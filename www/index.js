@@ -91,7 +91,9 @@ const renderLoop = () => {
     universe.tick(TICK_AT_ONCE);
 
     if (tickCount < MAX_TICK) {
+        // setTimeout(() => {
         requestAnimationFrame(renderLoop);
+        // }, 50);
     }
 };
 
