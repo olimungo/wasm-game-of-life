@@ -30,7 +30,7 @@ impl Universe {
         let size = (width * height) as usize;
         let mut cells = FixedBitSet::with_capacity(size);
         // let changed_cells : Vec<ChangedCell>= Vec::new();
-        let changed_cells: Vec<ChangedCell> = vec![ChangedCell((6, 6), true)];
+        let changed_cells: Vec<ChangedCell> = vec![ChangedCell((6, 6), true), ChangedCell((9, 9), false)];
     
         // for i in 0..size {
         //     cells.set(i, i % 2 == 0 || i % 7 == 0);
@@ -88,7 +88,7 @@ impl Universe {
     }
 
     pub fn changed_cells(&self) -> *const ChangedCell {
-        self.changed_cells.as_slice().as_ptr()
+        self.changed_cells.as_ptr()
     }
 
     fn get_index(&self, row: u32, column: u32) -> usize {

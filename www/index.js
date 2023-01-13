@@ -24,8 +24,8 @@ const createUniverse = () => {
     canvas.height = (CELL_SIZE + 1) * HEIGHT + 1;
     canvas.width = (CELL_SIZE + 1) * WIDTH + 1;
 
-    const cellsPtr = universe.cells();
-    const cells = new Uint8Array(memory.buffer, cellsPtr, (WIDTH * HEIGHT) / 8);
+    const cellsPtr = universe.changed_cells();
+    const cells = new Uint8Array(memory.buffer, cellsPtr, 256);
 
     console.log(cells);
 };
