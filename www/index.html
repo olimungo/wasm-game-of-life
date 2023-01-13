@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Hello wasm-pack!</title>
+
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <noscript
+            >This page contains webassembly and javascript content, please
+            enable javascript in your browser.</noscript
+        >
+
+        <div id></div>
+
+        <div class="slider">
+            <label for="width">WIDTH</label>
+
+            <input
+                type="range"
+                min="10"
+                max="200"
+                value="100"
+                class="slider"
+                id="sliderWidth"
+            />
+
+            <div id="sliderWidthValue" class="slider-value">100</div>
+        </div>
+
+        <div class="slider">
+            <label for="height">HEIGHT</label>
+
+            <input
+                type="range"
+                min="10"
+                max="200"
+                value="100"
+                class="slider"
+                id="sliderHeight"
+            />
+
+            <div id="sliderHeightValue" class="slider-value">100</div>
+        </div>
+
+        <canvas id="canvas"></canvas>
+
+        <script src="./bootstrap.js"></script>
+    </body>
+</html>
