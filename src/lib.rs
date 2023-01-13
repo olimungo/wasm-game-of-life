@@ -29,16 +29,16 @@ impl Universe {
     pub fn new(width: u32, height: u32) -> Universe {
         let size = (width * height) as usize;
         let mut cells = FixedBitSet::with_capacity(size);
-        // let changed_cells : Vec<ChangedCell>= Vec::new();
-        let changed_cells: Vec<ChangedCell> = vec![ChangedCell((6, 6), true), ChangedCell((9, 9), false)];
+        let changed_cells : Vec<ChangedCell> = Vec::new();
+        // let changed_cells: Vec<ChangedCell> = vec![ChangedCell((1, 2), true), ChangedCell((3, 4), false)];
     
-        // for i in 0..size {
-        //     cells.set(i, i % 2 == 0 || i % 7 == 0);
-        // }
-
         for i in 0..size {
-            cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+            cells.set(i, i % 2 == 0 || i % 7 == 0);
         }
+
+        // for i in 0..size {
+        //     cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+        // }
     
         Universe {
             width,
@@ -56,15 +56,15 @@ impl Universe {
             for row in 0..self.height {
                 for col in 0..self.width {
                     let index = self.get_index(row, col);
-                    let is_alive = self.cells[index];
+                    let state = self.cells[index];
                     let live_neighbour_count = self.live_neighbour_count(row, col);
 
-                    new_cells.set(index, match (live_neighbour_count, is_alive) {
+                    new_cells.set(index, match (live_neighbour_count, state) {
                         (2, true) | (3, _) => true,
                         _ => false
                     });
 
-                    if is_alive != new_cells[index] {
+                    if state != new_cells[index] {
                         changed_cells.push(ChangedCell ((row, col), new_cells[index]));
                     }
                 }
@@ -86,9 +86,46 @@ impl Universe {
     pub fn cells(&self) -> *const u32 {
         self.cells.as_slice().as_ptr()
     }
+    
+    pub fn changed_cells_len(&self) -> usize {
+        self.changed_cells.len()
+    }
 
-    pub fn changed_cells(&self) -> *const ChangedCell {
-        self.changed_cells.as_ptr()
+    pub fn changed_cells_rows(&self) -> *const u32 {
+        let mut rows: Vec<u32> = Vec::new();
+
+        for index in 0..self.changed_cells.len() {
+            let (row, _) = self.changed_cells[index].0;
+            rows.push(row);
+        }
+
+        rows.as_ptr()
+    }
+
+    pub fn changed_cells_cols(&self) -> *const u32 {
+        let mut cols: Vec<u32> = Vec::new();
+
+        for index in 0..self.changed_cells.len() {
+            let (_, col) = self.changed_cells[index].0;
+            cols.push(col);
+        }
+
+        cols.as_ptr()
+    }
+
+    pub fn changed_cells_states(&self) -> *const u32 {
+        let mut states: Vec<u32> = Vec::new();
+
+        for index in 0..self.changed_cells.len() {
+            let state = self.changed_cells[index].1;
+
+            states.push(match state {
+                true => 1,
+                _ => 0
+            });
+        }
+
+        states.as_ptr()
     }
 
     fn get_index(&self, row: u32, column: u32) -> usize {

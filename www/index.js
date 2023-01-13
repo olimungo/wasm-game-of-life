@@ -1,11 +1,11 @@
 import { Universe } from 'wasm-game-of-life';
 import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
 
-const CELL_SIZE = 3; // px
+const CELL_SIZE = 5; // px
 const GRID_COLOR = '#CCCCCC';
 const DEAD_COLOR = '#FFFFFF';
 const ALIVE_COLOR = '#000000';
-const MAX_TICK = 30000;
+const MAX_TICK = 10000;
 const TICK_AT_ONCE = 1;
 
 let WIDTH = 100;
@@ -23,44 +23,38 @@ const createUniverse = () => {
     universe = Universe.new(WIDTH, HEIGHT);
     canvas.height = (CELL_SIZE + 1) * HEIGHT + 1;
     canvas.width = (CELL_SIZE + 1) * WIDTH + 1;
-
-    const cellsPtr = universe.changed_cells();
-    const cells = new Uint8Array(memory.buffer, cellsPtr, 256);
-
-    console.log(cells);
-};
-
-const getIndex = (row, column) => {
-    return row * WIDTH + column;
-};
-
-const isAlive = (n, arr) => {
-    const byte = Math.floor(n / 8);
-    const mask = 1 << n % 8;
-    return (arr[byte] & mask) === mask;
 };
 
 const drawCells = () => {
-    const cellsPtr = universe.cells();
-    const cells = new Uint8Array(memory.buffer, cellsPtr, (WIDTH * HEIGHT) / 8);
+    const changedCellsLen = universe.changed_cells_len();
+
+    let pointer = universe.changed_cells_rows();
+    let data = new Uint32Array(memory.buffer, pointer, changedCellsLen);
+    const changedCellsRows = [...data];
+
+    pointer = universe.changed_cells_cols();
+    data = new Uint32Array(memory.buffer, pointer, changedCellsLen);
+    const changedCellsCols = [...data];
+
+    pointer = universe.changed_cells_states();
+    data = new Uint32Array(memory.buffer, pointer, changedCellsLen);
+    const changedCellsStates = [...data];
 
     context.beginPath();
 
-    for (let row = 0; row < HEIGHT; row++) {
-        for (let col = 0; col < WIDTH; col++) {
-            const index = getIndex(row, col);
+    for (let element = 0; element < changedCellsLen; element++) {
+        const row = changedCellsRows[element];
+        const col = changedCellsCols[element];
+        const state = changedCellsStates[element];
 
-            context.fillStyle = isAlive(index, cells)
-                ? ALIVE_COLOR
-                : DEAD_COLOR;
+        context.fillStyle = state ? ALIVE_COLOR : DEAD_COLOR;
 
-            context.fillRect(
-                col * (CELL_SIZE + 1) + 1,
-                row * (CELL_SIZE + 1) + 1,
-                CELL_SIZE,
-                CELL_SIZE
-            );
-        }
+        context.fillRect(
+            col * (CELL_SIZE + 1) + 1,
+            row * (CELL_SIZE + 1) + 1,
+            CELL_SIZE,
+            CELL_SIZE
+        );
     }
 
     context.stroke();
@@ -69,6 +63,7 @@ const drawCells = () => {
 const drawGrid = () => {
     context.beginPath();
     context.strokeStyle = GRID_COLOR;
+    context.lineWidth = 0.1;
 
     // Vertical lines.
     for (let i = 0; i <= WIDTH; i++) {
@@ -93,19 +88,11 @@ const renderLoop = () => {
     drawGrid();
     drawCells();
 
-    const changedCellsPtr = universe.changed_cells();
-    // const changed_cells = new Uint8Array(memory.buffer, changedCellsPtr);
+    universe.tick(TICK_AT_ONCE);
 
-    // console.log(changed_cells);
-    // const x = new ChangedCell();
-
-    // console.log(x);
-
-    if (tickCount <= MAX_TICK) {
+    if (tickCount < MAX_TICK) {
         requestAnimationFrame(renderLoop);
     }
-
-    universe.tick(TICK_AT_ONCE);
 };
 
 const sliderWidth = document.getElementById('sliderWidth');
@@ -132,4 +119,5 @@ sliderHeight.addEventListener('change', (e) => {
 });
 
 createUniverse();
-// requestAnimationFrame(renderLoop);
+drawGrid();
+requestAnimationFrame(renderLoop);
