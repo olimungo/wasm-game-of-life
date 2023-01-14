@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Hello wasm-pack!</title>
+        <title>Game of life</title>
 
         <link rel="stylesheet" href="index.css" />
     </head>
@@ -12,39 +12,62 @@
             enable javascript in your browser.</noscript
         >
 
-        <div id></div>
+        <div class="main">
+            <div>
+                <div class="input">
+                    <label for="ui-width">WIDTH</label>
+                    <input id="ui-width" type="number" value="100"></input>
+                </div>
 
-        <div class="slider">
-            <label for="width">WIDTH</label>
+                <div class="input">
+                    <label for="ui-height">HEIGHT</label>
+                    <input id="ui-height" type="number" value="100"></input>
+                </div>
 
-            <input
-                type="range"
-                min="10"
-                max="200"
-                value="100"
-                class="slider"
-                id="sliderWidth"
-            />
+                <div class="input">
+                    <label for="ui-cell-size">CELL SIZE</label>
+                    <input id="ui-cell-size" type="number" value="4"></input>
+                </div>
 
-            <div id="sliderWidthValue" class="slider-value">100</div>
+                <div class="input">
+                    <label for="ui-number-of-generations">NUMBER OF GENERATIONS</label>
+                    <input id="ui-number-of-generations" type="number" value="10000" min="0"></input>
+                </div>
+
+                <div class="input">
+                    <label for="ui-generations-at-once">GENERATIONS AT ONCE</label>
+                    <input id="ui-generations-at-once" type="number" value="1" min="1"></input>
+                </div>
+
+                <div class="input">
+                    <label for="ui-throttle">THROTTLE</label>
+                    <input id="ui-throttle" type="number" value="500" min="0"></input>
+                </div>
+
+                <div class="colony-generation">
+                    <div>
+                        <input type="radio" id="pattern" name="ui-colony-generation-type" value="pattern" checked>
+                        <label for="pattern">PATTERN</label>
+                    </div>
+                
+                    <div>
+                        <input type="radio" id="randomly" name="ui-colony-generation-type" value="randomly">
+                        <label for="randomly">RANDOMLY</label>
+                    </div>
+                </div>
+
+                <div class="input">
+                    <button id="ui-play-pause">PLAY</button>
+                    <button id="ui-reset">RESET</button>
+                </div>
+            </div>
+
+            <div class="canvas">
+                <canvas id="ui-canvas"></canvas>
+                
+                <div id="ui-counter"></div>
+            </div>
         </div>
-
-        <div class="slider">
-            <label for="height">HEIGHT</label>
-
-            <input
-                type="range"
-                min="10"
-                max="200"
-                value="100"
-                class="slider"
-                id="sliderHeight"
-            />
-
-            <div id="sliderHeightValue" class="slider-value">100</div>
-        </div>
-
-        <canvas id="canvas"></canvas>
 
         <script src="./bootstrap.js"></script>
     </body>

@@ -12,66 +12,69 @@ use fixedbitset::FixedBitSet;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-#[wasm_bindgen]
-pub struct ChangedCell((u32, u32), bool);
+struct UpdatedCell((u32, u32), bool);
 
 #[wasm_bindgen]
 pub struct Universe {
     width: u32,
     height: u32,
     cells: FixedBitSet,
-    changed_cells: Vec<ChangedCell>
+    updated_cells: Vec<UpdatedCell>
 }
 
 /// Public methods, exported to JavaScript
 #[wasm_bindgen]
 impl Universe {
-    pub fn new(width: u32, height: u32) -> Universe {
+    pub fn new(width: u32, height: u32, randomly: bool) -> Universe {
         let size = (width * height) as usize;
         let mut cells = FixedBitSet::with_capacity(size);
-        let changed_cells : Vec<ChangedCell> = Vec::new();
-        // let changed_cells: Vec<ChangedCell> = vec![ChangedCell((1, 2), true), ChangedCell((3, 4), false)];
-    
-        for i in 0..size {
-            cells.set(i, i % 2 == 0 || i % 7 == 0);
-        }
+        let updated_cells : Vec<UpdatedCell> = Vec::new();
 
-        // for i in 0..size {
-        //     cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
-        // }
+        if randomly {
+            for i in 0..size {
+                cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+            }
+        
+        } else {
+            for i in 0..size {
+                cells.set(i, i % 2 == 0 || i % 7 == 0);
+            }
+        }
     
         Universe {
             width,
             height,
             cells,
-            changed_cells,
+            updated_cells,
         }
     }
 
-    pub fn tick(&mut self, iterations: u32) {
-        for _ in 0..iterations {
+    pub fn tick(&mut self, generations: u32) {
+        for _ in 0..generations {
             let mut new_cells = self.cells.clone();
-            let mut changed_cells : Vec<ChangedCell>= Vec::new();
+            let mut updated_cells : Vec<UpdatedCell>= Vec::new();
 
             for row in 0..self.height {
                 for col in 0..self.width {
                     let index = self.get_index(row, col);
-                    let state = self.cells[index];
+                    let previous_state = self.cells[index];
                     let live_neighbour_count = self.live_neighbour_count(row, col);
 
-                    new_cells.set(index, match (live_neighbour_count, state) {
+                    let new_state = match (live_neighbour_count, previous_state) {
                         (2, true) | (3, _) => true,
                         _ => false
-                    });
+                    };
 
-                    if state != new_cells[index] {
-                        changed_cells.push(ChangedCell ((row, col), new_cells[index]));
+                    new_cells.set(index, new_state);
+
+                    if previous_state != new_state {
+                        updated_cells.push(UpdatedCell((row, col), new_state));
                     }
                 }
             }
 
             self.cells = new_cells;
-            self.changed_cells = changed_cells;
+            self.updated_cells = updated_cells;
         }
     }
 
@@ -87,37 +90,37 @@ impl Universe {
         self.cells.as_slice().as_ptr()
     }
     
-    pub fn changed_cells_len(&self) -> usize {
-        self.changed_cells.len()
+    pub fn updated_cells_length(&self) -> usize {
+        self.updated_cells.len()
     }
 
-    pub fn changed_cells_rows(&self) -> *const u32 {
+    pub fn updated_cells_rows(&self) -> *const u32 {
         let mut rows: Vec<u32> = Vec::new();
 
-        for index in 0..self.changed_cells.len() {
-            let (row, _) = self.changed_cells[index].0;
+        for index in 0..self.updated_cells.len() {
+            let (row, _) = self.updated_cells[index].0;
             rows.push(row);
         }
 
         rows.as_ptr()
     }
 
-    pub fn changed_cells_cols(&self) -> *const u32 {
+    pub fn updated_cells_columns(&self) -> *const u32 {
         let mut cols: Vec<u32> = Vec::new();
 
-        for index in 0..self.changed_cells.len() {
-            let (_, col) = self.changed_cells[index].0;
+        for index in 0..self.updated_cells.len() {
+            let (_, col) = self.updated_cells[index].0;
             cols.push(col);
         }
 
         cols.as_ptr()
     }
 
-    pub fn changed_cells_states(&self) -> *const u32 {
+    pub fn updated_cells_states(&self) -> *const u32 {
         let mut states: Vec<u32> = Vec::new();
 
-        for index in 0..self.changed_cells.len() {
-            let state = self.changed_cells[index].1;
+        for index in 0..self.updated_cells.len() {
+            let state = self.updated_cells[index].1;
 
             states.push(match state {
                 true => 1,
