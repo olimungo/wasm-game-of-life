@@ -58,9 +58,9 @@ impl Universe {
                 for col in 0..self.width {
                     let index = self.get_index(row, col);
                     let previous_state = self.cells[index];
-                    let live_neighbour_count = self.live_neighbour_count(row, col);
+                    let count = self.live_neighbour_count(row, col);
 
-                    let new_state = match (live_neighbour_count, previous_state) {
+                    let new_state = match (count, previous_state) {
                         (2, true) | (3, _) => true,
                         _ => false
                     };
@@ -106,14 +106,14 @@ impl Universe {
     }
 
     pub fn updated_cells_columns(&self) -> *const u32 {
-        let mut cols: Vec<u32> = Vec::new();
+        let mut columns: Vec<u32> = Vec::new();
 
         for index in 0..self.updated_cells.len() {
             let (_, col) = self.updated_cells[index].0;
-            cols.push(col);
+            columns.push(col);
         }
 
-        cols.as_ptr()
+        columns.as_ptr()
     }
 
     pub fn updated_cells_states(&self) -> *const u32 {
@@ -139,16 +139,16 @@ impl Universe {
         let mut count = 0;
 
         for delta_row in [self.height - 1, 0, 1].iter().cloned() {
-            for delta_col in [self.width - 1, 0, 1].iter().cloned() {
-                if delta_row == 0 && delta_col == 0 {
+            for delta_column in [self.width - 1, 0, 1].iter().cloned() {
+                if delta_row == 0 && delta_column == 0 {
                     continue;
                 }
 
                 let neighbor_row = (row + delta_row) % self.height;
-                let neighbor_col = (column + delta_col) % self.width;
-                let idx = self.get_index(neighbor_row, neighbor_col);
+                let neighbor_column = (column + delta_column) % self.width;
+                let index = self.get_index(neighbor_row, neighbor_column);
 
-                count += self.cells[idx] as u8;
+                count += self.cells[index] as u8;
             }
         }
 

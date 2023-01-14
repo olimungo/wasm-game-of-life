@@ -14,6 +14,18 @@
 
         <div class="main">
             <div>
+                <div class="engine-generation">
+                    <div>
+                        <input type="radio" id="wasm" name="ui-engine-generation-type" value="wasm" checked>
+                        <label for="wasm">WASM</label>
+                    </div>
+                
+                    <div>
+                        <input type="radio" id="javascript" name="ui-engine-generation-type" value="javascript">
+                        <label for="javascript">JAVASCRIPT</label>
+                    </div>
+                </div>
+
                 <div class="input">
                     <label for="ui-width">WIDTH</label>
                     <input id="ui-width" type="number" value="100"></input>
@@ -41,7 +53,7 @@
 
                 <div class="input">
                     <label for="ui-throttle">THROTTLE</label>
-                    <input id="ui-throttle" type="number" value="500" min="0"></input>
+                    <input id="ui-throttle" type="number" value="0" min="0"></input>
                 </div>
 
                 <div class="colony-generation">

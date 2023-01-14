@@ -1,8 +1,18 @@
+export const ColonyGenerationType = Object.freeze({
+    Pattern: Symbol('pattern'),
+    Randomly: Symbol('randomly'),
+});
+
+export const EngineGenerationType = Object.freeze({
+    Wasm: Symbol('wasm'),
+    Javascript: Symbol('javascript'),
+});
+
 export function Ui(
     propsUpdatedCallback,
-    playClicked,
-    pauseClicked,
-    resetClicked
+    playClickedCallback,
+    pauseClickedCallback,
+    resetClickedCalback
 ) {
     let cellSize; // px
     let width; // px
@@ -10,7 +20,8 @@ export function Ui(
     let numberOfGenerations;
     let ticksAtOnce;
     let throttle;
-    let colonyGenerationType = false;
+    let colonyGenerationType;
+    let engineGenerationType;
 
     //
     // HTML elements references
@@ -33,6 +44,9 @@ export function Ui(
     const uiColonyGenerationTypes = document.querySelectorAll(
         'input[name="ui-colony-generation-type"]'
     );
+    const uiEngineGenerationTypes = document.querySelectorAll(
+        'input[name="ui-engine-generation-type"]'
+    );
 
     // Buttons
     const uiPlayPause = document.getElementById('ui-play-pause');
@@ -48,6 +62,7 @@ export function Ui(
         getTicksAtOnce,
         getThrottle,
         getColonyGenerationType,
+        getEngineGenerationType,
         getNumberOfGenerations,
         setUiCounter,
         setPlayButton,
@@ -77,6 +92,10 @@ export function Ui(
         return colonyGenerationType;
     }
 
+    function getEngineGenerationType() {
+        return engineGenerationType;
+    }
+
     function getThrottle() {
         return throttle;
     }
@@ -90,12 +109,31 @@ export function Ui(
     //
 
     function initProperties() {
+        for (let radioButton of uiEngineGenerationTypes) {
+            if (radioButton.checked) {
+                engineGenerationType =
+                    radioButton.value === 'wasm'
+                        ? EngineGenerationType.Wasm
+                        : EngineGenerationType.Javascript;
+            }
+        }
+
+        for (let radioButton of uiColonyGenerationTypes) {
+            if (radioButton.checked) {
+                colonyGenerationType =
+                    radioButton.value === 'pattern'
+                        ? ColonyGenerationType.Pattern
+                        : ColonyGenerationType.Randomly;
+            }
+        }
+
         width = parseInt(uiWidth.value);
         height = parseInt(uiHeight.value);
         cellSize = parseInt(uiCellSize.value);
         numberOfGenerations = parseInt(uiNumberOfGenerations.value);
         ticksAtOnce = parseInt(uiGenerationsAtOnce.value);
         throttle = parseInt(uiThrottle.value);
+
         setUiCounter(0);
     }
 
@@ -113,6 +151,19 @@ export function Ui(
     }
 
     function addEventListeners() {
+        for (const radioButton of uiEngineGenerationTypes) {
+            radioButton.addEventListener('change', (e) => {
+                engineGenerationType =
+                    e.target.value === 'wasm'
+                        ? EngineGenerationType.Wasm
+                        : EngineGenerationType.Javascript;
+
+                uiPlayPause.textContent = 'PLAY';
+
+                propsUpdated();
+            });
+        }
+
         function updateWidth(e) {
             const value = parseInt(e.target.value);
 
@@ -199,8 +250,12 @@ export function Ui(
         for (const radioButton of uiColonyGenerationTypes) {
             radioButton.addEventListener('change', (e) => {
                 colonyGenerationType =
-                    e.target.value === 'pattern' ? false : true;
+                    e.target.value === 'pattern'
+                        ? ColonyGenerationType.Pattern
+                        : ColonyGenerationType.Randomly;
+
                 uiPlayPause.textContent = 'PLAY';
+
                 propsUpdated();
             });
         }
@@ -208,16 +263,16 @@ export function Ui(
         uiPlayPause.addEventListener('click', (e) => {
             if (uiPlayPause.textContent === 'PAUSE') {
                 uiPlayPause.textContent = 'PLAY';
-                pauseClicked();
+                pauseClickedCallback();
             } else {
                 uiPlayPause.textContent = 'PAUSE';
-                playClicked();
+                playClickedCallback();
             }
         });
 
         uiReset.addEventListener('click', (e) => {
             uiPlayPause.textContent = 'PLAY';
-            resetClicked();
+            resetClickedCalback();
         });
     }
 }

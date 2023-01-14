@@ -1,7 +1,7 @@
-import { Universe } from 'wasm-game-of-life';
-import { memory } from 'wasm-game-of-life/wasm_game_of_life_bg';
-import { Ui } from './ui';
+import { Ui, ColonyGenerationType, EngineGenerationType } from './ui';
 import { Canvas } from './canvas';
+import { UniverseJs } from './game-of-life-javascript';
+import { UniverseWasm } from './game-of-life-wasm';
 
 let universe;
 
@@ -19,6 +19,40 @@ createUniverse();
 // Functions
 //
 
+function createUniverse() {
+    loopRendering = false;
+
+    setTimeout(() => {
+        if (universe) {
+            universe.dispose();
+        }
+
+        canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
+
+        universe = createUniverseEngine();
+
+        canvas.drawAllCells(universe.getAllCells());
+
+        generationsCount = 0;
+        totalTicksTime = 0;
+    }, ui.getThrottle() + 100);
+}
+
+function createUniverseEngine() {
+    const width = ui.getWidth();
+    const height = ui.getHeight();
+    const isGenerationTypeRandomly =
+        ui.getColonyGenerationType() === ColonyGenerationType.Randomly
+            ? true
+            : false;
+
+    if (ui.getEngineGenerationType() === EngineGenerationType.Wasm) {
+        return UniverseWasm().create(width, height, isGenerationTypeRandomly);
+    } else {
+        return UniverseJs().create(width, height, isGenerationTypeRandomly);
+    }
+}
+
 function renderLoop() {
     const beforeTicks = new Date().getTime();
 
@@ -30,9 +64,9 @@ function renderLoop() {
     ui.setUiCounter(generationsCount);
 
     if (ui.getTicksAtOnce() > 1) {
-        canvas.drawAllCells(getAllCellsFromWasm());
+        canvas.drawAllCells(universe.getAllCells());
     } else {
-        canvas.drawUpdatedCells(getUpdatedCellsFromWasm());
+        canvas.drawUpdatedCells(universe.getUpdatedCells());
     }
 
     if (loopRendering) {
@@ -72,55 +106,6 @@ function renderLoop() {
             );
         }
     }
-}
-
-function createUniverse() {
-    loopRendering = false;
-
-    setTimeout(() => {
-        canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
-
-        universe = Universe.new(
-            ui.getWidth(),
-            ui.getHeight(),
-            ui.getColonyGenerationType()
-        );
-
-        canvas.drawAllCells(getAllCellsFromWasm());
-
-        generationsCount = 0;
-        totalTicksTime = 0;
-    }, ui.getThrottle() + 1);
-}
-
-function getAllCellsFromWasm() {
-    const cellsPtr = universe.cells();
-
-    return [
-        ...new Uint8Array(
-            memory.buffer,
-            cellsPtr,
-            (ui.getWidth() * ui.getHeight()) / 8
-        ),
-    ];
-}
-
-function getUpdatedCellsFromWasm() {
-    const length = universe.updated_cells_length();
-
-    let pointer = universe.updated_cells_rows();
-    let data = new Uint32Array(memory.buffer, pointer, length);
-    const rows = [...data];
-
-    pointer = universe.updated_cells_columns();
-    data = new Uint32Array(memory.buffer, pointer, length);
-    const columns = [...data];
-
-    pointer = universe.updated_cells_states();
-    data = new Uint32Array(memory.buffer, pointer, length);
-    const states = [...data];
-
-    return { rows, columns, states, length };
 }
 
 function playClicked() {

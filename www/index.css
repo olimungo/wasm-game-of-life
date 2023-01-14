@@ -38,13 +38,13 @@ label {
 }
 
 .canvas {
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    align-items: center; */
-    /* margin: 1rem; */
+    align-items: center;
 }
 
-.colony-generation {
+.colony-generation,
+.engine-generation {
     display: flex;
     margin: 0 0.5rem;
 }

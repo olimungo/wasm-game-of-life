@@ -54,16 +54,18 @@ export function Canvas() {
         uiCanvas.height = cellSize * height;
     }
 
-    function drawAllCells(cells) {
+    function drawAllCells(allCells) {
         context.beginPath();
 
         for (let row = 0; row < height; row++) {
             for (let column = 0; column < width; column++) {
                 const index = getIndex(row, column);
 
-                context.fillStyle = bitIsSet(index, cells)
-                    ? ALIVE_COLOR
-                    : DEAD_COLOR;
+                context.fillStyle = allCells[index] ? ALIVE_COLOR : DEAD_COLOR;
+
+                // context.fillStyle = bitIsSet(index, allCells)
+                //     ? ALIVE_COLOR
+                //     : DEAD_COLOR;
 
                 context.fillRect(
                     column * cellSize,
@@ -80,15 +82,12 @@ export function Canvas() {
     function drawUpdatedCells(updatedCells) {
         context.beginPath();
 
-        for (let element = 0; element < updatedCells.length; element++) {
-            const row = updatedCells.rows[element];
-            const column = updatedCells.columns[element];
-            const state = updatedCells.states[element];
+        for (let element of updatedCells) {
+            context.fillStyle = element.state ? ALIVE_COLOR : DEAD_COLOR;
 
-            context.fillStyle = state ? ALIVE_COLOR : DEAD_COLOR;
             context.fillRect(
-                column * cellSize,
-                row * cellSize,
+                element.column * cellSize,
+                element.row * cellSize,
                 cellSize,
                 cellSize
             );
@@ -99,11 +98,5 @@ export function Canvas() {
 
     function getIndex(row, column) {
         return row * width + column;
-    }
-
-    function bitIsSet(n, arr) {
-        const byte = Math.floor(n / 8);
-        const mask = 1 << n % 8;
-        return (arr[byte] & mask) === mask;
     }
 }
