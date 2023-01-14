@@ -14,13 +14,15 @@
 
         <div class="main">
             <div>
+                <h1>GAME OF LIFE</h1>
+                
                 <div class="engine-generation">
-                    <div>
+                    <div class="radio-button">
                         <input type="radio" id="wasm" name="ui-engine-generation-type" value="wasm" checked>
                         <label for="wasm">WASM</label>
                     </div>
                 
-                    <div>
+                    <div class="radio-button">
                         <input type="radio" id="javascript" name="ui-engine-generation-type" value="javascript">
                         <label for="javascript">JAVASCRIPT</label>
                     </div>
@@ -29,16 +31,19 @@
                 <div class="input">
                     <label for="ui-width">WIDTH</label>
                     <input id="ui-width" type="number" value="100"></input>
+                    <label for="ui-width">px</label>
                 </div>
-
+                
                 <div class="input">
                     <label for="ui-height">HEIGHT</label>
                     <input id="ui-height" type="number" value="100"></input>
+                    <label for="ui-width">px</label>
                 </div>
-
+                
                 <div class="input">
                     <label for="ui-cell-size">CELL SIZE</label>
                     <input id="ui-cell-size" type="number" value="4"></input>
+                    <label for="ui-width">px</label>
                 </div>
 
                 <div class="input">
@@ -54,15 +59,16 @@
                 <div class="input">
                     <label for="ui-throttle">THROTTLE</label>
                     <input id="ui-throttle" type="number" value="0" min="0"></input>
+                    <label for="ui-width">ms</label>
                 </div>
 
                 <div class="colony-generation">
-                    <div>
+                    <div class="radio-button">
                         <input type="radio" id="pattern" name="ui-colony-generation-type" value="pattern" checked>
                         <label for="pattern">PATTERN</label>
                     </div>
                 
-                    <div>
+                    <div class="radio-button">
                         <input type="radio" id="randomly" name="ui-colony-generation-type" value="randomly">
                         <label for="randomly">RANDOMLY</label>
                     </div>
@@ -77,7 +83,7 @@
             <div class="canvas">
                 <canvas id="ui-canvas"></canvas>
                 
-                <div id="ui-counter"></div>
+                <div id="ui-counter" class="counter"></div>
             </div>
         </div>
 

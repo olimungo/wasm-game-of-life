@@ -86,9 +86,9 @@ export function UniverseJs() {
                     continue;
                 }
 
-                const neighborRow = (row + deltaRow) % height;
-                const neighborColumn = (column + deltaColumn) % width;
-                const index = getIndex(neighborRow, neighborColumn);
+                const neighbourRow = (row + deltaRow) % height;
+                const neighbourColumn = (column + deltaColumn) % width;
+                const index = getIndex(neighbourRow, neighbourColumn);
 
                 count += allCells[index];
             }

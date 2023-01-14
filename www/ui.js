@@ -19,7 +19,7 @@ export function Ui(
     let height; // px
     let numberOfGenerations;
     let ticksAtOnce;
-    let throttle;
+    let throttle; // ms
     let colonyGenerationType;
     let engineGenerationType;
 

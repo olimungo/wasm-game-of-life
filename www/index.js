@@ -29,7 +29,7 @@ function createUniverse() {
 
         canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
 
-        universe = createUniverseEngine();
+        universe = createUniverseFactory();
 
         canvas.drawAllCells(universe.getAllCells());
 
@@ -38,7 +38,7 @@ function createUniverse() {
     }, ui.getThrottle() + 100);
 }
 
-function createUniverseEngine() {
+function createUniverseFactory() {
     const width = ui.getWidth();
     const height = ui.getHeight();
     const isGenerationTypeRandomly =
@@ -124,5 +124,5 @@ function resetClicked() {
     setTimeout(() => {
         ui.setUiCounter(0);
         createUniverse();
-    }, ui.getThrottle() + 1);
+    }, ui.getThrottle() + 100);
 }
