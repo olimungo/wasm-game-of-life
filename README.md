@@ -1,80 +1,59 @@
-<div align="center">
+# GAME OF LIFE
 
-  <h1><code>wasm-pack-template</code></h1>
+This project is about comparing WebAssembly to JavaScript.
+The Game of life was implemented both in Rust (transpiled to WebAssembly) and JavaScript.
 
-  <strong>A template for kick starting a Rust and WebAssembly project using <a href="https://github.com/rustwasm/wasm-pack">wasm-pack</a>.</strong>
+Inspired by: https://rustwasm.github.io/docs/book/introduction.html
+and https://rosettacode.org/wiki/Conway%27s_Game_of_Life#Rust
 
-  <p>
-    <a href="https://travis-ci.org/rustwasm/wasm-pack-template"><img src="https://img.shields.io/travis/rustwasm/wasm-pack-template.svg?style=flat-square" alt="Build Status" /></a>
-  </p>
+## Required tools
 
-  <h3>
-    <a href="https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/index.html">Tutorial</a>
-    <span> | </span>
-    <a href="https://discordapp.com/channels/442252698964721669/443151097398296587">Chat</a>
-  </h3>
+-   [`Rust`](https://www.rust-lang.org/tools/install) toolchain, including rustup, rustc, and cargo.
+-   [`wasm-pack`](https://rustwasm.github.io/wasm-pack/installer/) building, testing, and publishing Rust-generated WebAssembly.
+-   [`node and npm`](https://nodejs.org/): **_make sure to use version 16_**
+-   cargo-generate helps you get up and running quickly with a new Rust project by leveraging a pre-existing git repository as a template.
 
-  <sub>Built with 🦀🕸 by <a href="https://rustwasm.github.io/">The Rust and WebAssembly Working Group</a></sub>
-</div>
+Use this command to install cargo-generate:
 
-## About
-
-[**📚 Read this template tutorial! 📚**][template-docs]
-
-This template is designed for compiling Rust libraries into WebAssembly and
-publishing the resulting package to NPM.
-
-Be sure to check out [other `wasm-pack` tutorials online][tutorials] for other
-templates and usages of `wasm-pack`.
-
-[tutorials]: https://rustwasm.github.io/docs/wasm-pack/tutorials/index.html
-[template-docs]: https://rustwasm.github.io/docs/wasm-pack/tutorials/npm-browser-packages/index.html
-
-## 🚴 Usage
-
-### 🐑 Use `cargo generate` to Clone this Template
-
-[Learn more about `cargo generate` here.](https://github.com/ashleygwilliams/cargo-generate)
-
-```
-cargo generate --git https://github.com/rustwasm/wasm-pack-template.git --name my-project
-cd my-project
+```shell
+cargo install cargo-generate
 ```
 
-### 🛠️ Build with `wasm-pack build`
+## Rust
 
-```
+The Rust code can be found into the _src_ folder (file: _lib.rs_).
+Use wasm-build to transpile the Rust code to WebAssembly. This command has to be executed when the _lib.rs_ file is modified and right after the repository cloning:
+
+```shell
 wasm-pack build
 ```
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
+## JavaScript
 
+The JavaScript code for the front-end as well as for the implementation of the Game of life can be found into the _www_ folder.
+
+The entry file is _index.js_. The implementation of the game is located into the _game-of-life-javascript.js_ file. The file _game-of-life-wasm.js_ is a wrapper for calling the WebAssembly executable.
+
+After the first clone of the repository, move to the _www_ folder and install the dependencies:
+
+```shell
+npm i
 ```
-wasm-pack test --headless --firefox
+
+When all dependencies are installed, a server can be fire up:
+
+```shell
+npm start
 ```
 
-### 🎁 Publish to NPM with `wasm-pack publish`
-
-```
-wasm-pack publish
-```
-
-## 🔋 Batteries Included
-
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* [`wee_alloc`](https://github.com/rustwasm/wee_alloc), an allocator optimized
-  for small code size.
-* `LICENSE-APACHE` and `LICENSE-MIT`: most Rust projects are licensed this way, so these are included for you
+The app will be available at http://localhost:8080.
 
 ## License
 
 Licensed under either of
 
-* Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
-* MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+-   Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
+-   MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
 

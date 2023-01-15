@@ -10,8 +10,9 @@ let totalTicksDuration;
 let startedGenerationTime;
 let loopRendering = false;
 let generationsOver = false;
+let generationPaused = false;
 
-const ui = Ui(createUniverse, playClicked, pauseClicked, resetClicked);
+const ui = Ui(propsUpdated, playClicked, pauseClicked, resetClicked);
 const canvas = Canvas();
 
 createUniverse();
@@ -19,6 +20,14 @@ createUniverse();
 //
 // Functions
 //
+
+function propsUpdated() {
+    loopRendering = false;
+
+    setTimeout(() => {
+        createUniverse();
+    }, ui.getThrottle() + 100);
+}
 
 function createUniverse() {
     if (universe) {
@@ -75,25 +84,27 @@ function renderLoop() {
             loopRendering = false;
             generationsOver = true;
 
-            const now = new Date().getTime();
-
             ui.setPlayButton();
 
-            const totalDuration = now - startedGenerationTime;
-            const averageTickDuration = totalTicksDuration / generationsCount;
-            const totalRedrawDuration =
-                now - startedGenerationTime - totalTicksDuration;
-            const averageRedrawDuration =
-                (now - startedGenerationTime - totalTicksDuration) /
-                generationsCount;
+            if (!generationPaused) {
+                const now = new Date().getTime();
+                const totalDuration = now - startedGenerationTime;
+                const averageTickDuration =
+                    totalTicksDuration / generationsCount;
+                const totalRedrawDuration =
+                    now - startedGenerationTime - totalTicksDuration;
+                const averageRedrawDuration =
+                    (now - startedGenerationTime - totalTicksDuration) /
+                    generationsCount;
 
-            ui.setResults({
-                totalDuration,
-                totalTicksDuration,
-                averageTickDuration,
-                totalRedrawDuration,
-                averageRedrawDuration,
-            });
+                ui.setResults({
+                    totalDuration,
+                    totalTicksDuration,
+                    averageTickDuration,
+                    totalRedrawDuration,
+                    averageRedrawDuration,
+                });
+            }
         }
     }
 }
@@ -103,6 +114,7 @@ function playClicked() {
 
     if (generationsOver) {
         generationsOver = false;
+        generationPaused = false;
 
         ui.setUiCounter(0);
         ui.resetResults();
@@ -117,11 +129,13 @@ function playClicked() {
 
 function pauseClicked() {
     loopRendering = false;
+    generationPaused = true;
 }
 
 function resetClicked() {
     loopRendering = false;
     generationsOver = false;
+    generationPaused = false;
 
     setTimeout(() => {
         ui.setUiCounter(0);
