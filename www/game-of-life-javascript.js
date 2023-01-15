@@ -33,10 +33,11 @@ export function UniverseJs() {
     }
 
     function tick(generations) {
-        const newAllCells = [];
         updatedCells = [];
 
         for (let generation = 0; generation < generations; generation++) {
+            const newAllCells = [];
+
             for (let index = 0; index < width * height; index++) {
                 const previousState = allCells[index];
                 const { row, column } = getRowColumn(index);
@@ -49,13 +50,14 @@ export function UniverseJs() {
 
                 newAllCells.push(newState);
 
-                if (previousState !== newState) {
+                // If we process more than 1 generation, we can't rely on the updated cells
+                if (generations === 1 && previousState !== newState) {
                     updatedCells.push({ row, column, state: newState });
                 }
             }
-        }
 
-        allCells = newAllCells;
+            allCells = newAllCells;
+        }
     }
 
     function getAllCells() {
@@ -72,7 +74,7 @@ export function UniverseJs() {
 
     function getRowColumn(index) {
         const row = Math.floor(index / width);
-        const column = index % height;
+        const column = index % width;
 
         return { row, column };
     }

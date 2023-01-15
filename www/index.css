@@ -30,9 +30,9 @@ h1 {
 }
 
 canvas {
-    margin: 0.5rem;
     background-color: white;
-    border: solid 0.2rem var(--primary-color);
+    border: solid 0.2rem var(--primary-dark-color);
+    border-radius: 0.5rem;
 }
 
 label {
@@ -81,7 +81,14 @@ button:active {
     height: 15px;
     border: 1px solid var(--primary-action-color);
     border-radius: 100%;
+}
+
+[type='radio']:checked + label:before {
     background: var(--primary-action-dark-color);
+}
+
+[type='radio']:not(:checked) + label:before {
+    background: var(--primary-dark-color);
 }
 
 [type='radio']:checked + label:after,
@@ -133,7 +140,7 @@ input[type='number'] {
 .canvas {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .radio-button {
@@ -149,7 +156,11 @@ input[type='number'] {
 }
 
 .counter {
+    text-align: right;
     color: var(--primary-action-color);
-    width: 10rem;
-    text-align: center;
+    background-color: var(--primary-dark-color);
+    width: 4rem;
+    border-radius: 10rem;
+    padding: 0.3rem 1rem;
+    margin-top: 1rem;
 }

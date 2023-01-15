@@ -67,7 +67,8 @@ impl Universe {
 
                     new_cells.set(index, new_state);
 
-                    if previous_state != new_state {
+                    // If we process more than 1 generation, we can't rely on the updated cells
+                    if generations == 1 && previous_state != new_state {
                         updated_cells.push(UpdatedCell((row, col), new_state));
                     }
                 }

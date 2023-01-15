@@ -143,7 +143,7 @@ export function Ui(
     }
 
     function setUiCounter(count) {
-        uiCounter.textContent = `${count}/${numberOfGenerations}`;
+        uiCounter.textContent = count;
     }
 
     function setPlayButton() {
