@@ -70,7 +70,7 @@
                     <input
                         id="ui-number-of-generations"
                         type="number"
-                        value="10000"
+                        value="10"
                         min="0"
                     />
                 </div>
@@ -124,25 +124,56 @@
                     <button id="ui-reset">RESET</button>
                 </div>
 
-                <div id="ui-results">
-                    <div>
-                        <label>Total duration</label>
+                <div id="ui-results" class="results">
+                    <div class="result">
+                        <label class="result-label">Total duration</label>
+
+                        <div class="result-value">
+                            <span id="ui-total-duration"></span>
+                            <span>ms</span>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Total ticks duration</label>
+                    <div class="result">
+                        <label class="result-label">Total ticks duration</label>
+
+                        <div class="result-value">
+                            <span id="ui-total-ticks-duration"></span>
+                            <span>ms</span>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Average duration per tick</label>
+                    <div class="result">
+                        <label class="result-label"
+                            >Average duration per tick</label
+                        >
+
+                        <div class="result-value">
+                            <span id="ui-average-tick-duration"></span>
+                            <span>ms</span>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Total redraw duration</label>
+                    <div class="result">
+                        <label class="result-label"
+                            >Total redraw duration</label
+                        >
+
+                        <div class="result-value">
+                            <span id="ui-total-redraw-duration"></span>
+                            <span>ms</span>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Average redraw duration</label>
+                    <div class="result">
+                        <label class="result-label"
+                            >Average redraw duration</label
+                        >
+
+                        <div class="result-value">
+                            <span id="ui-average-redraw-duration"></span>
+                            <span>ms</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,8 +195,8 @@
                     role="img"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 496 512"
-                    width="50"
-                    height="50"
+                    width="40"
+                    height="40"
                     class="svg"
                 >
                     <path

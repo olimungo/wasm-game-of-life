@@ -24,7 +24,7 @@ export function Ui(
     let engineGenerationType;
 
     //
-    // HTML elements references
+    // HTML elements reference
     //
 
     // Inputs
@@ -53,6 +53,21 @@ export function Ui(
     const uiReset = document.getElementById('ui-reset');
     const uiSourceCode = document.getElementById('ui-source-code');
 
+    // Results
+    const uiTotalDuration = document.getElementById('ui-total-duration');
+    const uiTotalTicksDuration = document.getElementById(
+        'ui-total-ticks-duration'
+    );
+    const uiAverageTickDuration = document.getElementById(
+        'ui-average-tick-duration'
+    );
+    const uiTotalRedrawDuration = document.getElementById(
+        'ui-total-redraw-duration'
+    );
+    const uiAverageRedrawDuration = document.getElementById(
+        'ui-average-redraw-duration'
+    );
+
     initProperties();
     addEventListeners();
 
@@ -67,6 +82,8 @@ export function Ui(
         getNumberOfGenerations,
         setUiCounter,
         setPlayButton,
+        setResults,
+        resetResults,
     };
 
     //
@@ -281,6 +298,34 @@ export function Ui(
                 'https://github.com/olimungo/wasm-game-of-life',
                 '_blank'
             );
+        });
+    }
+
+    function setResults(results) {
+        uiTotalDuration.textContent = (
+            Math.round(results.totalDuration * 100) / 100
+        ).toFixed(2);
+        uiTotalTicksDuration.textContent = (
+            Math.round(results.totalTicksDuration * 100) / 100
+        ).toFixed(2);
+        uiAverageTickDuration.textContent = (
+            Math.round(results.averageTickDuration * 100) / 100
+        ).toFixed(2);
+        uiTotalRedrawDuration.textContent = (
+            Math.round(results.totalRedrawDuration * 100) / 100
+        ).toFixed(2);
+        uiAverageRedrawDuration.textContent = (
+            Math.round(results.averageRedrawDuration * 100) / 100
+        ).toFixed(2);
+    }
+
+    function resetResults() {
+        setResults({
+            totalDuration: 0,
+            totalTicksDuration: 0,
+            averageTickDuration: 0,
+            totalRedrawDuration: 0,
+            averageRedrawDuration: 0,
         });
     }
 }

@@ -28,6 +28,7 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
         Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
         sans-serif;
+    font-size: 0.8rem;
 }
 
 h1 {
@@ -37,7 +38,7 @@ h1 {
 }
 
 h2 {
-    margin: 0 0 3rem 0;
+    margin: 0 0 1rem 0;
     font-size: 1rem;
     font-weight: 300;
 }
@@ -54,7 +55,7 @@ h2 {
 }
 
 .left-panel {
-    width: 23rem;
+    width: 20rem;
     grid-column: 1 / 2;
     border-right: solid 1px var(--primary-dark-color);
     box-shadow: 1px 1px 5px black;
@@ -79,13 +80,16 @@ button {
     border: none;
     letter-spacing: 0.25rem;
     cursor: pointer;
-    font-size: 1rem;
     background-color: var(--primary-action-color);
     border-radius: 50px;
     color: var(--secondary-color);
-    width: 7rem;
+    width: 6rem;
     margin: 0.5rem 0;
     padding: 0.5rem;
+}
+
+button:hover {
+    background-color: var(--primary-color);
 }
 
 button:active {
@@ -158,7 +162,6 @@ input[type='number'] {
     outline: none;
     background-color: var(--primary-action-dark-color);
     border-radius: 50px;
-    font-size: 1rem;
     padding: 0.2rem 0.5rem;
     color: var(--primary-action-color);
     width: 6rem;
@@ -180,7 +183,7 @@ input[type='number'] {
 }
 
 .buttons {
-    margin: 2rem 0 0 2.3rem;
+    margin: 1rem 0 0 2.3rem;
 }
 
 .canvas-center {
@@ -225,11 +228,14 @@ footer {
     border-top: solid 1px var(--primary-dark-color);
     box-shadow: 1px 1px 5px black;
     background-color: var(--secondary-dark-color);
+    padding: 0.5rem !important;
+    text-align: end;
 }
 
 .svg {
     padding: 0.5rem;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .svg:hover {
@@ -237,5 +243,24 @@ footer {
 }
 
 .svg:active {
-    background-color: var(--primary-action-dark-color);
+    background-color: var(--secondary-action-color);
+}
+
+.results {
+    margin-top: 1.5rem;
+}
+
+.result {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 2.5rem 1rem 0.5rem;
+    /* background-color: var(--primary-dark-color); */
+    border: solid 1px var(--primary-dark-color);
+    box-shadow: 1px 1px 3px black;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3rem;
+}
+
+.result-value {
+    color: var(--primary-action-color);
 }

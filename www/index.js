@@ -6,9 +6,10 @@ import { UniverseWasm } from './game-of-life-wasm';
 let universe;
 
 let generationsCount;
-let totalTicksTime;
+let totalTicksDuration;
 let startedGenerationTime;
 let loopRendering = false;
+let generationsOver = false;
 
 const ui = Ui(createUniverse, playClicked, pauseClicked, resetClicked);
 const canvas = Canvas();
@@ -20,22 +21,18 @@ createUniverse();
 //
 
 function createUniverse() {
-    loopRendering = false;
+    if (universe) {
+        universe.dispose();
+    }
 
-    setTimeout(() => {
-        if (universe) {
-            universe.dispose();
-        }
+    canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
 
-        canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
+    universe = createUniverseFactory();
 
-        universe = createUniverseFactory();
+    canvas.drawAllCells(universe.getAllCells());
 
-        canvas.drawAllCells(universe.getAllCells());
-
-        generationsCount = 0;
-        totalTicksTime = 0;
-    }, ui.getThrottle() + 100);
+    generationsCount = 0;
+    totalTicksDuration = 0;
 }
 
 function createUniverseFactory() {
@@ -58,59 +55,63 @@ function renderLoop() {
 
     universe.tick(ui.getTicksAtOnce());
 
-    totalTicksTime += new Date().getTime() - beforeTicks;
-
-    generationsCount += ui.getTicksAtOnce();
-    ui.setUiCounter(generationsCount);
-
-    if (ui.getTicksAtOnce() > 1) {
-        canvas.drawAllCells(universe.getAllCells());
-    } else {
-        canvas.drawUpdatedCells(universe.getUpdatedCells());
-    }
-
     if (loopRendering) {
+        totalTicksDuration += new Date().getTime() - beforeTicks;
+        generationsCount += ui.getTicksAtOnce();
+
+        ui.setUiCounter(generationsCount);
+
+        if (ui.getTicksAtOnce() > 1) {
+            canvas.drawAllCells(universe.getAllCells());
+        } else {
+            canvas.drawUpdatedCells(universe.getUpdatedCells());
+        }
+
         if (generationsCount < ui.getNumberOfGenerations()) {
             setTimeout(() => {
                 requestAnimationFrame(renderLoop);
             }, ui.getThrottle());
         } else {
             loopRendering = false;
-            ui.setPlayButton();
+            generationsOver = true;
 
             const now = new Date().getTime();
 
-            console.log(
-                `Total time for ${generationsCount} generations (tick + redraw): ${
-                    now - startedGenerationTime
-                }`
-            );
+            ui.setPlayButton();
 
-            console.log(`Total ticks time (Rust - WASM): ${totalTicksTime}`);
+            const totalDuration = now - startedGenerationTime;
+            const averageTickDuration = totalTicksDuration / generationsCount;
+            const totalRedrawDuration =
+                now - startedGenerationTime - totalTicksDuration;
+            const averageRedrawDuration =
+                (now - startedGenerationTime - totalTicksDuration) /
+                generationsCount;
 
-            console.log(
-                `Average time per tick: ${totalTicksTime / generationsCount}`
-            );
-
-            console.log(
-                `Total redraw time (Javascript): ${
-                    now - startedGenerationTime - totalTicksTime
-                }`
-            );
-
-            console.log(
-                `Average redraw time per generation: ${
-                    (now - startedGenerationTime - totalTicksTime) /
-                    generationsCount
-                }`
-            );
+            ui.setResults({
+                totalDuration,
+                totalTicksDuration,
+                averageTickDuration,
+                totalRedrawDuration,
+                averageRedrawDuration,
+            });
         }
     }
 }
 
 function playClicked() {
     loopRendering = true;
+
+    if (generationsOver) {
+        generationsOver = false;
+
+        ui.setUiCounter(0);
+        ui.resetResults();
+
+        createUniverse();
+    }
+
     startedGenerationTime = new Date().getTime();
+
     requestAnimationFrame(renderLoop);
 }
 
@@ -120,9 +121,12 @@ function pauseClicked() {
 
 function resetClicked() {
     loopRendering = false;
+    generationsOver = false;
 
     setTimeout(() => {
         ui.setUiCounter(0);
+        ui.resetResults();
+
         createUniverse();
     }, ui.getThrottle() + 100);
 }
