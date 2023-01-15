@@ -51,6 +51,7 @@ export function Ui(
     // Buttons
     const uiPlayPause = document.getElementById('ui-play-pause');
     const uiReset = document.getElementById('ui-reset');
+    const uiSourceCode = document.getElementById('ui-source-code');
 
     initProperties();
     addEventListeners();
@@ -273,6 +274,13 @@ export function Ui(
         uiReset.addEventListener('click', (e) => {
             uiPlayPause.textContent = 'PLAY';
             resetClickedCalback();
+        });
+
+        uiSourceCode.addEventListener('click', (e) => {
+            window.open(
+                'https://github.com/olimungo/wasm-game-of-life',
+                '_blank'
+            );
         });
     }
 }
