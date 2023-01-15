@@ -22,7 +22,9 @@ cargo install cargo-generate
 ## Rust
 
 The Rust code can be found into the _src_ folder (file: _lib.rs_).
-Use wasm-build to transpile the Rust code to WebAssembly. This command has to be executed when the _lib.rs_ file is modified and right after cloning the repository:
+Use wasm-build to transpile the Rust code to WebAssembly. This command has to be executed when the _lib.rs_ file is modified and right after cloning the repository.
+
+This command has to be executed in the root folder of the project:
 
 ```shell
 wasm-pack build
