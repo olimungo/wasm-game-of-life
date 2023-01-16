@@ -12,6 +12,10 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
+            - name: Install Rust toolchain
+              run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+            - name: Compile Rust code to WebAssembly
+              run: wasm-pack build
             - name: Build the app
               working-directory: ./www
               run: |
@@ -22,4 +26,3 @@ jobs:
                   repoToken: '${{ secrets.GITHUB_TOKEN }}'
                   firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GAME_OF_LIFE_9A203 }}'
                   projectId: game-of-life-9a203
-
