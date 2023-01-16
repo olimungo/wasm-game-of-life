@@ -50,6 +50,10 @@ npm start
 
 The app will be available at http://localhost:8080.
 
+## Redraw the canvas
+
+At each generation (tick), the colony is redrawn. This is done purely in JavaScript.
+
 ## License
 
 Licensed under either of
