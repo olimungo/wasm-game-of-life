@@ -18,46 +18,43 @@ struct UpdatedCell((u32, u32), bool);
 pub struct Universe {
     width: u32,
     height: u32,
-    cells: FixedBitSet,
+    colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>
 }
 
 /// Public methods, exported to JavaScript
 #[wasm_bindgen]
 impl Universe {
-    pub fn new(width: u32, height: u32, randomly: bool) -> Universe {
+    pub fn new(width: u32, height: u32) -> Universe {
         let size = (width * height) as usize;
-        let mut cells = FixedBitSet::with_capacity(size);
+        let colony = FixedBitSet::with_capacity(size);
         let updated_cells : Vec<UpdatedCell> = Vec::new();
-
-        // if randomly {
-        //     for i in 0..size {
-        //         cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
-        //     }
-        
-        // } else {
-        //     for i in 0..size {
-        //         cells.set(i, i % 2 == 0 || i % 7 == 0);
-        //     }
-        // }
     
         Universe {
             width,
             height,
-            cells,
+            colony,
             updated_cells,
         }
     }
 
+    pub fn generate_pattern_colony(&mut self) {
+        self.generate_colony(false);
+    }
+    
+    pub fn generate_random_colony(&mut self) {
+        self.generate_colony(true);
+    }
+
     pub fn tick(&mut self, generations: u32) {
         for _ in 0..generations {
-            let mut new_cells = self.cells.clone();
+            let mut colony = self.colony.clone();
             let mut updated_cells : Vec<UpdatedCell>= Vec::new();
 
             for row in 0..self.height {
                 for col in 0..self.width {
                     let index = self.get_index(row, col);
-                    let previous_state = self.cells[index];
+                    let previous_state = self.colony[index];
                     let count = self.live_neighbour_count(row, col);
 
                     let new_state = match (count, previous_state) {
@@ -65,7 +62,7 @@ impl Universe {
                         _ => false
                     };
 
-                    new_cells.set(index, new_state);
+                    colony.set(index, new_state);
 
                     // If we process more than 1 generation, we can't rely on the updated cells
                     if generations == 1 && previous_state != new_state {
@@ -74,7 +71,7 @@ impl Universe {
                 }
             }
 
-            self.cells = new_cells;
+            self.colony = colony;
             self.updated_cells = updated_cells;
         }
     }
@@ -87,8 +84,8 @@ impl Universe {
         self.height
     }
 
-    pub fn cells(&self) -> *const u32 {
-        self.cells.as_slice().as_ptr()
+    pub fn colony(&self) -> *const u32 {
+        self.colony.as_slice().as_ptr()
     }
     
     pub fn updated_cells_length(&self) -> usize {
@@ -131,6 +128,38 @@ impl Universe {
 
         states.as_ptr()
     }
+}
+
+// Private methods called from Rust only
+impl Universe {
+    // Get the dead and alive values of the entire universe.
+    pub fn get_colony(&self) -> &FixedBitSet {
+        &self.colony
+    }
+
+    // Set cells to be alive in a universe by passing the row and column
+    // of each cell as an array.
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        for (row, column) in cells.iter().cloned() {
+            let index = self.get_index(row, column);
+            self.colony.set(index, true);
+        }
+    }
+
+    pub fn generate_colony(&mut self, randomly: bool) {
+        let size = (self.width * self.height) as usize;
+        let mut colony = FixedBitSet::with_capacity(size);
+
+        for i in 0..size {
+            if randomly {
+                    colony.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+            } else {
+                    colony.set(i, i % 2 == 0 || i % 7 == 0);
+            }
+        }
+
+        self.colony = colony;
+    }
 
     fn get_index(&self, row: u32, column: u32) -> usize {
         (row * self.width + column) as usize
@@ -149,26 +178,10 @@ impl Universe {
                 let neighbour_column = (column + delta_column) % self.width;
                 let index = self.get_index(neighbour_row, neighbour_column);
 
-                count += self.cells[index] as u8;
+                count += self.colony[index] as u8;
             }
         }
 
         count
-    }
-}
-
-impl Universe {
-    // Get the dead and alive values of the entire universe.
-    pub fn get_cells(&self) -> &FixedBitSet {
-        &self.cells
-    }
-
-    // Set cells to be alive in a universe by passing the row and column
-    // of each cell as an array.
-    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
-        for (row, column) in cells.iter().cloned() {
-            let index = self.get_index(row, column);
-            self.cells.set(index, true);
-        }
     }
 }
