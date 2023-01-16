@@ -12,9 +12,11 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: 16
-            - run: cd www
-            - run: npm ci
-            - run: npm run build
+            - name: Build the app
+              working-directory: ./www
+              run: |
+                  npm ci
+                  npm run build
             - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: '${{ secrets.GITHUB_TOKEN }}'
