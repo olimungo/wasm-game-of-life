@@ -232,6 +232,19 @@ footer {
     text-align: end;
 }
 
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.version {
+    margin: 0.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+    color: var(--primary-dark-color);
+}
+
 .svg {
     padding: 0.5rem;
     border-radius: 50%;

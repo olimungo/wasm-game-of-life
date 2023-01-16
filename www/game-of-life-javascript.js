@@ -1,45 +1,47 @@
 export function UniverseJs() {
-    let width, height, allCells, updatedCells;
+    let width, height, colony, updatedCells;
 
     return {
         create,
         dispose,
+        generatePatternColony,
+        generateRandomColony,
         tick,
-        getAllCells,
+        getColony,
         getUpdatedCells,
     };
 
-    function create(newWidth, newHeight, randomly) {
+    function create(newWidth, newHeight) {
         width = newWidth;
         height = newHeight;
 
-        allCells = [];
+        colony = [];
         updatedCells = [];
-
-        for (let index = 0; index < width * height; index++) {
-            if (randomly) {
-                allCells.push(Math.random() < 0.5 ? true : false);
-            } else {
-                allCells.push(index % 2 == 0 || index % 7 == 0);
-            }
-        }
 
         return this;
     }
 
     function dispose() {
-        allCells = [];
+        colony = [];
         updatedCells = [];
+    }
+
+    function generatePatternColony() {
+        generateColony(false);
+    }
+
+    function generateRandomColony() {
+        generateColony(true);
     }
 
     function tick(generations) {
         updatedCells = [];
 
         for (let generation = 0; generation < generations; generation++) {
-            const newAllCells = [];
+            const newColony = [];
 
             for (let index = 0; index < width * height; index++) {
-                const previousState = allCells[index];
+                const previousState = colony[index];
                 const { row, column } = getRowColumn(index);
                 const count = liveNeighbourCount(row, column);
 
@@ -48,7 +50,7 @@ export function UniverseJs() {
                         ? true
                         : false;
 
-                newAllCells.push(newState);
+                newColony.push(newState);
 
                 // If we process more than 1 generation, we can't rely on the updated cells
                 if (generations === 1 && previousState !== newState) {
@@ -56,12 +58,12 @@ export function UniverseJs() {
                 }
             }
 
-            allCells = newAllCells;
+            colony = newColony;
         }
     }
 
-    function getAllCells() {
-        return allCells;
+    function getColony() {
+        return colony;
     }
 
     function getUpdatedCells() {
@@ -79,6 +81,16 @@ export function UniverseJs() {
         return { row, column };
     }
 
+    function generateColony(randomly) {
+        for (let index = 0; index < width * height; index++) {
+            if (randomly) {
+                colony.push(Math.random() < 0.5 ? true : false);
+            } else {
+                colony.push(index % 2 == 0 || index % 7 == 0);
+            }
+        }
+    }
+
     function liveNeighbourCount(row, column) {
         let count = 0;
 
@@ -92,7 +104,7 @@ export function UniverseJs() {
                 const neighbourColumn = (column + deltaColumn) % width;
                 const index = getIndex(neighbourRow, neighbourColumn);
 
-                count += allCells[index];
+                count += colony[index];
             }
         }
 

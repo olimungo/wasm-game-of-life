@@ -38,7 +38,18 @@ function createUniverse() {
 
     universe = createUniverseFactory();
 
-    canvas.drawAllCells(universe.getAllCells());
+    const isGenerationTypeRandomly =
+        ui.getColonyGenerationType() === ColonyGenerationType.Randomly
+            ? true
+            : false;
+
+    if (isGenerationTypeRandomly) {
+        universe.generateRandomColony();
+    } else {
+        universe.generatePatternColony();
+    }
+
+    canvas.drawAllCells(universe.getColony());
 
     generationsCount = 0;
     totalTicksDuration = 0;
@@ -47,15 +58,11 @@ function createUniverse() {
 function createUniverseFactory() {
     const width = ui.getWidth();
     const height = ui.getHeight();
-    const isGenerationTypeRandomly =
-        ui.getColonyGenerationType() === ColonyGenerationType.Randomly
-            ? true
-            : false;
 
     if (ui.getEngineGenerationType() === EngineGenerationType.Wasm) {
-        return UniverseWasm().create(width, height, isGenerationTypeRandomly);
+        return UniverseWasm().create(width, height);
     } else {
-        return UniverseJs().create(width, height, isGenerationTypeRandomly);
+        return UniverseJs().create(width, height);
     }
 }
 

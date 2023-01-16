@@ -7,16 +7,18 @@ export function UniverseWasm() {
     return {
         create,
         dispose,
+        generatePatternColony,
+        generateRandomColony,
         tick,
-        getAllCells,
+        getColony,
         getUpdatedCells,
     };
 
-    function create(newWidth, newHeight, randomly) {
+    function create(newWidth, newHeight) {
         width = newWidth;
         height = newHeight;
 
-        universe = Universe.new(width, height, randomly);
+        universe = Universe.new(width, height);
 
         return this;
     }
@@ -28,12 +30,20 @@ export function UniverseWasm() {
         }
     }
 
+    function generatePatternColony() {
+        universe.generate_pattern_colony();
+    }
+
+    function generateRandomColony() {
+        universe.generate_random_colony();
+    }
+
     function tick(generations) {
         universe.tick(generations);
     }
 
-    function getAllCells() {
-        const cellsPtr = universe.cells();
+    function getColony() {
+        const cellsPtr = universe.colony();
 
         const wasm_cells = new Uint8Array(
             memory.buffer,
@@ -41,13 +51,13 @@ export function UniverseWasm() {
             (width * height) / 8
         );
 
-        const allCells = [];
+        const colony = [];
 
         for (let index = 0; index < width * height; index++) {
-            allCells.push(bitIsSet(index, wasm_cells));
+            colony.push(bitIsSet(index, wasm_cells));
         }
 
-        return allCells;
+        return colony;
     }
 
     function getUpdatedCells() {
