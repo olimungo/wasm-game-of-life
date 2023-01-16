@@ -30,16 +30,16 @@ impl Universe {
         let mut cells = FixedBitSet::with_capacity(size);
         let updated_cells : Vec<UpdatedCell> = Vec::new();
 
-        if randomly {
-            for i in 0..size {
-                cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
-            }
+        // if randomly {
+        //     for i in 0..size {
+        //         cells.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+        //     }
         
-        } else {
-            for i in 0..size {
-                cells.set(i, i % 2 == 0 || i % 7 == 0);
-            }
-        }
+        // } else {
+        //     for i in 0..size {
+        //         cells.set(i, i % 2 == 0 || i % 7 == 0);
+        //     }
+        // }
     
         Universe {
             width,
@@ -154,5 +154,21 @@ impl Universe {
         }
 
         count
+    }
+}
+
+impl Universe {
+    // Get the dead and alive values of the entire universe.
+    pub fn get_cells(&self) -> &FixedBitSet {
+        &self.cells
+    }
+
+    // Set cells to be alive in a universe by passing the row and column
+    // of each cell as an array.
+    pub fn set_cells(&mut self, cells: &[(u32, u32)]) {
+        for (row, column) in cells.iter().cloned() {
+            let index = self.get_index(row, column);
+            self.cells.set(index, true);
+        }
     }
 }
