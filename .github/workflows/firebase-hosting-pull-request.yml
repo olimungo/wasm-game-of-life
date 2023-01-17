@@ -14,11 +14,10 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: 16
-            - name: Caching node modules
-              uses: actions/cache@v2
-              with:
-                  path: 'www/node_modules'
-                  key: node-modules-${{ hashFiles('app/package.json') }}
+            - name: Get npm cache directory
+              id: npm-cache-dir
+              shell: bash
+              run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
             - name: Install latest Chrome version
               uses: browser-actions/setup-chrome@latest
             - name: Check Chrome version
