@@ -277,3 +277,16 @@ footer {
 .result-value {
     color: var(--primary-action-color);
 }
+
+.frame-per-seconds {
+    position: fixed;
+    top: 1rem;
+    left: 23rem;
+    font-family: system-ui;
+    color: var(--primary-action-color);
+    background-color: rgb(85 91 105 / 51%);
+    padding: 0.5rem;
+    border: solid 1px var(--primary-dark-color);
+    border-radius: 0.2rem;
+    white-space: pre;
+}
