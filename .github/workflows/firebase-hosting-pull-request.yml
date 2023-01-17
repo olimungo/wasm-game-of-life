@@ -8,7 +8,7 @@ jobs:
         if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
         runs-on: ubuntu-latest
         steps:
-            - name: Chekout sources
+            - name: Checkout sources
               uses: actions/checkout@v3
             - name: Install node v16
               uses: actions/setup-node@v3
