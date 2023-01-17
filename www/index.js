@@ -70,6 +70,8 @@ function createUniverseFactory() {
 }
 
 function renderLoop() {
+    // debugger;
+
     const beforeTicks = new Date().getTime();
 
     fps.render();
