@@ -16,8 +16,20 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: 16
+                  cache: 'npm'
+                  cache-dependency-path: www/package-lock.json
             - name: Install Rust toolchain
               run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+            - name: Cache Crates
+              uses: actions/cache@v3
+              with:
+                  path: |
+                      ./target
+                      ~/.cargo
+                  key: debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-${{ hashFiles('Cargo.lock') }}
+                  restore-keys: |
+                      debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-
+                      debug-${{ runner.os }}-
             - name: Compile Rust code to WebAssembly
               run: wasm-pack build
             - name: Build the app
