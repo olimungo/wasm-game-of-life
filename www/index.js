@@ -2,6 +2,7 @@ import { Ui, ColonyGenerationType, EngineGenerationType } from './ui';
 import { Canvas } from './canvas';
 import { UniverseJs } from './game-of-life-javascript';
 import { UniverseWasm } from './game-of-life-wasm';
+import { Fps } from './fps';
 
 let universe;
 
@@ -15,6 +16,7 @@ let animationTimeOutId = null;
 
 const ui = Ui(createUniverse, play, pause, reset);
 const canvas = Canvas();
+const fps = Fps();
 
 createUniverse();
 
@@ -28,6 +30,8 @@ function createUniverse() {
 
     generationsCount = 0;
     totalTicksDuration = 0;
+    generationsOver = false;
+    generationPaused = false;
 
     ui.setUiCounter(0);
     ui.resetResults();
@@ -68,6 +72,8 @@ function createUniverseFactory() {
 function renderLoop() {
     const beforeTicks = new Date().getTime();
 
+    fps.render();
+
     universe.tick(ui.getTicksAtOnce());
 
     totalTicksDuration += new Date().getTime() - beforeTicks;
@@ -82,9 +88,13 @@ function renderLoop() {
     }
 
     if (generationsCount < ui.getNumberOfGenerations()) {
-        animationTimeOutId = setTimeout(() => {
+        if (ui.getThrottle() > 0) {
+            animationTimeOutId = setTimeout(() => {
+                animationId = requestAnimationFrame(renderLoop);
+            }, ui.getThrottle());
+        } else {
             animationId = requestAnimationFrame(renderLoop);
-        }, ui.getThrottle());
+        }
     } else {
         generationsOver = true;
 
@@ -131,8 +141,5 @@ function pause() {
 }
 
 function reset() {
-    generationPaused = false;
-    generationsOver = false;
-
     createUniverse();
 }

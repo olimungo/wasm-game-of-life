@@ -3,14 +3,41 @@ mod utils;
 use wasm_bindgen::prelude::*;
 
 extern crate js_sys;
+
 extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
+
+extern crate web_sys;
+use web_sys::console;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+// macro_rules! log {
+//     ( $( $t:tt )* ) => {
+//         web_sys::console::log_1(&format!( $( $t )* ).into());
+//     }
+// }
+
+pub struct Timer<'a> {
+    name: &'a str,
+}
+
+impl<'a> Timer<'a> {
+    pub fn new(name: &'a str) -> Timer<'a> {
+        console::time_with_label(name);
+        Timer { name }
+    }
+}
+
+impl<'a> Drop for Timer<'a> {
+    fn drop(&mut self) {
+        console::time_end_with_label(self.name);
+    }
+}
 
 struct UpdatedCell((u32, u32), bool);
 
@@ -26,10 +53,12 @@ pub struct Universe {
 #[wasm_bindgen]
 impl Universe {
     pub fn new(width: u32, height: u32) -> Universe {
+        utils::set_panic_hook();
+
         let size = (width * height) as usize;
         let colony = FixedBitSet::with_capacity(size);
         let updated_cells : Vec<UpdatedCell> = Vec::new();
-    
+
         Universe {
             width,
             height,
@@ -168,19 +197,53 @@ impl Universe {
     fn live_neighbour_count(&self, row: u32, column: u32) -> u8 {
         let mut count = 0;
 
-        for delta_row in [self.height - 1, 0, 1].iter().cloned() {
-            for delta_column in [self.width - 1, 0, 1].iter().cloned() {
-                if delta_row == 0 && delta_column == 0 {
-                    continue;
-                }
+        let north = if row == 0 {
+            self.height - 1
+        } else {
+            row - 1
+        };
 
-                let neighbour_row = (row + delta_row) % self.height;
-                let neighbour_column = (column + delta_column) % self.width;
-                let index = self.get_index(neighbour_row, neighbour_column);
+        let south = if row == self.height - 1 {
+            0
+        } else {
+            row + 1
+        };
 
-                count += self.colony[index] as u8;
-            }
-        }
+        let west = if column == 0 {
+            self.width - 1
+        } else {
+            column - 1
+        };
+
+        let east = if column == self.width - 1 {
+            0
+        } else {
+            column + 1
+        };
+
+        let nw = self.get_index(north, west);
+        count += self.colony[nw] as u8;
+
+        let n = self.get_index(north, column);
+        count += self.colony[n] as u8;
+
+        let ne = self.get_index(north, east);
+        count += self.colony[ne] as u8;
+
+        let w = self.get_index(row, west);
+        count += self.colony[w] as u8;
+
+        let e = self.get_index(row, east);
+        count += self.colony[e] as u8;
+
+        let sw = self.get_index(south, west);
+        count += self.colony[sw] as u8;
+
+        let s = self.get_index(south, column);
+        count += self.colony[s] as u8;
+
+        let se = self.get_index(south, east);
+        count += self.colony[se] as u8;
 
         count
     }
