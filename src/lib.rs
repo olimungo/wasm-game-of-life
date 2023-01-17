@@ -197,19 +197,53 @@ impl Universe {
     fn live_neighbour_count(&self, row: u32, column: u32) -> u8 {
         let mut count = 0;
 
-        for delta_row in [self.height - 1, 0, 1].iter().cloned() {
-            for delta_column in [self.width - 1, 0, 1].iter().cloned() {
-                if delta_row == 0 && delta_column == 0 {
-                    continue;
-                }
+        let north = if row == 0 {
+            self.height - 1
+        } else {
+            row - 1
+        };
 
-                let neighbour_row = (row + delta_row) % self.height;
-                let neighbour_column = (column + delta_column) % self.width;
-                let index = self.get_index(neighbour_row, neighbour_column);
+        let south = if row == self.height - 1 {
+            0
+        } else {
+            row + 1
+        };
 
-                count += self.colony[index] as u8;
-            }
-        }
+        let west = if column == 0 {
+            self.width - 1
+        } else {
+            column - 1
+        };
+
+        let east = if column == self.width - 1 {
+            0
+        } else {
+            column + 1
+        };
+
+        let nw = self.get_index(north, west);
+        count += self.colony[nw] as u8;
+
+        let n = self.get_index(north, column);
+        count += self.colony[n] as u8;
+
+        let ne = self.get_index(north, east);
+        count += self.colony[ne] as u8;
+
+        let w = self.get_index(row, west);
+        count += self.colony[w] as u8;
+
+        let e = self.get_index(row, east);
+        count += self.colony[e] as u8;
+
+        let sw = self.get_index(south, west);
+        count += self.colony[sw] as u8;
+
+        let s = self.get_index(south, column);
+        count += self.colony[s] as u8;
+
+        let se = self.get_index(south, east);
+        count += self.colony[se] as u8;
 
         count
     }

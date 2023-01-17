@@ -90,9 +90,13 @@ function renderLoop() {
     }
 
     if (generationsCount < ui.getNumberOfGenerations()) {
-        animationTimeOutId = setTimeout(() => {
+        if (ui.getThrottle() > 0) {
+            animationTimeOutId = setTimeout(() => {
+                animationId = requestAnimationFrame(renderLoop);
+            }, ui.getThrottle());
+        } else {
             animationId = requestAnimationFrame(renderLoop);
-        }, ui.getThrottle());
+        }
     } else {
         generationsOver = true;
 
