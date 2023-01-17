@@ -8,11 +8,12 @@ let universe;
 let generationsCount;
 let totalTicksDuration;
 let startedGenerationTime;
-let loopRendering = false;
 let generationsOver = false;
 let generationPaused = false;
+let animationId = null;
+let animationTimeOutId = null;
 
-const ui = Ui(propsUpdated, playClicked, pauseClicked, resetClicked);
+const ui = Ui(createUniverse, play, pause, reset);
 const canvas = Canvas();
 
 createUniverse();
@@ -21,15 +22,16 @@ createUniverse();
 // Functions
 //
 
-function propsUpdated() {
-    loopRendering = false;
-
-    setTimeout(() => {
-        createUniverse();
-    }, ui.getThrottle() + 100);
-}
-
 function createUniverse() {
+    cancelAnimationFrame(animationId);
+    clearTimeout(animationTimeOutId);
+
+    generationsCount = 0;
+    totalTicksDuration = 0;
+
+    ui.setUiCounter(0);
+    ui.resetResults();
+
     if (universe) {
         universe.dispose();
     }
@@ -50,9 +52,6 @@ function createUniverse() {
     }
 
     canvas.drawAllCells(universe.getColony());
-
-    generationsCount = 0;
-    totalTicksDuration = 0;
 }
 
 function createUniverseFactory() {
@@ -71,83 +70,69 @@ function renderLoop() {
 
     universe.tick(ui.getTicksAtOnce());
 
-    if (loopRendering) {
-        totalTicksDuration += new Date().getTime() - beforeTicks;
-        generationsCount += ui.getTicksAtOnce();
+    totalTicksDuration += new Date().getTime() - beforeTicks;
+    generationsCount += ui.getTicksAtOnce();
 
-        ui.setUiCounter(generationsCount);
+    ui.setUiCounter(generationsCount);
 
-        if (ui.getTicksAtOnce() > 1) {
-            canvas.drawAllCells(universe.getAllCells());
-        } else {
-            canvas.drawUpdatedCells(universe.getUpdatedCells());
-        }
+    if (ui.getTicksAtOnce() > 1) {
+        canvas.drawAllCells(universe.getColony());
+    } else {
+        canvas.drawUpdatedCells(universe.getUpdatedCells());
+    }
 
-        if (generationsCount < ui.getNumberOfGenerations()) {
-            setTimeout(() => {
-                requestAnimationFrame(renderLoop);
-            }, ui.getThrottle());
-        } else {
-            loopRendering = false;
-            generationsOver = true;
+    if (generationsCount < ui.getNumberOfGenerations()) {
+        animationTimeOutId = setTimeout(() => {
+            animationId = requestAnimationFrame(renderLoop);
+        }, ui.getThrottle());
+    } else {
+        generationsOver = true;
 
-            ui.setPlayButton();
+        ui.setPlayButton();
 
-            if (!generationPaused) {
-                const now = new Date().getTime();
-                const totalDuration = now - startedGenerationTime;
-                const averageTickDuration =
-                    totalTicksDuration / generationsCount;
-                const totalRedrawDuration =
-                    now - startedGenerationTime - totalTicksDuration;
-                const averageRedrawDuration =
-                    (now - startedGenerationTime - totalTicksDuration) /
-                    generationsCount;
+        if (!generationPaused) {
+            const now = new Date().getTime();
+            const totalDuration = now - startedGenerationTime;
+            const averageTickDuration = totalTicksDuration / generationsCount;
+            const totalRedrawDuration =
+                now - startedGenerationTime - totalTicksDuration;
+            const averageRedrawDuration =
+                (now - startedGenerationTime - totalTicksDuration) /
+                generationsCount;
 
-                ui.setResults({
-                    totalDuration,
-                    totalTicksDuration,
-                    averageTickDuration,
-                    totalRedrawDuration,
-                    averageRedrawDuration,
-                });
-            }
+            ui.setResults({
+                totalDuration,
+                totalTicksDuration,
+                averageTickDuration,
+                totalRedrawDuration,
+                averageRedrawDuration,
+            });
         }
     }
 }
 
-function playClicked() {
-    loopRendering = true;
-
+function play() {
     if (generationsOver) {
         generationsOver = false;
-        generationPaused = false;
-
-        ui.setUiCounter(0);
-        ui.resetResults();
 
         createUniverse();
     }
 
     startedGenerationTime = new Date().getTime();
 
-    requestAnimationFrame(renderLoop);
+    renderLoop();
 }
 
-function pauseClicked() {
-    loopRendering = false;
+function pause() {
+    cancelAnimationFrame(animationId);
+    clearTimeout(animationTimeOutId);
+
     generationPaused = true;
 }
 
-function resetClicked() {
-    loopRendering = false;
-    generationsOver = false;
+function reset() {
     generationPaused = false;
+    generationsOver = false;
 
-    setTimeout(() => {
-        ui.setUiCounter(0);
-        ui.resetResults();
-
-        createUniverse();
-    }, ui.getThrottle() + 100);
+    createUniverse();
 }
