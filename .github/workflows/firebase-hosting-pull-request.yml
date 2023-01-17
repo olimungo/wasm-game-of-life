@@ -21,7 +21,7 @@ jobs:
               run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
             - name: Cache Crates
               uses: actions/cache@v3
-                  with:
+              with:
                   path: |
                       ./target
                       ~/.cargo
