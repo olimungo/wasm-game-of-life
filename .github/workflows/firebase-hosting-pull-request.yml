@@ -19,6 +19,16 @@ jobs:
               run: chrome --version
             - name: Install Rust toolchain
               run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+            - name: Cache Crates
+                uses: actions/cache@v3
+                with:
+                path: |
+                    ./target
+                    ~/.cargo                        
+                key: debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-${{ hashFiles('Cargo.lock') }}
+                restore-keys: |
+                    debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-
+                    debug-${{ runner.os }}-  
             - name: Test Rust code
               run: wasm-pack test --chrome --headless
             - name: Compile Rust code to WebAssembly
