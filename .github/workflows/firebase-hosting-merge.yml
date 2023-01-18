@@ -26,10 +26,10 @@ jobs:
                   path: |
                       ./target
                       ~/.cargo
-                  key: debug-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+                  key: cache-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
                   restore-keys: |
-                      debug-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
-                      debug-${{ runner.os }}-
+                      cache-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+                      cache-${{ runner.os }}-
             - name: Compile Rust code to WebAssembly
               run: wasm-pack build
             - name: Build the app
