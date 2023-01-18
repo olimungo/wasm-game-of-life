@@ -42,3 +42,4 @@ jobs:
                   repoToken: '${{ secrets.GITHUB_TOKEN }}'
                   firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GAME_OF_LIFE_9A203 }}'
                   projectId: game-of-life-9a203
+                  expires: 1d
