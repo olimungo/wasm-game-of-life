@@ -15,8 +15,6 @@ jobs:
                   cache-dependency-path: www/package-lock.json
             - name: Install latest Chrome version
               uses: browser-actions/setup-chrome@latest
-            - name: Check Chrome version
-              run: chrome --version
             - name: Install Rust toolchain
               run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
             - name: Cache Crates
