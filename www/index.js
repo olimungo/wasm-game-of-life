@@ -1,5 +1,4 @@
 import { Ui, ColonyGenerationType, EngineGenerationType } from './ui';
-import { Canvas } from './canvas';
 import { UniverseJs } from './game-of-life-javascript';
 import { UniverseWasm } from './game-of-life-wasm';
 import { Fps } from './fps';
@@ -15,7 +14,6 @@ let animationId = null;
 let animationTimeOutId = null;
 
 const ui = Ui(createUniverse, play, pause, reset);
-const canvas = Canvas();
 const fps = Fps();
 
 createUniverse();
@@ -40,8 +38,6 @@ function createUniverse() {
         universe.dispose();
     }
 
-    canvas.setCanvas(ui.getWidth(), ui.getHeight(), ui.getCellSize());
-
     universe = createUniverseFactory();
 
     const isGenerationTypeRandomly =
@@ -55,17 +51,18 @@ function createUniverse() {
         universe.generatePatternColony();
     }
 
-    canvas.drawAllCells(universe.getColony());
+    universe.drawAllCells();
 }
 
 function createUniverseFactory() {
     const width = ui.getWidth();
     const height = ui.getHeight();
+    const cellSize = ui.getCellSize();
 
     if (ui.getEngineGenerationType() === EngineGenerationType.Wasm) {
-        return UniverseWasm().create(width, height);
+        return UniverseWasm().create(width, height, cellSize);
     } else {
-        return UniverseJs().create(width, height);
+        return UniverseJs().create(width, height, cellSize);
     }
 }
 
@@ -82,9 +79,9 @@ function renderLoop() {
     ui.setUiCounter(generationsCount);
 
     if (ui.getTicksAtOnce() > 1) {
-        canvas.drawAllCells(universe.getColony());
+        universe.drawAllCells();
     } else {
-        canvas.drawUpdatedCells(universe.getUpdatedCells());
+        universe.drawUpdatedCells();
     }
 
     if (generationsCount < ui.getNumberOfGenerations()) {
