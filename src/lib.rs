@@ -4,7 +4,6 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
 extern crate js_sys;
-use js_sys::Object;
 
 extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
@@ -56,7 +55,7 @@ pub struct Universe {
     cell_size: u32,
     colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
-    canvas_rendering_context: Option<CanvasRenderingContext2d>
+    canvas: Option<CanvasRenderingContext2d>
 }
 
 /// Public methods, exported to JavaScript
@@ -65,14 +64,15 @@ impl Universe {
     pub fn new(width: u32, height: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
         
-        let mut canvas_rendering_context: Option<CanvasRenderingContext2d> = None;
+        let mut canvas: Option<CanvasRenderingContext2d> = None;
         let document = window().unwrap().document().unwrap();
         let element = document.get_element_by_id("ui-canvas");
 
+        // When testing, there's no index.html page containing the div element with ui-canvas as id
         if let Some(_) = element {
             let html_canvas_element: HtmlCanvasElement = element.unwrap().dyn_into().unwrap();
-            let object: Object = html_canvas_element.get_context("2d").unwrap().unwrap();
-            canvas_rendering_context = Some(object.dyn_into().unwrap());
+            let context_object = html_canvas_element.get_context("2d").unwrap().unwrap();
+            canvas = Some(context_object.dyn_into().unwrap());
         }
 
         let size = (width * height) as usize;
@@ -85,7 +85,7 @@ impl Universe {
             cell_size,
             colony,
             updated_cells,
-            canvas_rendering_context
+            canvas
         }
     }
 
@@ -128,7 +128,7 @@ impl Universe {
     }
 
     pub fn draw_all_cells(&self) {
-        if let Some(canvas) = &self.canvas_rendering_context {
+        if let Some(canvas) = &self.canvas {
             canvas.begin_path();
     
             self.draw_all_cells_by_state(true);
@@ -139,7 +139,7 @@ impl Universe {
     }
 
     pub fn draw_updated_cells(&self) {
-        if let Some(canvas) = &self.canvas_rendering_context {
+        if let Some(canvas) = &self.canvas {
             canvas.begin_path();
 
             self.draw_updated_cells_by_state(true);
@@ -240,7 +240,7 @@ impl Universe {
     }
 
     fn draw_all_cells_by_state(&self, state: bool) {
-        if let Some(canvas) = &self.canvas_rendering_context {
+        if let Some(canvas) = &self.canvas {
             let color: &str;
 
             if state {
@@ -271,7 +271,7 @@ impl Universe {
     }
 
     fn draw_updated_cells_by_state(&self, state: bool) {
-        if let Some(canvas) = &self.canvas_rendering_context {
+        if let Some(canvas) = &self.canvas {
             let color: &str;
 
             if state {
