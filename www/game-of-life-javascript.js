@@ -1,5 +1,9 @@
+import { Canvas } from './canvas';
+
 export function UniverseJs() {
-    let width, height, colony, updatedCells;
+    let width, height, cellSize, colony, updatedCells;
+
+    const canvas = Canvas();
 
     return {
         create,
@@ -7,16 +11,19 @@ export function UniverseJs() {
         generatePatternColony,
         generateRandomColony,
         tick,
-        getColony,
-        getUpdatedCells,
+        drawAllCells,
+        drawUpdatedCells,
     };
 
-    function create(newWidth, newHeight) {
+    function create(newWidth, newHeight, newCellSize) {
         width = newWidth;
         height = newHeight;
+        cellSize = newCellSize;
 
         colony = [];
         updatedCells = [];
+
+        canvas.setCanvas(width, height, cellSize);
 
         return this;
     }
@@ -24,6 +31,14 @@ export function UniverseJs() {
     function dispose() {
         colony = [];
         updatedCells = [];
+    }
+
+    function drawAllCells() {
+        canvas.drawAllCells(colony);
+    }
+
+    function drawUpdatedCells() {
+        canvas.drawUpdatedCells(updatedCells);
     }
 
     function generatePatternColony() {
@@ -62,14 +77,6 @@ export function UniverseJs() {
         }
     }
 
-    function getColony() {
-        return colony;
-    }
-
-    function getUpdatedCells() {
-        return updatedCells;
-    }
-
     function getIndex(row, column) {
         return row * width + column;
     }
@@ -94,19 +101,34 @@ export function UniverseJs() {
     function liveNeighbourCount(row, column) {
         let count = 0;
 
-        for (let deltaRow of [height - 1, 0, 1]) {
-            for (let deltaColumn of [width - 1, 0, 1]) {
-                if (deltaRow === 0 && deltaColumn === 0) {
-                    continue;
-                }
+        let north = row == 0 ? height - 1 : row - 1;
+        let south = row == height - 1 ? 0 : row + 1;
+        let west = column == 0 ? width - 1 : column - 1;
+        let east = column == width - 1 ? 0 : column + 1;
 
-                const neighbourRow = (row + deltaRow) % height;
-                const neighbourColumn = (column + deltaColumn) % width;
-                const index = getIndex(neighbourRow, neighbourColumn);
+        let nw = getIndex(north, west);
+        count += colony[nw];
 
-                count += colony[index];
-            }
-        }
+        let n = getIndex(north, column);
+        count += colony[n];
+
+        let ne = getIndex(north, east);
+        count += colony[ne];
+
+        let w = getIndex(row, west);
+        count += colony[w];
+
+        let e = getIndex(row, east);
+        count += colony[e];
+
+        let sw = getIndex(south, west);
+        count += colony[sw];
+
+        let s = getIndex(south, column);
+        count += colony[s];
+
+        let se = getIndex(south, east);
+        count += colony[se];
 
         return count;
     }

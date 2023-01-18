@@ -10,7 +10,7 @@ extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
 
 extern crate web_sys;
-use web_sys::console;
+// use web_sys::console;
 use web_sys::window;
 use web_sys::CanvasRenderingContext2d;
 use web_sys::Document;
@@ -23,28 +23,31 @@ use web_sys::HtmlCanvasElement;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+static COLOR_CELL_ALIVE: &str = "#000000";
+static COLOR_CELL_DEAD: &str = "#ffffff";
+
 // macro_rules! log {
 //     ( $( $t:tt )* ) => {
 //         web_sys::console::log_1(&format!( $( $t )* ).into());
 //     }
 // }
 
-pub struct Timer<'a> {
-    name: &'a str,
-}
+// pub struct Timer<'a> {
+//     name: &'a str,
+// }
 
-impl<'a> Timer<'a> {
-    pub fn new(name: &'a str) -> Timer<'a> {
-        console::time_with_label(name);
-        Timer { name }
-    }
-}
+// impl<'a> Timer<'a> {
+//     pub fn new(name: &'a str) -> Timer<'a> {
+//         console::time_with_label(name);
+//         Timer { name }
+//     }
+// }
 
-impl<'a> Drop for Timer<'a> {
-    fn drop(&mut self) {
-        console::time_end_with_label(self.name);
-    }
-}
+// impl<'a> Drop for Timer<'a> {
+//     fn drop(&mut self) {
+//         console::time_end_with_label(self.name);
+//     }
+// }
 
 struct UpdatedCell((u32, u32), bool);
 
@@ -52,6 +55,7 @@ struct UpdatedCell((u32, u32), bool);
 pub struct Universe {
     width: u32,
     height: u32,
+    cell_size: u32,
     colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
     canvas_rendering_context: CanvasRenderingContext2d
@@ -60,10 +64,7 @@ pub struct Universe {
 /// Public methods, exported to JavaScript
 #[wasm_bindgen]
 impl Universe {
-    pub fn hello_canvas(&self) {
-    }
-    
-    pub fn new(width: u32, height: u32) -> Universe {
+    pub fn new(width: u32, height: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
         
         let document: Document = window().unwrap().document().unwrap();
@@ -79,6 +80,7 @@ impl Universe {
         Universe {
             width,
             height,
+            cell_size,
             colony,
             updated_cells,
             canvas_rendering_context
@@ -99,10 +101,10 @@ impl Universe {
             let mut updated_cells : Vec<UpdatedCell>= Vec::new();
 
             for row in 0..self.height {
-                for col in 0..self.width {
-                    let index = self.get_index(row, col);
+                for column in 0..self.width {
+                    let index = self.get_index(row, column);
                     let previous_state = self.colony[index];
-                    let count = self.live_neighbour_count(row, col);
+                    let count = self.live_neighbour_count(row, column);
 
                     let new_state = match (count, previous_state) {
                         (2, true) | (3, _) => true,
@@ -113,7 +115,7 @@ impl Universe {
 
                     // If we process more than 1 generation, we can't rely on the updated cells
                     if generations == 1 && previous_state != new_state {
-                        updated_cells.push(UpdatedCell((row, col), new_state));
+                        updated_cells.push(UpdatedCell((row, column), new_state));
                     }
                 }
             }
@@ -121,63 +123,24 @@ impl Universe {
             self.colony = colony;
             self.updated_cells = updated_cells;
         }
-
-        self.canvas_rendering_context.set_font("normal 40px serif");
-        self.canvas_rendering_context.stroke_text("Hello, Canvas!", 20.0, 50.0).unwrap();
-
     }
 
-    pub fn width(&self) -> u32 {
-        self.width
+    pub fn draw_all_cells(&self) {
+        self.canvas_rendering_context.begin_path();
+
+        self.draw_all_cells_by_state(true);
+        self.draw_all_cells_by_state(false);  
+        
+        self.canvas_rendering_context.stroke();
     }
 
-    pub fn height(&self) -> u32 {
-        self.height
-    }
+    pub fn draw_updated_cells(&self) {
+        self.canvas_rendering_context.begin_path();
 
-    pub fn colony(&self) -> *const u32 {
-        self.colony.as_slice().as_ptr()
-    }
+        self.draw_updated_cells_by_state(true);
+        self.draw_updated_cells_by_state(false);
     
-    pub fn updated_cells_length(&self) -> usize {
-        self.updated_cells.len()
-    }
-
-    pub fn updated_cells_rows(&self) -> *const u32 {
-        let mut rows: Vec<u32> = Vec::new();
-
-        for index in 0..self.updated_cells.len() {
-            let (row, _) = self.updated_cells[index].0;
-            rows.push(row);
-        }
-
-        rows.as_ptr()
-    }
-
-    pub fn updated_cells_columns(&self) -> *const u32 {
-        let mut columns: Vec<u32> = Vec::new();
-
-        for index in 0..self.updated_cells.len() {
-            let (_, col) = self.updated_cells[index].0;
-            columns.push(col);
-        }
-
-        columns.as_ptr()
-    }
-
-    pub fn updated_cells_states(&self) -> *const u32 {
-        let mut states: Vec<u32> = Vec::new();
-
-        for index in 0..self.updated_cells.len() {
-            let state = self.updated_cells[index].1;
-
-            states.push(match state {
-                true => 1,
-                _ => 0
-            });
-        }
-
-        states.as_ptr()
+        self.canvas_rendering_context.stroke();
     }
 }
 
@@ -268,5 +231,62 @@ impl Universe {
         count += self.colony[se] as u8;
 
         count
+    }
+
+    fn draw_all_cells_by_state(&self, state: bool) {
+        let color: &str;
+
+        if state {
+            color = &COLOR_CELL_ALIVE;
+        } else {
+            color = &COLOR_CELL_DEAD;
+        }
+
+        self.canvas_rendering_context.set_fill_style(&color.into());
+        
+        for row in 0..self.height {
+            for column in 0..self.width {
+                let index = self.get_index(row, column);
+
+                if self.colony[index] != state {
+                    continue;
+                }
+                
+                self.canvas_rendering_context.fill_rect(
+                    column as f64 * self.cell_size as f64,
+                    row as f64 * self.cell_size as f64,
+                    self.cell_size as f64,
+                    self.cell_size as f64
+                );
+            }
+        }
+    }
+
+    fn draw_updated_cells_by_state(&self, state: bool) {
+        let color: &str;
+
+        if state {
+            color = &COLOR_CELL_ALIVE;
+        } else {
+            color = &COLOR_CELL_DEAD;
+        }
+
+        self.canvas_rendering_context.set_fill_style(&color.into());
+        
+        for index in 0..self.updated_cells.len() {
+            let (row, column) = self.updated_cells[index].0;
+            let updated_state = self.updated_cells[index].1;
+
+            if updated_state != state {
+                continue;
+            }
+
+            self.canvas_rendering_context.fill_rect(
+                row as f64 * self.cell_size as f64,
+                column as f64 * self.cell_size as f64,
+                self.cell_size as f64,
+                self.cell_size as f64
+            );
+        }
     }
 }
