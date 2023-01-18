@@ -25,9 +25,8 @@ jobs:
                   path: |
                       ./target
                       ~/.cargo
-                  key: debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-${{ hashFiles('Cargo.lock') }}
+                  key: debug-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
                   restore-keys: |
-                      debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-
                       debug-${{ runner.os }}-
             - name: Test Rust code
               run: wasm-pack test --chrome --headless
