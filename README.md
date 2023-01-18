@@ -30,6 +30,12 @@ This command has to be executed in the root folder of the project:
 wasm-pack build
 ```
 
+### Tests
+
+```shell
+wasm-pack test --chrome --headless
+```
+
 ## JavaScript
 
 The JavaScript code for the front-end as well as for the implementation of the Game of life can be found into the _www_ folder.
@@ -52,7 +58,14 @@ The app will be available at http://localhost:8080.
 
 ## Redraw the canvas
 
-At each generation (tick), the colony is redrawn. This is done purely in JavaScript.
+At each generation (tick), the colony is redrawn on the canvas.
+If the _number of generations_ is:
+
+-   exactly equal to 1, then only the updated cells are redrawn,
+-   if it's higher than 1, then the colony is fully redrawn.
+
+The Rust code draws directly onto the canvas. Spoiler, as of 01/2023, it is not faster than Javascript\
+:open_mouth:
 
 ## License
 
