@@ -13,8 +13,6 @@ extern crate web_sys;
 // use web_sys::console;
 use web_sys::window;
 use web_sys::CanvasRenderingContext2d;
-use web_sys::Document;
-use web_sys::Element;
 use web_sys::HtmlCanvasElement;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -58,7 +56,7 @@ pub struct Universe {
     cell_size: u32,
     colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
-    canvas_rendering_context: CanvasRenderingContext2d
+    canvas_rendering_context: Option<CanvasRenderingContext2d>
 }
 
 /// Public methods, exported to JavaScript
@@ -67,11 +65,15 @@ impl Universe {
     pub fn new(width: u32, height: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
         
-        let document: Document = window().unwrap().document().unwrap();
-        let element: Element = document.get_element_by_id("ui-canvas").unwrap();
-        let html_canvas_element: HtmlCanvasElement = element.dyn_into().unwrap();
-        let object: Object = html_canvas_element.get_context("2d").unwrap().unwrap();
-        let canvas_rendering_context: CanvasRenderingContext2d = object.dyn_into().unwrap();
+        let mut canvas_rendering_context: Option<CanvasRenderingContext2d> = None;
+        let document = window().unwrap().document().unwrap();
+        let element = document.get_element_by_id("ui-canvas");
+
+        if let Some(_) = element {
+            let html_canvas_element: HtmlCanvasElement = element.unwrap().dyn_into().unwrap();
+            let object: Object = html_canvas_element.get_context("2d").unwrap().unwrap();
+            canvas_rendering_context = Some(object.dyn_into().unwrap());
+        }
 
         let size = (width * height) as usize;
         let colony = FixedBitSet::with_capacity(size);
@@ -126,21 +128,25 @@ impl Universe {
     }
 
     pub fn draw_all_cells(&self) {
-        self.canvas_rendering_context.begin_path();
-
-        self.draw_all_cells_by_state(true);
-        self.draw_all_cells_by_state(false);  
-        
-        self.canvas_rendering_context.stroke();
+        if let Some(canvas) = &self.canvas_rendering_context {
+            canvas.begin_path();
+    
+            self.draw_all_cells_by_state(true);
+            self.draw_all_cells_by_state(false);  
+            
+            canvas.stroke();
+        }
     }
 
     pub fn draw_updated_cells(&self) {
-        self.canvas_rendering_context.begin_path();
+        if let Some(canvas) = &self.canvas_rendering_context {
+            canvas.begin_path();
 
-        self.draw_updated_cells_by_state(true);
-        self.draw_updated_cells_by_state(false);
-    
-        self.canvas_rendering_context.stroke();
+            self.draw_updated_cells_by_state(true);
+            self.draw_updated_cells_by_state(false);
+        
+            canvas.stroke();
+        }
     }
 }
 
@@ -234,59 +240,63 @@ impl Universe {
     }
 
     fn draw_all_cells_by_state(&self, state: bool) {
-        let color: &str;
+        if let Some(canvas) = &self.canvas_rendering_context {
+            let color: &str;
 
-        if state {
-            color = &COLOR_CELL_ALIVE;
-        } else {
-            color = &COLOR_CELL_DEAD;
-        }
+            if state {
+                color = &COLOR_CELL_ALIVE;
+            } else {
+                color = &COLOR_CELL_DEAD;
+            }
 
-        self.canvas_rendering_context.set_fill_style(&color.into());
-        
-        for row in 0..self.height {
-            for column in 0..self.width {
-                let index = self.get_index(row, column);
+            canvas.set_fill_style(&color.into());
+            
+            for row in 0..self.height {
+                for column in 0..self.width {
+                    let index = self.get_index(row, column);
 
-                if self.colony[index] != state {
-                    continue;
+                    if self.colony[index] != state {
+                        continue;
+                    }
+                    
+                    canvas.fill_rect(
+                        column as f64 * self.cell_size as f64,
+                        row as f64 * self.cell_size as f64,
+                        self.cell_size as f64,
+                        self.cell_size as f64
+                    );
                 }
-                
-                self.canvas_rendering_context.fill_rect(
-                    column as f64 * self.cell_size as f64,
-                    row as f64 * self.cell_size as f64,
-                    self.cell_size as f64,
-                    self.cell_size as f64
-                );
             }
         }
     }
 
     fn draw_updated_cells_by_state(&self, state: bool) {
-        let color: &str;
+        if let Some(canvas) = &self.canvas_rendering_context {
+            let color: &str;
 
-        if state {
-            color = &COLOR_CELL_ALIVE;
-        } else {
-            color = &COLOR_CELL_DEAD;
-        }
-
-        self.canvas_rendering_context.set_fill_style(&color.into());
-        
-        for index in 0..self.updated_cells.len() {
-            let (row, column) = self.updated_cells[index].0;
-            let updated_state = self.updated_cells[index].1;
-
-            if updated_state != state {
-                continue;
+            if state {
+                color = &COLOR_CELL_ALIVE;
+            } else {
+                color = &COLOR_CELL_DEAD;
             }
 
-            self.canvas_rendering_context.fill_rect(
-                row as f64 * self.cell_size as f64,
-                column as f64 * self.cell_size as f64,
-                self.cell_size as f64,
-                self.cell_size as f64
-            );
+            canvas.set_fill_style(&color.into());
+            
+            for index in 0..self.updated_cells.len() {
+                let (row, column) = self.updated_cells[index].0;
+                let updated_state = self.updated_cells[index].1;
+
+                if updated_state != state {
+                    continue;
+                }
+
+                canvas.fill_rect(
+                    row as f64 * self.cell_size as f64,
+                    column as f64 * self.cell_size as f64,
+                    self.cell_size as f64,
+                    self.cell_size as f64
+                );
+            }
         }
     }
 }
