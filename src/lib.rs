@@ -1,14 +1,21 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 extern crate js_sys;
+use js_sys::Object;
 
 extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
 
 extern crate web_sys;
 use web_sys::console;
+use web_sys::window;
+use web_sys::CanvasRenderingContext2d;
+use web_sys::Document;
+use web_sys::Element;
+use web_sys::HtmlCanvasElement;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -46,14 +53,24 @@ pub struct Universe {
     width: u32,
     height: u32,
     colony: FixedBitSet,
-    updated_cells: Vec<UpdatedCell>
+    updated_cells: Vec<UpdatedCell>,
+    canvas_rendering_context: CanvasRenderingContext2d
 }
 
 /// Public methods, exported to JavaScript
 #[wasm_bindgen]
 impl Universe {
+    pub fn hello_canvas(&self) {
+    }
+    
     pub fn new(width: u32, height: u32) -> Universe {
         utils::set_panic_hook();
+        
+        let document: Document = window().unwrap().document().unwrap();
+        let element: Element = document.get_element_by_id("ui-canvas").unwrap();
+        let html_canvas_element: HtmlCanvasElement = element.dyn_into().unwrap();
+        let object: Object = html_canvas_element.get_context("2d").unwrap().unwrap();
+        let canvas_rendering_context: CanvasRenderingContext2d = object.dyn_into().unwrap();
 
         let size = (width * height) as usize;
         let colony = FixedBitSet::with_capacity(size);
@@ -64,6 +81,7 @@ impl Universe {
             height,
             colony,
             updated_cells,
+            canvas_rendering_context
         }
     }
 
@@ -103,6 +121,10 @@ impl Universe {
             self.colony = colony;
             self.updated_cells = updated_cells;
         }
+
+        self.canvas_rendering_context.set_font("normal 40px serif");
+        self.canvas_rendering_context.stroke_text("Hello, Canvas!", 20.0, 50.0).unwrap();
+
     }
 
     pub fn width(&self) -> u32 {
