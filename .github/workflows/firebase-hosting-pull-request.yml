@@ -1,4 +1,4 @@
-name: Deploy to Firebase Hosting on Pull request-x
+name: Deploy to Firebase Hosting on Pull request
 'on': pull_request
 jobs:
     build_and_preview:
@@ -23,8 +23,10 @@ jobs:
                   path: |
                       ./target
                       ~/.cargo
-                  key: debug-${{ runner.os }}-
-                  restore-keys: debug-${{ runner.os }}-
+                  key: cache-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+                  restore-keys: |
+                      cache-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
+                      cache-${{ runner.os }}-
             - name: Test Rust code
               run: wasm-pack test --chrome --headless
             - name: Compile Rust code to WebAssembly
