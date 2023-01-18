@@ -26,9 +26,9 @@ jobs:
                   path: |
                       ./target
                       ~/.cargo
-                  key: debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-${{ hashFiles('Cargo.lock') }}
+                  key: debug-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
                   restore-keys: |
-                      debug-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}-
+                      debug-${{ runner.os }}-${{ hashFiles('Cargo.lock') }}
                       debug-${{ runner.os }}-
             - name: Compile Rust code to WebAssembly
               run: wasm-pack build
