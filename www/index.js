@@ -18,6 +18,8 @@ const fps = Fps();
 
 createUniverse();
 
+universe.test();
+
 //
 // Functions
 //

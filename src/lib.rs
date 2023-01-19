@@ -9,7 +9,6 @@ extern crate fixedbitset;
 use fixedbitset::FixedBitSet;
 
 extern crate web_sys;
-// use web_sys::console;
 use web_sys::window;
 use web_sys::CanvasRenderingContext2d;
 use web_sys::HtmlCanvasElement;
@@ -116,7 +115,7 @@ impl Universe {
                     colony.set(index, new_state);
 
                     // If we process more than 1 generation, we can't rely on the updated cells
-                    if generations == 1 && previous_state != new_state {
+                    if generations == 1 && previous_state != new_state {                        
                         updated_cells.push(UpdatedCell((row, column), new_state));
                     }
                 }
@@ -145,6 +144,36 @@ impl Universe {
             self.draw_updated_cells_by_state(true);
             self.draw_updated_cells_by_state(false);
         
+            canvas.stroke();
+        }
+    }
+
+    pub fn test(&mut self) {
+        // self.tick(1u32);
+
+        if let Some(canvas) = &self.canvas {
+            // log!("{}", self.colony[0]);
+            // log!("{}", self.colony[1]);
+            // log!("{}", self.colony[2]);
+            // log!("{}", self.colony[3]);
+            // log!("{}", self.colony[4]);
+            // log!("{}", self.colony[5]);
+            // log!("{}", self.colony[6]);
+            // log!("{}", self.colony[7]);
+            // log!("{}", self.colony[8]);
+
+            // let cell_size = self.cell_size as f64;
+
+            // canvas.clear_rect(0f64, 0f64, self.width as f64 * cell_size, self.height as f64 * cell_size);
+            // canvas.set_fill_style(&COLOR_CELL_ALIVE.into());
+            
+            // canvas.fill_rect(
+            //     0f64 * cell_size,
+            //     0f64 * cell_size,
+            //     150f64 * cell_size,
+            //     150f64 * cell_size
+            // );
+
             canvas.stroke();
         }
     }
@@ -242,6 +271,7 @@ impl Universe {
     fn draw_all_cells_by_state(&self, state: bool) {
         if let Some(canvas) = &self.canvas {
             let color: &str;
+            let cell_size = self.cell_size as f64;
 
             if state {
                 color = &COLOR_CELL_ALIVE;
@@ -260,10 +290,10 @@ impl Universe {
                     }
                     
                     canvas.fill_rect(
-                        column as f64 * self.cell_size as f64,
-                        row as f64 * self.cell_size as f64,
-                        self.cell_size as f64,
-                        self.cell_size as f64
+                        column as f64 * cell_size,
+                        row as f64 * cell_size,
+                        cell_size,
+                        cell_size
                     );
                 }
             }
@@ -273,13 +303,14 @@ impl Universe {
     fn draw_updated_cells_by_state(&self, state: bool) {
         if let Some(canvas) = &self.canvas {
             let color: &str;
-
+            let cell_size = self.cell_size as f64;
+            
             if state {
                 color = &COLOR_CELL_ALIVE;
             } else {
                 color = &COLOR_CELL_DEAD;
             }
-
+            
             canvas.set_fill_style(&color.into());
             
             for index in 0..self.updated_cells.len() {
@@ -291,10 +322,10 @@ impl Universe {
                 }
 
                 canvas.fill_rect(
-                    row as f64 * self.cell_size as f64,
-                    column as f64 * self.cell_size as f64,
-                    self.cell_size as f64,
-                    self.cell_size as f64
+                    column as f64 * cell_size,
+                    row as f64 * cell_size,
+                    cell_size,
+                    cell_size
                 );
             }
         }
