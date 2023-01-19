@@ -14,7 +14,12 @@ export function UniverseWasm() {
         tick,
         drawAllCells,
         drawUpdatedCells,
+        test,
     };
+
+    function test() {
+        universe.test();
+    }
 
     function create(width, height, cellSize) {
         universe = Universe.new(width, height, cellSize);
