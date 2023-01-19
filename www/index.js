@@ -13,7 +13,7 @@ let generationPaused = false;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(createUniverse, play, pause, reset);
+const ui = Ui(play, pause, reset);
 const fps = Fps();
 
 createUniverse();
@@ -23,8 +23,8 @@ createUniverse();
 //
 
 function createUniverse() {
-    cancelAnimationFrame(animationId);
     clearTimeout(animationTimeOutId);
+    cancelAnimationFrame(animationId);
 
     generationsCount = 0;
     totalTicksDuration = 0;

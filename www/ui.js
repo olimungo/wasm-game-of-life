@@ -9,11 +9,12 @@ export const EngineGenerationType = Object.freeze({
 });
 
 export function Ui(
-    propsUpdatedCallback,
     playClickedCallback,
     pauseClickedCallback,
     resetClickedCalback
 ) {
+    const githubSourcesUrl = 'https://github.com/olimungo/wasm-game-of-life';
+
     let cellSize; // px
     let width; // px
     let height; // px
@@ -49,6 +50,7 @@ export function Ui(
     );
 
     // Buttons
+    const uiSet = document.getElementById('ui-set');
     const uiPlayPause = document.getElementById('ui-play-pause');
     const uiReset = document.getElementById('ui-reset');
     const uiSourceCode = document.getElementById('ui-source-code');
@@ -155,17 +157,27 @@ export function Ui(
         setUiCounter(0);
     }
 
-    function propsUpdated() {
-        uiPlayPause.textContent = 'PLAY';
-        propsUpdatedCallback();
-    }
-
     function setUiCounter(count) {
         uiCounter.textContent = count;
     }
 
     function setPlayButton() {
         uiPlayPause.textContent = 'PLAY';
+    }
+
+    function reset() {
+        uiPlayPause.textContent = 'PLAY';
+        resetClickedCalback();
+    }
+
+    function unwrapDefault(value, defaultValue) {
+        const intValue = parseInt(value);
+
+        if (!isNaN(intValue)) {
+            return intValue;
+        }
+
+        return defaultValue;
     }
 
     function addEventListeners() {
@@ -176,94 +188,47 @@ export function Ui(
                         ? EngineGenerationType.Wasm
                         : EngineGenerationType.Javascript;
 
-                uiPlayPause.textContent = 'PLAY';
-
-                propsUpdated();
+                reset();
             });
         }
 
-        function updateWidth(e) {
-            const value = parseInt(e.target.value);
-
-            if (!isNaN(value)) {
-                width = value;
-                propsUpdated();
-            }
-        }
-
-        uiWidth.addEventListener('change', (e) => updateWidth(e));
-        uiWidth.addEventListener('keyup', (e) => updateWidth(e));
-
-        function updateHeight(e) {
-            const value = parseInt(e.target.value);
-
-            if (!isNaN(value)) {
-                height = value;
-                propsUpdated();
-            }
-        }
-
-        uiHeight.addEventListener('change', (e) => updateHeight(e));
-        uiHeight.addEventListener('keyup', (e) => updateHeight(e));
-
-        function updateCellSize(e) {
-            const value = parseInt(e.target.value);
-
-            if (!isNaN(value)) {
-                cellSize = value;
-                propsUpdated();
-            }
-        }
-
-        uiCellSize.addEventListener('change', (e) => updateCellSize(e));
-        uiCellSize.addEventListener('keyup', (e) => updateCellSize(e));
-
-        function updateNumberOfGenerations(e) {
-            const value = parseInt(e.target.value);
-
-            if (!isNaN(value)) {
-                numberOfGenerations = value;
-                setUiCounter(0);
-                propsUpdated();
-            }
-        }
-
-        uiNumberOfGenerations.addEventListener('change', (e) =>
-            updateNumberOfGenerations(e)
+        uiNumberOfGenerations.addEventListener(
+            'change',
+            (e) =>
+                (numberOfGenerations = unwrapDefault(
+                    e.target.value,
+                    numberOfGenerations
+                ))
         );
 
-        uiNumberOfGenerations.addEventListener('keyup', (e) =>
-            updateNumberOfGenerations(e)
+        uiNumberOfGenerations.addEventListener(
+            'keyup',
+            (e) =>
+                (numberOfGenerations = unwrapDefault(
+                    e.target.value,
+                    numberOfGenerations
+                ))
         );
 
-        function updateGenerationsAtOnce(e) {
-            const value = parseInt(e.target.value);
-
-            if (!isNaN(value)) {
-                ticksAtOnce = parseInt(e.target.value);
-                propsUpdated();
-            }
-        }
-
-        uiGenerationsAtOnce.addEventListener('change', (e) =>
-            updateGenerationsAtOnce(e)
+        uiGenerationsAtOnce.addEventListener(
+            'change',
+            (e) => (ticksAtOnce = unwrapDefault(e.target.value, ticksAtOnce))
         );
 
-        uiGenerationsAtOnce.addEventListener('keyup', (e) =>
-            updateGenerationsAtOnce(e)
+        uiGenerationsAtOnce.addEventListener(
+            'keyup',
+            (e) => (ticksAtOnce = unwrapDefault(e.target.value, ticksAtOnce))
         );
 
-        function updateThrottle(e) {
-            const value = parseInt(e.target.value);
+        uiThrottle.addEventListener(
+            'change',
+            (e) => (throttle = unwrapDefault(e.target.value, throttle))
+        );
 
-            if (!isNaN(value)) {
-                throttle = parseInt(e.target.value);
-                propsUpdated();
-            }
-        }
-
-        uiThrottle.addEventListener('change', (e) => updateThrottle(e));
-        uiThrottle.addEventListener('keyup', (e) => updateThrottle(e));
+        uiThrottle.addEventListener(
+            'keyup',
+            (e) => (throttle = unwrapDefault(e.target.value, throttle))
+        );
 
         for (const radioButton of uiColonyGenerationTypes) {
             radioButton.addEventListener('change', (e) => {
@@ -272,11 +237,20 @@ export function Ui(
                         ? ColonyGenerationType.Pattern
                         : ColonyGenerationType.Randomly;
 
-                uiPlayPause.textContent = 'PLAY';
-
-                propsUpdated();
+                reset();
             });
         }
+
+        function set() {
+            width = unwrapDefault(uiWidth.value, width);
+            height = unwrapDefault(uiHeight.value, height);
+            cellSize = unwrapDefault(uiCellSize.value, cellSize);
+
+            reset();
+        }
+
+        uiSet.addEventListener('click', set);
+        uiReset.addEventListener('click', reset);
 
         uiPlayPause.addEventListener('click', (e) => {
             if (uiPlayPause.textContent === 'PAUSE') {
@@ -288,17 +262,9 @@ export function Ui(
             }
         });
 
-        uiReset.addEventListener('click', (e) => {
-            uiPlayPause.textContent = 'PLAY';
-            resetClickedCalback();
-        });
-
-        uiSourceCode.addEventListener('click', (e) => {
-            window.open(
-                'https://github.com/olimungo/wasm-game-of-life',
-                '_blank'
-            );
-        });
+        uiSourceCode.addEventListener('click', () =>
+            window.open(githubSourcesUrl, '_blank')
+        );
     }
 
     function setResults(results) {
