@@ -2,7 +2,6 @@
 #![cfg(target_arch = "wasm32")]
 
 extern crate wasm_game_of_life;
-
 use wasm_game_of_life::Universe;
 
 extern crate wasm_bindgen_test;
@@ -45,6 +44,48 @@ pub fn input_factory(colony_example: ColonyExample) -> Universe {
 }
 
 #[wasm_bindgen_test]
+pub fn test_get_colony() {
+    let mut input_universe = Universe::new(3, 3, 1);
+    input_universe.generate_random_colony();
+
+    assert_eq!(&input_universe.get_colony().len(), &9usize);
+}
+
+#[wasm_bindgen_test]
+pub fn test_set_cells() {
+    let mut input_universe = Universe::new(3, 3, 1);
+
+    assert_eq!(&input_universe.get_colony().count_ones(..), &0usize);
+
+    input_universe.set_cells(&[(0, 0)]);
+
+    let colony = input_universe.get_colony();
+
+    assert_eq!(&colony.count_ones(..), &1usize);
+    assert_eq!(&colony[0], &true);
+}
+
+#[wasm_bindgen_test]
+pub fn test_generate_pattern_colony() {
+    let mut input_universe = Universe::new(3, 3, 1);
+    input_universe.generate_pattern_colony();
+
+    let expected_universe = input_factory(ColonyExample::PatternExpected);
+
+    input_universe.tick(1);
+
+    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
+}
+
+#[wasm_bindgen_test]
+pub fn test_generate_random_colony() {
+    let mut input_universe = Universe::new(3, 3, 1);
+    input_universe.generate_random_colony();
+
+    assert_ne!(&input_universe.get_colony().count_ones(..), &0usize);
+}
+
+#[wasm_bindgen_test]
 pub fn test_tick_spaceship() {
     let mut input_universe = input_factory(ColonyExample::SpaceshipInput);
     let expected_universe = input_factory(ColonyExample::SpaceshipExpected);
@@ -69,18 +110,6 @@ pub fn test_tick_blinker() {
 pub fn test_tick_border() {
     let mut input_universe = input_factory(ColonyExample::BorderInput);
     let expected_universe = input_factory(ColonyExample::BorderExpected);
-
-    input_universe.tick(1);
-
-    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
-}
-
-#[wasm_bindgen_test]
-pub fn test_generate_pattern() {
-    let mut input_universe = Universe::new(3, 3, 1);
-    input_universe.generate_pattern_colony();
-
-    let expected_universe = input_factory(ColonyExample::PatternExpected);
 
     input_universe.tick(1);
 
