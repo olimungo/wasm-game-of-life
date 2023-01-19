@@ -20,6 +20,15 @@ pub enum ColonyExample {
 }
 
 #[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        let result = 2 + 2;
+        assert_eq!(result, 4);
+    }
+}
+
+#[cfg(test)]
 pub fn input_factory(colony_example: ColonyExample) -> Universe {
     let (width, height) = match colony_example {
         ColonyExample::SpaceshipInput | ColonyExample::SpaceshipExpected => (6, 6),
