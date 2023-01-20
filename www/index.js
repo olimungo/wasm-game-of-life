@@ -7,9 +7,10 @@ let universe;
 
 let generationsCount;
 let totalTicksDuration;
+let totalRedrawDuration;
 let startedGenerationTime;
-let generationsOver = false;
-let generationPaused = false;
+let generationsOver;
+let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
@@ -17,8 +18,6 @@ const ui = Ui(play, pause, reset);
 const fps = Fps();
 
 createUniverse();
-
-universe.test();
 
 //
 // Functions
@@ -30,6 +29,7 @@ function createUniverse() {
 
     generationsCount = 0;
     totalTicksDuration = 0;
+    totalRedrawDuration = 0;
     generationsOver = false;
     generationPaused = false;
 
@@ -53,7 +53,9 @@ function createUniverse() {
         universe.generatePatternColony();
     }
 
-    universe.drawAllCells();
+    setTimeout(() => {
+        universe.drawAllCells();
+    }, 0);
 }
 
 function createUniverseFactory() {
@@ -69,16 +71,18 @@ function createUniverseFactory() {
 }
 
 function renderLoop() {
-    const beforeTicks = new Date().getTime();
-
     fps.render();
+
+    let now = new Date().getTime();
 
     universe.tick(ui.getTicksAtOnce());
 
-    totalTicksDuration += new Date().getTime() - beforeTicks;
+    totalTicksDuration += new Date().getTime() - now;
     generationsCount += ui.getTicksAtOnce();
 
     ui.setUiCounter(generationsCount);
+
+    now = new Date().getTime();
 
     if (ui.getTicksAtOnce() > 1) {
         universe.drawAllCells();
@@ -86,14 +90,15 @@ function renderLoop() {
         universe.drawUpdatedCells();
     }
 
+    totalRedrawDuration += new Date().getTime() - now;
+
     if (generationsCount < ui.getNumberOfGenerations()) {
-        if (ui.getThrottle() > 0) {
-            animationTimeOutId = setTimeout(() => {
-                animationId = requestAnimationFrame(renderLoop);
-            }, ui.getThrottle());
-        } else {
+        // Always use a setTimeout, even with a value of 0, so to
+        // let the browser engine have some time to redraw the screen
+        // or do other stuffs
+        animationTimeOutId = setTimeout(() => {
             animationId = requestAnimationFrame(renderLoop);
-        }
+        }, ui.getThrottle());
     } else {
         generationsOver = true;
 
@@ -103,11 +108,8 @@ function renderLoop() {
             const now = new Date().getTime();
             const totalDuration = now - startedGenerationTime;
             const averageTickDuration = totalTicksDuration / generationsCount;
-            const totalRedrawDuration =
-                now - startedGenerationTime - totalTicksDuration;
             const averageRedrawDuration =
-                (now - startedGenerationTime - totalTicksDuration) /
-                generationsCount;
+                totalRedrawDuration / generationsCount;
 
             ui.setResults({
                 totalDuration,

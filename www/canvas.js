@@ -97,7 +97,7 @@ export function Canvas() {
             }
         }
 
-        context.stroke();
+        context.closePath();
     }
 
     function drawUpdatedCells(updatedCells) {
@@ -135,7 +135,7 @@ export function Canvas() {
             );
         }
 
-        context.stroke();
+        context.closePath();
     }
 
     function getIndex(row, column) {

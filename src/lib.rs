@@ -133,7 +133,7 @@ impl Universe {
             self.draw_all_cells_by_state(true);
             self.draw_all_cells_by_state(false);  
             
-            canvas.stroke();
+            canvas.close_path();
         }
     }
 
@@ -144,37 +144,7 @@ impl Universe {
             self.draw_updated_cells_by_state(true);
             self.draw_updated_cells_by_state(false);
         
-            canvas.stroke();
-        }
-    }
-
-    pub fn test(&mut self) {
-        // self.tick(1u32);
-
-        if let Some(canvas) = &self.canvas {
-            // log!("{}", self.colony[0]);
-            // log!("{}", self.colony[1]);
-            // log!("{}", self.colony[2]);
-            // log!("{}", self.colony[3]);
-            // log!("{}", self.colony[4]);
-            // log!("{}", self.colony[5]);
-            // log!("{}", self.colony[6]);
-            // log!("{}", self.colony[7]);
-            // log!("{}", self.colony[8]);
-
-            // let cell_size = self.cell_size as f64;
-
-            // canvas.clear_rect(0f64, 0f64, self.width as f64 * cell_size, self.height as f64 * cell_size);
-            // canvas.set_fill_style(&COLOR_CELL_ALIVE.into());
-            
-            // canvas.fill_rect(
-            //     0f64 * cell_size,
-            //     0f64 * cell_size,
-            //     150f64 * cell_size,
-            //     150f64 * cell_size
-            // );
-
-            canvas.stroke();
+            canvas.close_path();
         }
     }
 }
