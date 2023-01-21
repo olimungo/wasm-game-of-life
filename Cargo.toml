@@ -1,6 +1,9 @@
 [package]
 name = "wasm-game-of-life"
-version = "1.0.0"
+description= "A project for comparing WebAssembly (Rust) to JavaScript"
+repository = "https://github.com/olimungo/wasm-game-of-life"
+license = "Apache-2.0"
+version = "1.7.0"
 authors = ["Olivier Mungo <olivier@mungo.eu>"]
 edition = "2018"
 

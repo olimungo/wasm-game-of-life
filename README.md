@@ -22,12 +22,18 @@ cargo install cargo-generate
 ## Rust
 
 The Rust code can be found into the _src_ folder (file: _lib.rs_).
-Use wasm-build to transpile the Rust code to WebAssembly. This command has to be executed when the _lib.rs_ file is modified and right after cloning the repository.
+Use wasm-pack to transpile the Rust code to WebAssembly. This command has to be executed when the _lib.rs_ file is modified and right after cloning the repository.
 
 This command has to be executed in the root folder of the project:
 
 ```shell
 wasm-pack build
+```
+
+For being able to see the Rust functions name executed in the JavaScript profiler of your browser, do a build with the --dev option and debug symbols will be added:
+
+```shell
+wasm-pack build --dev
 ```
 
 ### Tests
@@ -56,7 +62,7 @@ npm start
 
 The app will be available at http://localhost:8080.
 
-## Redraw the canvas
+## Redrawing the canvas
 
 At each generation (tick), the colony is redrawn on the canvas.
 If the _number of generations_ is:
@@ -64,8 +70,23 @@ If the _number of generations_ is:
 -   exactly equal to 1, then only the updated cells are redrawn,
 -   if it's higher than 1, then the colony is fully redrawn.
 
-The Rust code draws directly onto the canvas. Spoiler, as of 01/2023, it is not faster than Javascript\
-:open_mouth:
+:warning: When benchmarking, do not PAUSE the game or change tab in your browser. It will mess with the timing. :warning:
+
+## Conclusions
+
+Implementations of the Game of Life in Rust and JavaScript are identical (taking into account each langague specificity).
+
+The Rust code draws directly onto the canvas and as of January 2023, the performances are similar :open_mouth:
+
+Where Rust (or more precisely WebAssembly) is more efficicent is on large Universes, when computing is more intensive. Like in the tick function when the number of generations at once is big enough. A good test is a Universe of 702\*820 and a number of generations at once of 100. When I run it for 2000 generations, I get the following results with WebAssembly:
+
+-   Average duration per tick: 22.84 ms
+-   Average duration per redraw: 4.65 ms
+
+and with JavaScript:
+
+-   Average duration per tick: 33.17 ms
+-   Average duration per redraw: 4.40 ms
 
 ## License
 

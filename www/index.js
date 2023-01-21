@@ -1,7 +1,7 @@
-import { Ui, ColonyGenerationType, EngineGenerationType } from './ui';
-import { UniverseJs } from './game-of-life-javascript';
-import { UniverseWasm } from './game-of-life-wasm';
-import { Fps } from './fps';
+import { Ui, ColonyGenerationType, EngineGenerationType } from './src/ui';
+import { UniverseJs } from './src/game-of-life-javascript';
+import { UniverseWasm } from './src/game-of-life-wasm';
+import { Fps } from './src/fps';
 
 let universe;
 

@@ -57,45 +57,8 @@ export function Canvas() {
     function drawAllCells(colony) {
         context.beginPath();
 
-        // Alive cells
-        context.fillStyle = ALIVE_COLOR;
-
-        for (let row = 0; row < height; row++) {
-            for (let column = 0; column < width; column++) {
-                const index = getIndex(row, column);
-
-                if (!colony[index]) {
-                    continue;
-                }
-
-                context.fillRect(
-                    column * cellSize,
-                    row * cellSize,
-                    cellSize,
-                    cellSize
-                );
-            }
-        }
-
-        // Dead cells
-        context.fillStyle = DEAD_COLOR;
-
-        for (let row = 0; row < height; row++) {
-            for (let column = 0; column < width; column++) {
-                const index = getIndex(row, column);
-
-                if (colony[index]) {
-                    continue;
-                }
-
-                context.fillRect(
-                    column * cellSize,
-                    row * cellSize,
-                    cellSize,
-                    cellSize
-                );
-            }
-        }
+        drawAllCellsByState(colony, true);
+        drawAllCellsByState(colony, false);
 
         context.closePath();
     }
@@ -103,39 +66,56 @@ export function Canvas() {
     function drawUpdatedCells(updatedCells) {
         context.beginPath();
 
-        // Alive cells
-        context.fillStyle = ALIVE_COLOR;
-
-        for (let element of updatedCells) {
-            if (!element.state) {
-                continue;
-            }
-
-            context.fillRect(
-                element.column * cellSize,
-                element.row * cellSize,
-                cellSize,
-                cellSize
-            );
-        }
-
-        // Dead cells
-        context.fillStyle = DEAD_COLOR;
-
-        for (let element of updatedCells) {
-            if (element.state) {
-                continue;
-            }
-
-            context.fillRect(
-                element.column * cellSize,
-                element.row * cellSize,
-                cellSize,
-                cellSize
-            );
-        }
+        drawUpdatedCellsByState(updatedCells, true);
+        drawUpdatedCellsByState(updatedCells, false);
 
         context.closePath();
+    }
+
+    function drawAllCellsByState(colony, state) {
+        if (state) {
+            context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
+        }
+
+        for (let row = 0; row < height; row++) {
+            for (let column = 0; column < width; column++) {
+                const index = getIndex(row, column);
+
+                if (colony[index] !== state) {
+                    continue;
+                }
+
+                context.fillRect(
+                    column * cellSize,
+                    row * cellSize,
+                    cellSize,
+                    cellSize
+                );
+            }
+        }
+    }
+
+    function drawUpdatedCellsByState(updatedCells, state) {
+        if (state) {
+            context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
+        }
+
+        for (let element of updatedCells) {
+            if (element.state !== state) {
+                continue;
+            }
+
+            context.fillRect(
+                element.column * cellSize,
+                element.row * cellSize,
+                cellSize,
+                cellSize
+            );
+        }
     }
 
     function getIndex(row, column) {

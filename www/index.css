@@ -214,6 +214,7 @@ input[type='number'] {
 }
 
 .counter {
+    font-family: monospace;
     text-align: right;
     color: var(--primary-action-color);
     background-color: var(--primary-dark-color);
@@ -292,5 +293,6 @@ footer {
 }
 
 #ui-fps {
-    width: 1.4rem;
+    width: 1.2rem;
+    font-family: monospace;
 }
