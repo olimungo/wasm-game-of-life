@@ -65,11 +65,11 @@ impl Universe {
         
         let mut canvas: Option<CanvasRenderingContext2d> = None;
         let document = window().unwrap().document().unwrap();
-        let element = document.get_element_by_id("ui-canvas");
+        let option_element = document.get_element_by_id("ui-canvas");
 
-        // When testing, there's no index.html page containing the div element with ui-canvas as id
-        if let Some(_) = element {
-            let html_canvas_element: HtmlCanvasElement = element.unwrap().dyn_into().unwrap();
+        // When testing, there's no index.html page containing the canvas element with ui-canvas as id
+        if let Some(element) = option_element {
+            let html_canvas_element: HtmlCanvasElement = element.dyn_into().unwrap();
             let context_object = html_canvas_element.get_context("2d").unwrap().unwrap();
             canvas = Some(context_object.dyn_into().unwrap());
         }
