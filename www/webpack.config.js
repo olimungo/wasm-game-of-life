@@ -8,5 +8,7 @@ module.exports = {
         filename: 'bootstrap.js',
     },
     mode: 'development',
-    plugins: [new CopyWebpackPlugin(['index.html', 'index.css'])],
+    plugins: [
+        new CopyWebpackPlugin(['index.html', 'index.css', 'favicon.ico']),
+    ],
 };
