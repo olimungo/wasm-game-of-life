@@ -186,6 +186,10 @@ input[type='number'] {
     margin: 1rem 0 0 0.5rem;
 }
 
+.left-panel {
+    overflow: auto;
+}
+
 .canvas-center {
     display: flex;
     justify-content: center;
