@@ -56,6 +56,7 @@ export function Ui(
     const uiSourceCode = document.getElementById('ui-source-code');
 
     // Results
+    const uiOpenResultsPanel = document.getElementById('ui-open-results-panel');
     const uiTotalDuration = document.getElementById('ui-total-duration');
     const uiTotalTicksDuration = document.getElementById(
         'ui-total-ticks-duration'
@@ -86,6 +87,7 @@ export function Ui(
         setPlayButton,
         setResults,
         resetResults,
+        openResults,
     };
 
     //
@@ -262,24 +264,42 @@ export function Ui(
             }
         });
 
+        uiOpenResultsPanel.addEventListener('click', () => {
+            if (uiOpenResultsPanel.classList.contains('open')) {
+                uiOpenResultsPanel.classList.remove('open');
+            } else {
+                uiOpenResultsPanel.classList.add('open');
+            }
+        });
+
         uiSourceCode.addEventListener('click', () =>
             window.open(githubSourcesUrl, '_blank')
         );
+    }
+
+    function openResults() {
+        if (!uiOpenResultsPanel.classList.contains('open')) {
+            uiOpenResultsPanel.classList.add('open');
+        }
     }
 
     function setResults(results) {
         uiTotalDuration.textContent = (
             Math.round(results.totalDuration * 100) / 100
         ).toFixed(2);
+
         uiTotalTicksDuration.textContent = (
             Math.round(results.totalTicksDuration * 100) / 100
         ).toFixed(2);
+
         uiAverageTickDuration.textContent = (
             Math.round(results.averageTickDuration * 100) / 100
         ).toFixed(2);
+
         uiTotalRedrawDuration.textContent = (
             Math.round(results.totalRedrawDuration * 100) / 100
         ).toFixed(2);
+
         uiAverageRedrawDuration.textContent = (
             Math.round(results.averageRedrawDuration * 100) / 100
         ).toFixed(2);
