@@ -43,6 +43,12 @@ h2 {
     font-weight: 300;
 }
 
+hr {
+    border: none;
+    border-bottom: solid 1px #555b69;
+    margin: 0.8rem 0;
+}
+
 .section {
     padding: 1rem;
 }
@@ -55,7 +61,8 @@ h2 {
 }
 
 .left-panel {
-    width: 20rem;
+    overflow: auto;
+    width: 19rem;
     grid-column: 1 / 2;
     border-right: solid 1px var(--primary-dark-color);
     box-shadow: 1px 1px 5px black;
@@ -74,6 +81,16 @@ canvas {
 
 label {
     margin-right: 0.5rem;
+}
+
+.label {
+    display: inline-block;
+    width: 11rem;
+    text-align: end;
+}
+
+.unit {
+    margin: 0;
 }
 
 button {
@@ -164,7 +181,7 @@ input[type='number'] {
     border-radius: 50px;
     padding: 0.2rem 0.5rem;
     color: var(--primary-action-color);
-    width: 6rem;
+    width: 3rem;
     margin: 0.3rem;
 }
 
@@ -183,11 +200,8 @@ input[type='number'] {
 }
 
 .buttons {
-    margin: 1rem 0 0 0.5rem;
-}
-
-.left-panel {
-    overflow: auto;
+    text-align: end;
+    margin: 1rem;
 }
 
 .canvas-center {
@@ -208,13 +222,14 @@ input[type='number'] {
 .radio-button {
     display: flex;
     align-items: center;
-    margin: 0.5rem 1.3rem 0.5rem 0;
+    margin: 0.5rem 0rem 0.5rem 1.3rem;
 }
 
 .colony-generation,
 .engine-generation {
     display: flex;
     margin: 0 0.5rem;
+    justify-content: end;
 }
 
 .counter {
@@ -271,8 +286,7 @@ footer {
 .result {
     display: flex;
     justify-content: space-between;
-    margin: 1rem 2.5rem 1rem 0.5rem;
-    /* background-color: var(--primary-dark-color); */
+    margin: 1rem 0;
     border: solid 1px var(--primary-dark-color);
     box-shadow: 1px 1px 3px black;
     padding: 0.5rem 1rem;

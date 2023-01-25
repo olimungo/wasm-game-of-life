@@ -45,30 +45,34 @@
                     </div>
                 </div>
 
+                <hr />
+
                 <div class="input">
-                    <label for="ui-width">WIDTH</label>
+                    <label for="ui-width" class="label">WIDTH</label>
                     <input id="ui-width" type="number" value="500" />
-                    <label for="ui-width">px</label>
+                    <label for="ui-width" class="unit">px</label>
                 </div>
 
                 <div class="input">
-                    <label for="ui-height">HEIGHT</label>
+                    <label for="ui-height" class="label">HEIGHT</label>
                     <input id="ui-height" type="number" value="500" />
-                    <label for="ui-width">px</label>
+                    <label for="ui-height" class="unit">px</label>
                 </div>
 
                 <div class="input">
-                    <label for="ui-cell-size">CELL SIZE</label>
+                    <label for="ui-cell-size" class="label">CELL SIZE</label>
                     <input id="ui-cell-size" type="number" value="1" />
-                    <label for="ui-width">px</label>
+                    <label for="ui-cell-size" class="unit">px</label>
                 </div>
 
-                <div class="input buttons">
+                <div class="buttons">
                     <button id="ui-set">SET</button>
                 </div>
 
+                <hr />
+
                 <div class="input">
-                    <label for="ui-number-of-generations"
+                    <label for="ui-number-of-generations" class="label"
                         >NUMBER OF GENERATIONS</label
                     >
                     <input
@@ -80,7 +84,7 @@
                 </div>
 
                 <div class="input">
-                    <label for="ui-generations-at-once"
+                    <label for="ui-generations-at-once" class="label"
                         >GENERATIONS AT ONCE</label
                     >
                     <input
@@ -92,9 +96,9 @@
                 </div>
 
                 <div class="input">
-                    <label for="ui-throttle">THROTTLE</label>
+                    <label for="ui-throttle" class="label">THROTTLE</label>
                     <input id="ui-throttle" type="number" value="0" min="0" />
-                    <label for="ui-width">ms</label>
+                    <label for="ui-throttle" class="unit">ms</label>
                 </div>
 
                 <div class="colony-generation">
@@ -120,13 +124,15 @@
                     </div>
                 </div>
 
-                <div class="input buttons">
+                <div class="buttons">
                     <button id="ui-play-pause">PLAY</button>
 
                     <span class="horizontal-spacer"></span>
 
                     <button id="ui-reset">RESET</button>
                 </div>
+
+                <hr />
 
                 <div id="ui-results" class="results">
                     <div class="result">
@@ -196,7 +202,7 @@
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.7.1</div>
+                    <div class="version">v1.8.0</div>
 
                     <svg
                         id="ui-source-code"
