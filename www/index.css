@@ -287,7 +287,7 @@ footer {
     align-items: center;
     position: fixed;
     left: 1rem;
-    top: 8.15rem;
+    top: 21.7rem;
     padding-left: 2rem;
     cursor: pointer;
     border: solid 1px var(--primary-dark-color);
@@ -325,7 +325,7 @@ footer {
 .result {
     display: flex;
     justify-content: space-between;
-    margin: 1.5rem 0;
+    margin: 1.6rem 0;
 }
 
 .result-value {
