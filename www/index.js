@@ -117,6 +117,7 @@ function renderLoop() {
     } else {
         generationsOver = true;
 
+        ui.openResults();
         ui.setPlayButton();
     }
 }
