@@ -131,64 +131,83 @@
 
                     <button id="ui-reset">RESET</button>
                 </div>
-
-                <hr />
-
-                <div id="ui-results" class="results">
-                    <div class="result">
-                        <label class="result-label">Total duration</label>
-
-                        <div class="result-value">
-                            <span id="ui-total-duration"></span>
-                            <span>ms</span>
-                        </div>
-                    </div>
-
-                    <div class="result">
-                        <label class="result-label">Total ticks duration</label>
-
-                        <div class="result-value">
-                            <span id="ui-total-ticks-duration"></span>
-                            <span>ms</span>
-                        </div>
-                    </div>
-
-                    <div class="result">
-                        <label class="result-label"
-                            >Average duration per tick</label
-                        >
-
-                        <div class="result-value">
-                            <span id="ui-average-tick-duration"></span>
-                            <span>ms</span>
-                        </div>
-                    </div>
-
-                    <div class="result">
-                        <label class="result-label"
-                            >Total redraw duration</label
-                        >
-
-                        <div class="result-value">
-                            <span id="ui-total-redraw-duration"></span>
-                            <span>ms</span>
-                        </div>
-                    </div>
-
-                    <div class="result">
-                        <label class="result-label"
-                            >Average redraw duration</label
-                        >
-
-                        <div class="result-value">
-                            <span id="ui-average-redraw-duration"></span>
-                            <span>ms</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <main class="section canvas-center">
+                <div id="ui-open-results-panel" class="open-results-panel">
+                    <div class="open-results-content">
+                        <div class="result">
+                            <label class="result-label">Total duration</label>
+
+                            <div class="result-value">
+                                <span
+                                    id="ui-total-duration"
+                                    class="duration"
+                                ></span>
+                                <span>ms</span>
+                            </div>
+                        </div>
+
+                        <div class="result">
+                            <label class="result-label"
+                                >Total ticks duration</label
+                            >
+
+                            <div class="result-value">
+                                <span
+                                    id="ui-total-ticks-duration"
+                                    class="duration"
+                                ></span>
+                                <span>ms</span>
+                            </div>
+                        </div>
+
+                        <div class="result">
+                            <label class="result-label"
+                                >Average duration per tick</label
+                            >
+
+                            <div class="result-value">
+                                <span
+                                    id="ui-average-tick-duration"
+                                    class="duration"
+                                ></span>
+                                <span>ms</span>
+                            </div>
+                        </div>
+
+                        <div class="result">
+                            <label class="result-label"
+                                >Total redraw duration</label
+                            >
+
+                            <div class="result-value">
+                                <span
+                                    id="ui-total-redraw-duration"
+                                    class="duration"
+                                ></span>
+                                <span>ms</span>
+                            </div>
+                        </div>
+
+                        <div class="result">
+                            <label class="result-label"
+                                >Average redraw duration</label
+                            >
+
+                            <div class="result-value">
+                                <span
+                                    id="ui-average-redraw-duration"
+                                    class="duration"
+                                ></span>
+                                <span>ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="open-results-button">BENCHMARKS</div>
+                </div>
+
                 <div class="frame-per-seconds">
                     <div id="ui-fps">0</div>
                     FRAMES PER SECOND
@@ -202,7 +221,7 @@
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.8.0</div>
+                    <div class="version">v1.9.0</div>
 
                     <svg
                         id="ui-source-code"

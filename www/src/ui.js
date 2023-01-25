@@ -56,6 +56,7 @@ export function Ui(
     const uiSourceCode = document.getElementById('ui-source-code');
 
     // Results
+    const uiOpenResultsPanel = document.getElementById('ui-open-results-panel');
     const uiTotalDuration = document.getElementById('ui-total-duration');
     const uiTotalTicksDuration = document.getElementById(
         'ui-total-ticks-duration'
@@ -259,6 +260,14 @@ export function Ui(
             } else {
                 uiPlayPause.textContent = 'PAUSE';
                 playClickedCallback();
+            }
+        });
+
+        uiOpenResultsPanel.addEventListener('click', () => {
+            if (uiOpenResultsPanel.classList.contains('open')) {
+                uiOpenResultsPanel.classList.remove('open');
+            } else {
+                uiOpenResultsPanel.classList.add('open');
             }
         });
 

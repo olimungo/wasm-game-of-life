@@ -92,6 +92,21 @@ function renderLoop() {
 
     totalRedrawDuration += new Date().getTime() - now;
 
+    now = new Date().getTime();
+    const totalDuration = now - startedGenerationTime;
+    const averageTickDuration = totalTicksDuration / generationsCount;
+    const averageRedrawDuration = totalRedrawDuration / generationsCount;
+
+    if (!generationPaused) {
+        ui.setResults({
+            totalDuration,
+            totalTicksDuration,
+            averageTickDuration,
+            totalRedrawDuration,
+            averageRedrawDuration,
+        });
+    }
+
     if (generationsCount < ui.getNumberOfGenerations()) {
         // Always use a setTimeout, even with a value of 0, so to
         // let the browser engine have some time to redraw the screen
@@ -103,22 +118,6 @@ function renderLoop() {
         generationsOver = true;
 
         ui.setPlayButton();
-
-        if (!generationPaused) {
-            const now = new Date().getTime();
-            const totalDuration = now - startedGenerationTime;
-            const averageTickDuration = totalTicksDuration / generationsCount;
-            const averageRedrawDuration =
-                totalRedrawDuration / generationsCount;
-
-            ui.setResults({
-                totalDuration,
-                totalTicksDuration,
-                averageTickDuration,
-                totalRedrawDuration,
-                averageRedrawDuration,
-            });
-        }
     }
 }
 
