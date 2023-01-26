@@ -70,11 +70,11 @@ If the _number of generations_ is:
 -   exactly equal to 1, then only the updated cells are redrawn,
 -   if it's higher than 1, then the colony is fully redrawn.
 
-:warning: When benchmarking, do not PAUSE the game or change tab in your browser. It will mess with the timing. :warning:
+:warning: When benchmarking, do not switch tab in your browser. It will mess with the timing. :warning:
 
 ## Conclusions
 
-Implementations of the Game of Life in Rust and JavaScript are identical (taking into account each langague specificity).
+Implementations of the Game of Life in Rust and JavaScript are identical (taking into account each language specificity).
 
 The Rust code draws directly onto the canvas and as of January 2023, the performances are similar :open_mouth:
 

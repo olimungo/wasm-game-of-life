@@ -23,8 +23,8 @@ jobs:
                   path: |
                       target
                       ~/.cargo
-                  key: cache-${{ runner.os }}-crates-${{ hashFiles('Cargo.lock') }}
-                  restore-keys: cache-${{ runner.os }}-crates-
+                  key: cache-${{ runner.os }}-crates-pull-${{ hashFiles('Cargo.lock') }}
+                  restore-keys: cache-${{ runner.os }}-crates-pull-
             - name: Test Rust code
               run: wasm-pack test --chrome --headless
             - name: Compile Rust code to WebAssembly

@@ -31,7 +31,6 @@ function createUniverse() {
     totalTicksDuration = 0;
     totalRedrawDuration = 0;
     generationsOver = false;
-    generationPaused = false;
 
     ui.setUiCounter(0);
     ui.resetResults();
@@ -97,15 +96,13 @@ function renderLoop() {
     const averageTickDuration = totalTicksDuration / generationsCount;
     const averageRedrawDuration = totalRedrawDuration / generationsCount;
 
-    if (!generationPaused) {
-        ui.setResults({
-            totalDuration,
-            totalTicksDuration,
-            averageTickDuration,
-            totalRedrawDuration,
-            averageRedrawDuration,
-        });
-    }
+    ui.setResults({
+        totalDuration,
+        totalTicksDuration,
+        averageTickDuration,
+        totalRedrawDuration,
+        averageRedrawDuration,
+    });
 
     if (generationsCount < ui.getNumberOfGenerations()) {
         // Always use a setTimeout, even with a value of 0, so to
@@ -123,13 +120,18 @@ function renderLoop() {
 }
 
 function play() {
-    if (generationsOver) {
-        generationsOver = false;
+    if (generationPaused) {
+        startedGenerationTime += new Date().getTime() - generationPaused;
+    } else {
+        if (generationsOver) {
+            generationsOver = false;
+            createUniverse();
+        }
 
-        createUniverse();
+        startedGenerationTime = new Date().getTime();
     }
 
-    startedGenerationTime = new Date().getTime();
+    generationPaused = 0;
 
     renderLoop();
 }
@@ -138,7 +140,7 @@ function pause() {
     cancelAnimationFrame(animationId);
     clearTimeout(animationTimeOutId);
 
-    generationPaused = true;
+    generationPaused = new Date().getTime();
 }
 
 function reset() {
