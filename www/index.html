@@ -49,19 +49,19 @@
 
                 <div class="input">
                     <label for="ui-width" class="label">WIDTH</label>
-                    <input id="ui-width" type="number" value="500" />
+                    <input id="ui-width" type="number" value="100" />
                     <label for="ui-width" class="unit">px</label>
                 </div>
 
                 <div class="input">
                     <label for="ui-height" class="label">HEIGHT</label>
-                    <input id="ui-height" type="number" value="500" />
+                    <input id="ui-height" type="number" value="100" />
                     <label for="ui-height" class="unit">px</label>
                 </div>
 
                 <div class="input">
                     <label for="ui-cell-size" class="label">CELL SIZE</label>
-                    <input id="ui-cell-size" type="number" value="1" />
+                    <input id="ui-cell-size" type="number" value="6" />
                     <label for="ui-cell-size" class="unit">px</label>
                 </div>
 
@@ -78,7 +78,7 @@
                     <input
                         id="ui-number-of-generations"
                         type="number"
-                        value="200"
+                        value="500"
                         min="0"
                     />
                 </div>
@@ -134,8 +134,26 @@
             </div>
 
             <main class="section canvas-center">
-                <div id="ui-open-results-panel" class="open-results-panel">
-                    <div class="open-results-content">
+                <div id="ui-library-panel" class="sliding-panel library">
+                    <div>
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                        TOTO <br />
+                    </div>
+                    <div class="results-button">LIBRARY</div>
+                </div>
+
+                <div id="ui-results-panel" class="sliding-panel results">
+                    <div class="results-content">
                         <div class="result">
                             <label class="result-label">Total duration</label>
 
@@ -205,7 +223,7 @@
                         </div>
                     </div>
 
-                    <div class="open-results-button">BENCHMARKS</div>
+                    <div class="results-button">BENCHMARKS</div>
                 </div>
 
                 <div class="frame-per-seconds">
@@ -221,7 +239,7 @@
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.10.0</div>
+                    <div class="version">v1.11.0</div>
 
                     <svg
                         id="ui-source-code"

@@ -15,6 +15,7 @@ export function Canvas() {
         getHeight,
         setHeight,
         setCanvas,
+        setCell,
         drawAllCells,
         drawUpdatedCells,
     };
@@ -52,6 +53,20 @@ export function Canvas() {
 
         uiCanvas.width = cellSize * width;
         uiCanvas.height = cellSize * height;
+    }
+
+    function setCell(row, column, state) {
+        if (state) {
+            context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
+        }
+
+        context.beginPath();
+
+        context.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
+
+        context.closePath();
     }
 
     function drawAllCells(colony) {

@@ -11,7 +11,8 @@ export const EngineGenerationType = Object.freeze({
 export function Ui(
     playClickedCallback,
     pauseClickedCallback,
-    resetClickedCalback
+    resetClickedCalback,
+    cellClickedCallback
 ) {
     const githubSourcesUrl = 'https://github.com/olimungo/wasm-game-of-life';
 
@@ -55,8 +56,11 @@ export function Ui(
     const uiReset = document.getElementById('ui-reset');
     const uiSourceCode = document.getElementById('ui-source-code');
 
+    // Library
+    const uiLibraryPanel = document.getElementById('ui-library-panel');
+
     // Results
-    const uiOpenResultsPanel = document.getElementById('ui-open-results-panel');
+    const uiResultsPanel = document.getElementById('ui-results-panel');
     const uiTotalDuration = document.getElementById('ui-total-duration');
     const uiTotalTicksDuration = document.getElementById(
         'ui-total-ticks-duration'
@@ -70,6 +74,12 @@ export function Ui(
     const uiAverageRedrawDuration = document.getElementById(
         'ui-average-redraw-duration'
     );
+
+    // Canvas
+    const uiCanvas = document.getElementById('ui-canvas');
+    const canvasContext = uiCanvas.getContext('2d', {
+        willReadFrequently: true,
+    });
 
     initProperties();
     addEventListeners();
@@ -264,22 +274,50 @@ export function Ui(
             }
         });
 
-        uiOpenResultsPanel.addEventListener('click', () => {
-            if (uiOpenResultsPanel.classList.contains('open')) {
-                uiOpenResultsPanel.classList.remove('open');
+        uiLibraryPanel.addEventListener('click', () => {
+            if (uiLibraryPanel.classList.contains('open')) {
+                uiLibraryPanel.classList.remove('open');
             } else {
-                uiOpenResultsPanel.classList.add('open');
+                uiLibraryPanel.classList.add('open');
+            }
+        });
+
+        uiResultsPanel.addEventListener('click', () => {
+            if (uiResultsPanel.classList.contains('open')) {
+                uiResultsPanel.classList.remove('open');
+            } else {
+                uiResultsPanel.classList.add('open');
             }
         });
 
         uiSourceCode.addEventListener('click', () =>
             window.open(githubSourcesUrl, '_blank')
         );
+
+        uiCanvas.addEventListener('click', (event) => {
+            const { row, column } = getCanvasClickCoordinates(event);
+            cellClickedCallback(row, column);
+        });
+    }
+
+    function getCanvasClickCoordinates(event) {
+        const boundingRect = uiCanvas.getBoundingClientRect();
+
+        const scaleX = uiCanvas.width / boundingRect.width;
+        const scaleY = uiCanvas.height / boundingRect.height;
+
+        const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
+        const canvasTop = (event.clientY - boundingRect.top) * scaleY;
+
+        const row = Math.min(Math.floor(canvasTop / cellSize), height - 1);
+        const column = Math.min(Math.floor(canvasLeft / cellSize), width - 1);
+
+        return { row, column };
     }
 
     function openResults() {
-        if (!uiOpenResultsPanel.classList.contains('open')) {
-            uiOpenResultsPanel.classList.add('open');
+        if (!uiResultsPanel.classList.contains('open')) {
+            uiResultsPanel.classList.add('open');
         }
     }
 

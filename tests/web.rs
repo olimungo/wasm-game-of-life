@@ -124,3 +124,23 @@ pub fn test_tick_border() {
 
     assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
 }
+
+#[wasm_bindgen_test]
+pub fn test_set_cell() {
+    let mut input_universe = Universe::new(1, 1, 1);
+    let mut state = *(&input_universe.get_colony()[0]) as u8;
+
+    assert_eq!(state, 0);
+    
+    input_universe.set_cell(0, 0);
+    
+    state = *(&input_universe.get_colony()[0]) as u8;
+
+    assert_eq!(state, 1);
+    
+    input_universe.set_cell(0, 0);
+    
+    state = *(&input_universe.get_colony()[0]) as u8;
+
+    assert_eq!(state, 0);
+}
