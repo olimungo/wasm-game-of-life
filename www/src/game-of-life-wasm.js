@@ -12,14 +12,10 @@ export function UniverseWasm() {
         generatePatternColony,
         generateRandomColony,
         tick,
+        setCell,
         drawAllCells,
         drawUpdatedCells,
-        test,
     };
-
-    function test() {
-        universe.test();
-    }
 
     function create(width, height, cellSize) {
         universe = Universe.new(width, height, cellSize);
@@ -34,6 +30,10 @@ export function UniverseWasm() {
             universe.free();
             universe = null;
         }
+    }
+
+    function setCell(row, column) {
+        universe.set_cell(row, column);
     }
 
     function drawAllCells() {

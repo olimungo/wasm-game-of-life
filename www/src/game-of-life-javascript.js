@@ -11,6 +11,7 @@ export function UniverseJs() {
         generatePatternColony,
         generateRandomColony,
         tick,
+        setCell,
         drawAllCells,
         drawUpdatedCells,
     };
@@ -31,6 +32,15 @@ export function UniverseJs() {
     function dispose() {
         colony = [];
         updatedCells = [];
+    }
+
+    function setCell(row, column) {
+        const index = getIndex(row, column);
+        const newState = colony[index] ? false : true;
+
+        colony[index] = newState;
+
+        canvas.setCell(row, column, newState);
     }
 
     function drawAllCells() {

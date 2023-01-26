@@ -14,7 +14,7 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(play, pause, reset);
+const ui = Ui(play, pause, reset, setCell);
 const fps = Fps();
 
 createUniverse();
@@ -145,4 +145,8 @@ function pause() {
 
 function reset() {
     createUniverse();
+}
+
+function setCell(row, column) {
+    universe.setCell(row, column);
 }

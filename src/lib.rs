@@ -126,6 +126,37 @@ impl Universe {
         }
     }
 
+    pub fn set_cell(&mut self, row: u32, column: u32) {
+        let index = self.get_index(row, column);
+        let new_state = !self.colony[index];
+
+        self.colony.set(index, new_state);
+
+        if let Some(canvas) = &self.canvas {
+            let color: &str;
+            let cell_size = self.cell_size as f64;
+
+            if new_state {
+                color = &COLOR_CELL_ALIVE;
+            } else {
+                color = &COLOR_CELL_DEAD;
+            }
+
+            canvas.begin_path();
+
+            canvas.set_fill_style(&color.into());
+        
+            canvas.fill_rect(
+                column as f64 * cell_size,
+                row as f64 * cell_size,
+                cell_size,
+                cell_size
+            );
+            
+            canvas.close_path();        
+        }
+    }
+
     pub fn draw_all_cells(&self) {
         if let Some(canvas) = &self.canvas {
             canvas.begin_path();
