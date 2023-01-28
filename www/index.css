@@ -301,7 +301,7 @@ footer {
 }
 
 .library {
-    display: none;
+    display: none !important;
     left: 7.6rem;
     top: 8.2rem;
     transition: 0.3s ease-in-out;
@@ -318,7 +318,7 @@ footer {
 .library-list {
     height: 9rem;
     overflow: auto;
-    border: solid 1px var(--primary-action-color);
+    border: solid 1px var(--primary-dark-color);
     border-radius: 0.5rem;
 }
 
