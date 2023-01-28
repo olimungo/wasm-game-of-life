@@ -302,13 +302,36 @@ footer {
 
 .library {
     /* display: none; */
-    left: 13.4rem;
-    top: 5.5rem;
-    transition: 0.2s ease-in-out;
+    left: 7.6rem;
+    top: 8.2rem;
+    transition: 0.3s ease-in-out;
 }
 
 .library.open {
-    transform: translate(5rem);
+    transform: translate(11.5rem);
+}
+
+.library-panel {
+    margin: 1rem 0;
+}
+
+.library-list {
+    height: 9rem;
+    overflow: auto;
+    border: solid 1px var(--primary-action-color);
+    border-radius: 0.5rem;
+}
+
+.library-item {
+    color: var(--primary-action-color);
+    list-style: none;
+    padding: 0.3rem 0.5rem 0.6rem 0.5rem;
+    width: 7rem;
+    border-bottom: solid 1px var(--primary-dark-color);
+}
+
+.library-item:hover {
+    background-color: var(--primary-dark-color);
 }
 
 .benchmarks {
