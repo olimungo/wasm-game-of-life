@@ -74,6 +74,15 @@ export function Ui(
     const uiAverageRedrawDuration = document.getElementById(
         'ui-average-redraw-duration'
     );
+    const uiAutomaticBenchmarks = document.getElementById(
+        'ui-automatic-benchmarks'
+    );
+    const uiAutomaticBenchmarksCheckbox = document.getElementById(
+        'ui-automatic-benchmarks-checkmark'
+    );
+    const uiAutomaticBenchmarksInput = document.getElementById(
+        'ui-automatic-benchmarks-input'
+    );
 
     // Canvas
     const uiCanvas = document.getElementById('ui-canvas');
@@ -282,11 +291,22 @@ export function Ui(
             }
         });
 
-        uiResultsPanel.addEventListener('click', () => {
-            if (uiResultsPanel.classList.contains('open')) {
-                uiResultsPanel.classList.remove('open');
+        uiResultsPanel.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            if (
+                event.target !== uiAutomaticBenchmarks &&
+                event.target !== uiAutomaticBenchmarksCheckbox &&
+                event.target !== uiAutomaticBenchmarksInput
+            ) {
+                if (uiResultsPanel.classList.contains('open')) {
+                    uiResultsPanel.classList.remove('open');
+                } else {
+                    uiResultsPanel.classList.add('open');
+                }
             } else {
-                uiResultsPanel.classList.add('open');
+                uiAutomaticBenchmarksInput.checked =
+                    !uiAutomaticBenchmarksInput.checked;
             }
         });
 
@@ -316,8 +336,10 @@ export function Ui(
     }
 
     function openResults() {
-        if (!uiResultsPanel.classList.contains('open')) {
-            uiResultsPanel.classList.add('open');
+        if (uiAutomaticBenchmarksInput.checked) {
+            if (!uiResultsPanel.classList.contains('open')) {
+                uiResultsPanel.classList.add('open');
+            }
         }
     }
 
