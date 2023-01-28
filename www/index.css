@@ -411,7 +411,7 @@ footer {
 }
 
 .slider::-webkit-slider-thumb:hover {
-    background-color: var(--primary-dark-color);
+    border: solid 0.2rem var(--primary-action-color);
 }
 
 .toggle-container {
