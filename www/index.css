@@ -76,9 +76,15 @@ main {
 }
 
 canvas {
-    background-color: white;
     border: solid 0.2rem var(--primary-dark-color);
     border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.canvas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 label {
@@ -205,21 +211,6 @@ input[type='number'] {
     text-align: end;
     margin: 1rem;
     padding-right: 0.7rem;
-}
-
-.canvas-center {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 1rem;
-    padding-top: 3rem;
-    overflow: auto;
-}
-
-.canvas-end {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
 }
 
 .radio-button {
@@ -353,14 +344,13 @@ footer {
 
 .frame-per-seconds {
     position: fixed;
-    top: 1.5rem;
-    left: 23.5rem;
+    top: 0.8rem;
+    left: 21.8rem;
     font-family: system-ui;
-    color: var(--primary-color);
+    color: var(--primary-action-color);
     background-color: rgb(85 91 105 / 51%);
-    padding: 0.5rem;
-    border: solid 1px var(--primary-dark-color);
-    border-radius: 0.2rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 1.5rem;
     display: flex;
 }
 
