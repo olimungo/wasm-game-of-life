@@ -307,7 +307,7 @@ footer {
 
 .library {
     display: none;
-    left: 15.8rem;
+    left: 15.5rem;
     top: 9.5rem;
     transition: 0.2s ease-in-out;
 }
@@ -317,7 +317,7 @@ footer {
 }
 
 .results {
-    left: 1rem;
+    left: 0.7rem;
     top: 21.7rem;
     transition: 0.35s ease-in-out;
 }
@@ -333,7 +333,7 @@ footer {
 .result {
     display: flex;
     justify-content: space-between;
-    margin: 1.6rem 0;
+    margin: 1.1rem 0;
 }
 
 .result-value {
@@ -341,8 +341,8 @@ footer {
 }
 
 .results-button {
-    font-size: medium;
-    padding: 0 0.8rem 0 2rem;
+    font-size: 0.8rem;
+    padding: 0 0.6rem 0 2rem;
     writing-mode: tb-rl;
     letter-spacing: 0.3rem;
 }
@@ -367,4 +367,62 @@ footer {
 #ui-fps {
     width: 1.2rem;
     font-family: monospace;
+}
+
+/* 
+** Checkbox
+*/
+
+.checkmark-container {
+    display: inline-block;
+    position: relative;
+    padding-left: 2rem;
+    margin: 1rem 0 1.5rem 0;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    user-select: none;
+    color: var(--primary-dark-colorcolor);
+}
+
+/* Hide the browser's default checkbox */
+.checkmark-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: -0.3rem;
+    left: 0;
+    height: 1.3rem;
+    width: 1.3rem;
+    background-color: var(--primary-action-dark-color);
+    border: solid 1px var(--primary-action-color);
+    border-radius: 5px;
+}
+
+.checkmark:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.checkmark-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkmark-container .checkmark:after {
+    left: 7px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--primary-action-color);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
