@@ -39,14 +39,14 @@ h1 {
 
 h2 {
     margin: 0 0 1rem 0;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 300;
 }
 
 hr {
     border: none;
     border-bottom: solid 1px #555b69;
-    margin: 0.8rem 0;
+    margin: 0.2rem 0;
 }
 
 .section {
@@ -62,7 +62,7 @@ hr {
 
 .left-panel {
     overflow: auto;
-    width: 19rem;
+    width: 17rem;
     grid-column: 1 / 2;
     background-color: var(--secondary-color);
     border-right: solid 1px var(--primary-dark-color);
@@ -93,7 +93,7 @@ label {
 
 .label {
     display: inline-block;
-    width: 10.5rem;
+    width: 8.7rem;
     text-align: end;
 }
 
@@ -209,8 +209,8 @@ input[type='number'] {
 
 .buttons {
     text-align: end;
-    margin: 1rem;
-    padding-right: 0.7rem;
+    margin: 0.3rem 1rem;
+    padding-right: 0.5rem;
 }
 
 .radio-button {
@@ -224,6 +224,28 @@ input[type='number'] {
     display: flex;
     margin: 0 0.5rem;
     justify-content: end;
+}
+
+.throttle {
+    margin-top: 1.2rem;
+}
+
+.throttle-labels {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    width: 100%;
+}
+
+.throttle-value {
+    font-size: 1rem;
+    margin-left: 0.2rem;
+    width: 2.7rem;
+    text-align: end;
+}
+
+.throttle-milliseconds {
+    margin-left: 0.2rem;
 }
 
 .counter {
@@ -308,8 +330,8 @@ footer {
 }
 
 .results {
-    left: 2.7rem;
-    top: 21.7rem;
+    left: 0.7rem;
+    top: 19.5rem;
     transition: 0.35s ease-in-out;
 }
 
@@ -345,7 +367,7 @@ footer {
 .frame-per-seconds {
     position: fixed;
     top: 0.8rem;
-    left: 21.8rem;
+    left: 19.8rem;
     font-family: system-ui;
     color: var(--primary-action-color);
     background-color: rgb(85 91 105 / 51%);
@@ -359,60 +381,100 @@ footer {
     font-family: monospace;
 }
 
-/* 
-** Checkbox
+/*
+** Components
 */
 
-.checkmark-container {
-    display: inline-block;
-    position: relative;
-    padding-left: 1.7rem;
-    margin: 0.8rem 0 1.5rem 0;
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 0.1rem;
+    background: var(--primary-action-color);
+    outline: none;
+    margin: 1.5rem 0;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    border: solid 0.15rem var(--primary-action-color);
     cursor: pointer;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    user-select: none;
-    color: var(--primary-dark-colorcolor);
 }
 
-/* Hide the browser's default checkbox */
-.checkmark-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin: 2.7rem 0 1rem 0;
 }
 
-.checkmark {
-    position: absolute;
-    top: -0.1rem;
-    left: 0;
-    height: 1.1rem;
-    width: 1.1rem;
-    background-color: var(--primary-action-dark-color);
-    border: solid 1px var(--primary-action-color);
-    border-radius: 5px;
-}
-
-.checkmark:after {
-    content: '';
-    position: absolute;
+.toggle {
     display: none;
 }
 
-.checkmark-container input:checked ~ .checkmark:after {
-    display: block;
+.toggle-background {
+    background-color: var(--primary-dark-color);
+    border-radius: 50px;
+    display: inline-block;
+    width: 3.5rem;
+    height: 1.7rem;
+    position: relative;
+    border: 0.1rem solid var(--primary-action-color);
+    cursor: pointer;
 }
 
-.checkmark-container .checkmark:after {
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid var(--primary-action-color);
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+.toggle:checked + .toggle-background {
+    background-color: var(--primary-action-dark-color);
+}
+
+.ball {
+    background: var(--primary-action-color);
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.1rem;
+    left: 0.1rem;
+    align-items: center;
+    justify-content: center;
+    animation: slideOff 0.15s linear forwards;
+}
+
+.toggle:checked + .toggle-background .ball {
+    animation: slideOn 0.15s linear forwards;
+}
+
+@keyframes slideOn {
+    0% {
+        transform: translateX(0) scale(1);
+    }
+    50% {
+        transform: translateX(1.5rem) scale(1.2);
+    }
+    100% {
+        transform: translateX(1.75rem) scale(1);
+    }
+}
+
+@keyframes slideOff {
+    0% {
+        transform: translateX(1.75rem) scale(1);
+    }
+    50% {
+        transform: translateX(1.5rem) scale(1.2);
+    }
+    100% {
+        transform: translateX(0) scale(1);
+    }
+}
+
+.automatic-open-label {
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-left: 0.5rem;
 }

@@ -40,7 +40,10 @@ export function Ui(
     const uiGenerationsAtOnce = document.getElementById(
         'ui-generations-at-once'
     );
+
+    // Throttle
     const uiThrottle = document.getElementById('ui-throttle');
+    const uiThrottleValue = document.getElementById('ui-throttle-value');
 
     // Radio buttons
     const uiColonyGenerationTypes = document.querySelectorAll(
@@ -74,21 +77,21 @@ export function Ui(
     const uiAverageRedrawDuration = document.getElementById(
         'ui-average-redraw-duration'
     );
-    const uiAutomaticBenchmarks = document.getElementById(
-        'ui-automatic-benchmarks'
+    const uiAutomaticOpenSwitch = document.getElementById(
+        'ui-automatic-open-switch'
     );
-    const uiAutomaticBenchmarksCheckbox = document.getElementById(
-        'ui-automatic-benchmarks-checkmark'
+    const uiAutomaticOpenBallContainer = document.getElementById(
+        'ui-automatic-open-ball-container'
     );
-    const uiAutomaticBenchmarksInput = document.getElementById(
-        'ui-automatic-benchmarks-input'
+    const uiAutomaticOpenBall = document.getElementById(
+        'ui-automatic-open-ball'
+    );
+    const uiAutomaticOpenLabel = document.getElementById(
+        'ui-automatic-open-label'
     );
 
     // Canvas
     const uiCanvas = document.getElementById('ui-canvas');
-    const canvasContext = uiCanvas.getContext('2d', {
-        willReadFrequently: true,
-    });
 
     initProperties();
     addEventListeners();
@@ -173,7 +176,7 @@ export function Ui(
         cellSize = parseInt(uiCellSize.value);
         numberOfGenerations = parseInt(uiNumberOfGenerations.value);
         ticksAtOnce = parseInt(uiGenerationsAtOnce.value);
-        throttle = parseInt(uiThrottle.value);
+        throttle = parseInt(uiThrottleValue.textContent);
 
         setUiCounter(0);
     }
@@ -241,15 +244,10 @@ export function Ui(
             (e) => (ticksAtOnce = unwrapDefault(e.target.value, ticksAtOnce))
         );
 
-        uiThrottle.addEventListener(
-            'change',
-            (e) => (throttle = unwrapDefault(e.target.value, throttle))
-        );
-
-        uiThrottle.addEventListener(
-            'keyup',
-            (e) => (throttle = unwrapDefault(e.target.value, throttle))
-        );
+        uiThrottle.addEventListener('input', (event) => {
+            throttle = event.target.value;
+            uiThrottleValue.textContent = throttle;
+        });
 
         for (const radioButton of uiColonyGenerationTypes) {
             radioButton.addEventListener('change', (e) => {
@@ -295,18 +293,17 @@ export function Ui(
             event.preventDefault();
 
             if (
-                event.target !== uiAutomaticBenchmarks &&
-                event.target !== uiAutomaticBenchmarksCheckbox &&
-                event.target !== uiAutomaticBenchmarksInput
+                event.target === uiAutomaticOpenBallContainer ||
+                event.target === uiAutomaticOpenBall ||
+                event.target === uiAutomaticOpenLabel
             ) {
+                uiAutomaticOpenSwitch.checked = !uiAutomaticOpenSwitch.checked;
+            } else {
                 if (uiResultsPanel.classList.contains('open')) {
                     uiResultsPanel.classList.remove('open');
                 } else {
                     uiResultsPanel.classList.add('open');
                 }
-            } else {
-                uiAutomaticBenchmarksInput.checked =
-                    !uiAutomaticBenchmarksInput.checked;
             }
         });
 
@@ -336,7 +333,7 @@ export function Ui(
     }
 
     function openResults() {
-        if (uiAutomaticBenchmarksInput.checked) {
+        if (uiAutomaticOpenSwitch.checked) {
             if (!uiResultsPanel.classList.contains('open')) {
                 uiResultsPanel.classList.add('open');
             }
