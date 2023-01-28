@@ -78,7 +78,7 @@
                     <input
                         id="ui-number-of-generations"
                         type="number"
-                        value="500"
+                        value="50"
                         min="0"
                     />
                 </div>
@@ -91,7 +91,7 @@
                         id="ui-generations-at-once"
                         type="number"
                         value="1"
-                        min="50"
+                        min="1"
                     />
                 </div>
 
@@ -153,93 +153,91 @@
 
             <main class="section">
                 <div id="ui-library-panel" class="sliding-panel library">
-                    <div>
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
-                        TOTO <br />
+                    <div class="library-panel">
+                        <ul class="library-list">
+                            <li class="library-item">Clear</li>
+                            <li class="library-item">Pattern</li>
+                            <li class="library-item">Randomly</li>
+                            <li class="library-item">Blinker</li>
+                            <li class="library-item">Glider</li>
+                            <li class="library-item">111</li>
+                            <li class="library-item">222</li>
+                            <li class="library-item">333</li>
+                            <li class="library-item">444</li>
+                            <li class="library-item">555</li>
+                            <li class="library-item">666</li>
+                        </ul>
                     </div>
-                    <div class="results-button">LIBRARY</div>
+                    <div class="sliding-panel-label">LIBRARY</div>
                 </div>
 
                 <!--
-                    RESULTS PANEL
+                    BENCHMARKS PANEL
                 -->
 
-                <div id="ui-results-panel" class="sliding-panel results">
-                    <div class="results-content">
-                        <div class="result">
-                            <label class="result-label">Total duration</label>
+                <div id="ui-benchmarks-panel" class="sliding-panel benchmarks">
+                    <div class="benchmarks-content">
+                        <div class="benchmark">
+                            <label>Total duration</label>
 
-                            <div class="result-value">
+                            <div class="benchmark-value">
                                 <span
                                     id="ui-total-duration"
-                                    class="duration"
+                                    class="benchmark-duration"
                                 ></span>
+
                                 <span>ms</span>
                             </div>
                         </div>
 
-                        <div class="result">
-                            <label class="result-label"
-                                >Total ticks duration</label
-                            >
+                        <div class="benchmark">
+                            <label>Total ticks duration</label>
 
-                            <div class="result-value">
+                            <div class="benchmark-value">
                                 <span
                                     id="ui-total-ticks-duration"
-                                    class="duration"
+                                    class="benchmark-duration"
                                 ></span>
+
                                 <span>ms</span>
                             </div>
                         </div>
 
-                        <div class="result">
-                            <label class="result-label"
-                                >Average duration per tick</label
-                            >
+                        <div class="benchmark">
+                            <label>Average duration per tick</label>
 
-                            <div class="result-value">
+                            <div class="benchmark-value">
                                 <span
                                     id="ui-average-tick-duration"
-                                    class="duration"
+                                    class="benchmark-duration"
                                 ></span>
+
                                 <span>ms</span>
                             </div>
                         </div>
 
-                        <div class="result">
-                            <label class="result-label"
-                                >Total redraw duration</label
-                            >
+                        <div class="benchmark">
+                            <label>Total redraw duration</label>
 
-                            <div class="result-value">
+                            <div class="benchmark-value">
                                 <span
                                     id="ui-total-redraw-duration"
-                                    class="duration"
+                                    class="benchmark-duration"
                                 ></span>
+
                                 <span>ms</span>
                             </div>
                         </div>
 
-                        <div class="result">
-                            <label class="result-label"
-                                >Average redraw duration</label
-                            >
+                        <div class="benchmark">
+                            <label>Average redraw duration</label>
 
-                            <div class="result-value">
+                            <div class="benchmark-value">
                                 <span
                                     id="ui-average-redraw-duration"
-                                    class="duration"
+                                    class="benchmark-duration"
                                 ></span>
+
                                 <span>ms</span>
                             </div>
                         </div>
@@ -271,13 +269,13 @@
                             <label
                                 id="ui-automatic-open-label"
                                 for="ui-automatic-open-switch"
-                                class="automatic-open-label"
+                                class="benchmark-automatic-open-label"
                                 >Automatic open</label
                             >
                         </div>
                     </div>
 
-                    <div class="results-button">BENCHMARKS</div>
+                    <div class="sliding-panel-label">BENCHMARKS</div>
                 </div>
 
                 <div class="frame-per-seconds">
@@ -293,7 +291,7 @@
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.13.0</div>
+                    <div class="version">v1.14.0</div>
 
                     <svg
                         id="ui-source-code"
