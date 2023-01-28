@@ -73,7 +73,7 @@
 
                 <div class="input">
                     <label for="ui-number-of-generations" class="label"
-                        >NUMBER OF GENERATIONS</label
+                        >GENERATIONS</label
                     >
                     <input
                         id="ui-number-of-generations"
@@ -85,7 +85,7 @@
 
                 <div class="input">
                     <label for="ui-generations-at-once" class="label"
-                        >GENERATIONS AT ONCE</label
+                        >AT ONCE</label
                     >
                     <input
                         id="ui-generations-at-once"
@@ -95,10 +95,24 @@
                     />
                 </div>
 
-                <div class="input">
-                    <label for="ui-throttle" class="label">THROTTLE</label>
-                    <input id="ui-throttle" type="number" value="0" min="0" />
-                    <label for="ui-throttle" class="unit">ms</label>
+                <div class="throttle">
+                    <div class="throttle-labels">
+                        <span class="throttle-label">THROTTLE</span>
+                        <span id="ui-throttle-value" class="throttle-value"
+                            >0</span
+                        >
+                        <span class="throttle-milliseconds">ms</span>
+                    </div>
+
+                    <input
+                        id="ui-throttle"
+                        class="slider"
+                        type="range"
+                        min="0"
+                        max="1000"
+                        step="50"
+                        value="0"
+                    />
                 </div>
 
                 <div class="colony-generation">
@@ -133,6 +147,10 @@
                 </div>
             </div>
 
+            <!--
+                LIBRARY PANEL
+            -->
+
             <main class="section">
                 <div id="ui-library-panel" class="sliding-panel library">
                     <div>
@@ -151,6 +169,10 @@
                     </div>
                     <div class="results-button">LIBRARY</div>
                 </div>
+
+                <!--
+                    RESULTS PANEL
+                -->
 
                 <div id="ui-results-panel" class="sliding-panel results">
                     <div class="results-content">
@@ -222,23 +244,37 @@
                             </div>
                         </div>
 
-                        <label
-                            id="ui-automatic-benchmarks"
-                            class="checkmark-container"
-                        >
+                        <!--
                             Automatic open
+                        -->
 
+                        <div class="toggle-container">
                             <input
-                                id="ui-automatic-benchmarks-input"
+                                id="ui-automatic-open-switch"
+                                name="switch"
                                 type="checkbox"
-                                checked="checked"
+                                class="toggle"
+                                checked
                             />
 
-                            <span
-                                id="ui-automatic-benchmarks-checkmark"
-                                class="checkmark"
-                            ></span>
-                        </label>
+                            <label
+                                id="ui-automatic-open-ball-container"
+                                for="ui-automatic-open-switch"
+                                class="toggle-background"
+                            >
+                                <div
+                                    id="ui-automatic-open-ball"
+                                    class="ball"
+                                ></div>
+                            </label>
+
+                            <label
+                                id="ui-automatic-open-label"
+                                for="ui-automatic-open-switch"
+                                class="automatic-open-label"
+                                >Automatic open</label
+                            >
+                        </div>
                     </div>
 
                     <div class="results-button">BENCHMARKS</div>
@@ -246,7 +282,7 @@
 
                 <div class="frame-per-seconds">
                     <div id="ui-fps">0</div>
-                    FRAMES PER SECOND
+                    FPS
                 </div>
 
                 <div class="canvas">
@@ -257,7 +293,7 @@
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.12.0</div>
+                    <div class="version">v1.13.0</div>
 
                     <svg
                         id="ui-source-code"
