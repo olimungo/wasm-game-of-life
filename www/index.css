@@ -38,7 +38,7 @@ h1 {
 }
 
 h2 {
-    margin: 0 0 1rem 0;
+    margin: 0 0 1.3rem 0;
     font-size: 0.9rem;
     font-weight: 300;
 }
@@ -226,6 +226,10 @@ input[type='number'] {
     justify-content: end;
 }
 
+.colony-generation {
+    margin: 0 0.5rem 0.8rem 0;
+}
+
 .throttle {
     margin-top: 1.2rem;
 }
@@ -331,7 +335,7 @@ footer {
 
 .results {
     left: 0.7rem;
-    top: 19.5rem;
+    top: 19.8rem;
     transition: 0.35s ease-in-out;
 }
 
