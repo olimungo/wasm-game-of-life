@@ -366,8 +366,8 @@ footer {
 .checkmark-container {
     display: inline-block;
     position: relative;
-    padding-left: 2rem;
-    margin: 1rem 0 1.5rem 0;
+    padding-left: 1.7rem;
+    margin: 0.8rem 0 1.5rem 0;
     cursor: pointer;
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -386,10 +386,10 @@ footer {
 
 .checkmark {
     position: absolute;
-    top: -0.3rem;
+    top: -0.1rem;
     left: 0;
-    height: 1.3rem;
-    width: 1.3rem;
+    height: 1.1rem;
+    width: 1.1rem;
     background-color: var(--primary-action-dark-color);
     border: solid 1px var(--primary-action-color);
     border-radius: 5px;
@@ -406,8 +406,8 @@ footer {
 }
 
 .checkmark-container .checkmark:after {
-    left: 7px;
-    top: 2px;
+    left: 5px;
+    top: 1px;
     width: 5px;
     height: 10px;
     border: solid var(--primary-action-color);
