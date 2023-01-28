@@ -1,4 +1,5 @@
-import { Ui, ColonyGenerationType, EngineGenerationType } from './src/ui';
+import { Ui } from './src/ui';
+import { ColonyGenerationType, EngineGenerationType } from './src/inputs';
 import { UniverseJs } from './src/game-of-life-javascript';
 import { UniverseWasm } from './src/game-of-life-wasm';
 import { Fps } from './src/fps';
@@ -72,18 +73,19 @@ function createUniverseFactory() {
 function renderLoop() {
     fps.render();
 
+    const generationsAtOnce = ui.getGenerationsAtOnce();
     let now = new Date().getTime();
 
-    universe.tick(ui.getTicksAtOnce());
+    universe.tick(generationsAtOnce);
 
     totalTicksDuration += new Date().getTime() - now;
-    generationsCount += ui.getTicksAtOnce();
+    generationsCount += generationsAtOnce;
 
     ui.setUiCounter(generationsCount);
 
     now = new Date().getTime();
 
-    if (ui.getTicksAtOnce() > 1) {
+    if (generationsAtOnce > 1) {
         universe.drawAllCells();
     } else {
         universe.drawUpdatedCells();
