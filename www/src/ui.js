@@ -1,17 +1,22 @@
 import { Throttle } from './throttle';
 import { Benchmarks } from './benchmarks';
 import { Inputs } from './inputs';
+import { Library } from './library';
 
 export function Ui(
     playClickedCallback,
     pauseClickedCallback,
     resetClickedCalback,
-    cellClickedCallback
+    cellClickedCallback,
+    libraryItemSelectedCallback
 ) {
+    const githubSourcesUrl = 'https://github.com/olimungo/wasm-game-of-life';
+
+    const inputs = Inputs(reset);
     const throttle = Throttle();
     const benchmarks = Benchmarks();
-    const inputs = Inputs(reset);
-    const githubSourcesUrl = 'https://github.com/olimungo/wasm-game-of-life';
+
+    Library(libraryItemSelectedCallback);
 
     //
     // HTML elements reference
@@ -22,9 +27,6 @@ export function Ui(
     const uiPlayPause = document.getElementById('ui-play-pause');
     const uiReset = document.getElementById('ui-reset');
     const uiSourceCode = document.getElementById('ui-source-code');
-
-    // Library
-    const uiLibraryPanel = document.getElementById('ui-library-panel');
 
     // Canvas
     const uiCanvas = document.getElementById('ui-canvas');
@@ -111,14 +113,6 @@ export function Ui(
             } else {
                 uiPlayPause.textContent = 'PAUSE';
                 playClickedCallback();
-            }
-        });
-
-        uiLibraryPanel.addEventListener('click', () => {
-            if (uiLibraryPanel.classList.contains('open')) {
-                uiLibraryPanel.classList.remove('open');
-            } else {
-                uiLibraryPanel.classList.add('open');
             }
         });
 
