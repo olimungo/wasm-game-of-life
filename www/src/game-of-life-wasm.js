@@ -1,10 +1,7 @@
 import { Universe } from 'wasm-game-of-life';
-import { Canvas } from './canvas';
 
 export function UniverseWasm() {
     let universe;
-
-    const canvas = Canvas();
 
     return {
         create,
@@ -19,9 +16,6 @@ export function UniverseWasm() {
 
     function create(width, height, cellSize) {
         universe = Universe.new(width, height, cellSize);
-
-        canvas.setCanvas(width, height, cellSize);
-
         return this;
     }
 

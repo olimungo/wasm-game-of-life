@@ -13,7 +13,11 @@ export function Fps() {
         const now = performance.now();
         const delta = now - lastFrameTimeStamp;
         lastFrameTimeStamp = now;
-        const fps = (1 / delta) * 1000;
+        let fps = (1 / delta) * 1000;
+
+        if (fps > 200) {
+            fps = 0;
+        }
 
         // Render the statistics.
         uiFps.textContent = `${Math.round(fps)}`.trim();

@@ -9,10 +9,8 @@ export const EngineGenerationType = Object.freeze({
 });
 
 export function Inputs(resetCallback) {
-    // Inputs
     const uiWidth = document.getElementById('ui-width');
     const uiHeight = document.getElementById('ui-height');
-    const uiCounter = document.getElementById('ui-counter');
     const uiCellSize = document.getElementById('ui-cell-size');
     const uiNumberOfGenerations = document.getElementById(
         'ui-number-of-generations'
@@ -21,7 +19,6 @@ export function Inputs(resetCallback) {
         'ui-generations-at-once'
     );
 
-    // Radio buttons
     const uiColonyGenerationTypes = document.querySelectorAll(
         'input[name="ui-colony-generation-type"]'
     );
@@ -48,12 +45,7 @@ export function Inputs(resetCallback) {
         getColonyGenerationType,
         getEngineGenerationType,
         getNumberOfGenerations,
-        setUiCounter,
     };
-
-    //
-    // Getters/Setters
-    //
 
     function getWidth() {
         width = unwrapDefault(uiWidth.value, width);
@@ -99,14 +91,6 @@ export function Inputs(resetCallback) {
         return engineGenerationType;
     }
 
-    function setUiCounter(count) {
-        uiCounter.textContent = count;
-    }
-
-    //
-    // Functions
-    //
-
     function initProperties() {
         for (let radioButton of uiEngineGenerationTypes) {
             if (radioButton.checked) {
@@ -131,8 +115,6 @@ export function Inputs(resetCallback) {
         cellSize = parseInt(uiCellSize.value);
         numberOfGenerations = parseInt(uiNumberOfGenerations.value);
         generationsAtOnce = parseInt(uiGenerationsAtOnce.value);
-
-        setUiCounter(0);
     }
 
     function unwrapDefault(value, defaultValue) {

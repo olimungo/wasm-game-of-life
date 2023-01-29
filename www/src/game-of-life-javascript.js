@@ -1,9 +1,11 @@
-import { Canvas } from './canvas';
-
 export function UniverseJs() {
+    const DEAD_COLOR = '#FFFFFF';
+    const ALIVE_COLOR = '#000000';
+
     let width, height, cellSize, colony, updatedCells;
 
-    const canvas = Canvas();
+    const uiCanvas = document.getElementById('ui-canvas');
+    const context = uiCanvas.getContext('2d');
 
     return {
         create,
@@ -24,8 +26,6 @@ export function UniverseJs() {
         colony = [];
         updatedCells = [];
 
-        canvas.setCanvas(width, height, cellSize);
-
         return this;
     }
 
@@ -36,27 +36,21 @@ export function UniverseJs() {
 
     function setCell(row, column) {
         const index = getIndex(row, column);
-        const newState = colony[index] ? false : true;
+        const state = colony[index];
 
-        colony[index] = newState;
+        if (state) {
+            context.fillStyle = DEAD_COLOR;
+        } else {
+            context.fillStyle = ALIVE_COLOR;
+        }
 
-        canvas.setCell(row, column, newState);
-    }
+        colony[index] = !state;
 
-    function drawAllCells() {
-        canvas.drawAllCells(colony);
-    }
+        context.beginPath();
 
-    function drawUpdatedCells() {
-        canvas.drawUpdatedCells(updatedCells);
-    }
+        context.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
 
-    function generatePatternColony() {
-        generateColony(false);
-    }
-
-    function generateRandomColony() {
-        generateColony(true);
+        context.closePath();
     }
 
     function tick(generations) {
@@ -87,15 +81,12 @@ export function UniverseJs() {
         }
     }
 
-    function getIndex(row, column) {
-        return row * width + column;
+    function generatePatternColony() {
+        generateColony(false);
     }
 
-    function getRowColumn(index) {
-        const row = Math.floor(index / width);
-        const column = index % width;
-
-        return { row, column };
+    function generateRandomColony() {
+        generateColony(true);
     }
 
     function generateColony(randomly) {
@@ -105,6 +96,71 @@ export function UniverseJs() {
             } else {
                 colony.push(index % 2 == 0 || index % 7 == 0);
             }
+        }
+    }
+
+    function drawAllCells() {
+        console.log;
+        context.beginPath();
+
+        drawAllCellsByState(colony, true);
+        drawAllCellsByState(colony, false);
+
+        context.closePath();
+    }
+
+    function drawUpdatedCells() {
+        context.beginPath();
+
+        drawUpdatedCellsByState(updatedCells, true);
+        drawUpdatedCellsByState(updatedCells, false);
+
+        context.closePath();
+    }
+
+    function drawAllCellsByState(colony, state) {
+        if (state) {
+            context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
+        }
+
+        for (let row = 0; row < height; row++) {
+            for (let column = 0; column < width; column++) {
+                const index = getIndex(row, column);
+
+                if (colony[index] !== state) {
+                    continue;
+                }
+
+                context.fillRect(
+                    column * cellSize,
+                    row * cellSize,
+                    cellSize,
+                    cellSize
+                );
+            }
+        }
+    }
+
+    function drawUpdatedCellsByState(updatedCells, state) {
+        if (state) {
+            context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
+        }
+
+        for (let element of updatedCells) {
+            if (element.state !== state) {
+                continue;
+            }
+
+            context.fillRect(
+                element.column * cellSize,
+                element.row * cellSize,
+                cellSize,
+                cellSize
+            );
         }
     }
 
@@ -141,5 +197,16 @@ export function UniverseJs() {
         count += colony[se];
 
         return count;
+    }
+
+    function getIndex(row, column) {
+        return row * width + column;
+    }
+
+    function getRowColumn(index) {
+        const row = Math.floor(index / width);
+        const column = index % width;
+
+        return { row, column };
     }
 }

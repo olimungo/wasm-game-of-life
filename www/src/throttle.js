@@ -13,10 +13,6 @@ export function Throttle() {
         getThrottle,
     };
 
-    //
-    // Getters
-    //
-
     function getThrottle() {
         return throttle;
     }
