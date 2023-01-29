@@ -2,7 +2,6 @@ import { Ui } from './src/ui';
 import { ColonyGenerationType, EngineGenerationType } from './src/inputs';
 import { UniverseJs } from './src/game-of-life-javascript';
 import { UniverseWasm } from './src/game-of-life-wasm';
-import { Fps } from './src/fps';
 
 let universe;
 
@@ -16,7 +15,6 @@ let animationId = null;
 let animationTimeOutId = null;
 
 const ui = Ui(play, pause, reset, setCell, libraryItemSelected);
-const fps = Fps();
 
 createUniverse();
 
@@ -33,16 +31,14 @@ function createUniverse() {
     totalRedrawDuration = 0;
     generationsOver = false;
 
-    ui.setUiCounter(0);
+    ui.updateUi(0);
     ui.resetResults();
 
     if (universe) {
         universe.dispose();
     }
 
-    const width = ui.getWidth();
-    const height = ui.getHeight();
-    const cellSize = ui.getCellSize();
+    const { width, height, cellSize } = ui.setCanvas();
 
     universe = createUniverseFactory(width, height, cellSize);
 
@@ -66,8 +62,6 @@ function createUniverseFactory(width, height, cellSize) {
 }
 
 function renderLoop() {
-    fps.render();
-
     const generationsAtOnce = ui.getGenerationsAtOnce();
     let now = new Date().getTime();
 
@@ -76,7 +70,7 @@ function renderLoop() {
     totalTicksDuration += new Date().getTime() - now;
     generationsCount += generationsAtOnce;
 
-    ui.setUiCounter(generationsCount);
+    ui.updateUi(generationsCount);
 
     now = new Date().getTime();
 

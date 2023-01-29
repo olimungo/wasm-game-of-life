@@ -2,6 +2,8 @@ import { Throttle } from './throttle';
 import { Benchmarks } from './benchmarks';
 import { Inputs } from './inputs';
 import { Library } from './library';
+import { Canvas } from './canvas';
+import { Fps } from './fps';
 
 export function Ui(
     playClickedCallback,
@@ -15,6 +17,8 @@ export function Ui(
     const inputs = Inputs(reset);
     const throttle = Throttle();
     const benchmarks = Benchmarks();
+    const canvas = Canvas(cellClickedCallback);
+    const fps = Fps();
 
     Library(libraryItemSelectedCallback);
 
@@ -31,42 +35,28 @@ export function Ui(
     // Canvas
     const uiCanvas = document.getElementById('ui-canvas');
 
+    // Counter
+    const uiCounter = document.getElementById('ui-counter');
+
     addEventListeners();
+    updateUi(0);
 
     return {
-        getWidth,
-        getHeight,
-        getCellSize,
         getGenerationsAtOnce,
         getThrottle,
         getColonyGenerationType,
         getEngineGenerationType,
         getNumberOfGenerations,
-        setUiCounter,
+        setCanvas,
+        updateUi,
         setPlayButton,
         setResults,
         resetResults,
         openResults,
     };
 
-    //
-    // Getters/Setters
-    //
-
-    function getWidth() {
-        return inputs.getWidth();
-    }
-
-    function getHeight() {
-        return inputs.getHeight();
-    }
-
     function getGenerationsAtOnce() {
         return inputs.getGenerationsAtOnce();
-    }
-
-    function getCellSize() {
-        return inputs.getCellSize();
     }
 
     function getColonyGenerationType() {
@@ -85,13 +75,11 @@ export function Ui(
         return inputs.getNumberOfGenerations();
     }
 
-    function setUiCounter(count) {
-        inputs.setUiCounter(count);
-    }
+    function updateUi(count) {
+        uiCounter.textContent = count;
 
-    //
-    // Functions
-    //
+        fps.render();
+    }
 
     function setPlayButton() {
         uiPlayPause.textContent = 'PLAY';
@@ -119,26 +107,16 @@ export function Ui(
         uiSourceCode.addEventListener('click', () =>
             window.open(githubSourcesUrl, '_blank')
         );
-
-        uiCanvas.addEventListener('click', (event) => {
-            const { row, column } = getCanvasClickCoordinates(event);
-            cellClickedCallback(row, column);
-        });
     }
 
-    function getCanvasClickCoordinates(event) {
-        const boundingRect = uiCanvas.getBoundingClientRect();
+    function setCanvas() {
+        const width = inputs.getWidth();
+        const height = inputs.getHeight();
+        const cellSize = inputs.getCellSize();
 
-        const scaleX = uiCanvas.width / boundingRect.width;
-        const scaleY = uiCanvas.height / boundingRect.height;
+        canvas.setCanvas(width, height, cellSize);
 
-        const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
-        const canvasTop = (event.clientY - boundingRect.top) * scaleY;
-
-        const row = Math.min(Math.floor(canvasTop / cellSize), height - 1);
-        const column = Math.min(Math.floor(canvasLeft / cellSize), width - 1);
-
-        return { row, column };
+        return { width, height, cellSize };
     }
 
     function openResults() {
