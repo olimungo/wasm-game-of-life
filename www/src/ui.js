@@ -22,10 +22,6 @@ export function Ui(
 
     Library(libraryItemSelectedCallback);
 
-    //
-    // HTML elements reference
-    //
-
     // Buttons
     const uiSet = document.getElementById('ui-set');
     const uiPlayPause = document.getElementById('ui-play-pause');
