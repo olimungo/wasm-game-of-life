@@ -15,7 +15,7 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(play, pause, reset, setCell);
+const ui = Ui(play, pause, reset, setCell, libraryItemSelected);
 const fps = Fps();
 
 createUniverse();
@@ -40,14 +40,13 @@ function createUniverse() {
         universe.dispose();
     }
 
-    universe = createUniverseFactory();
+    const width = ui.getWidth();
+    const height = ui.getHeight();
+    const cellSize = ui.getCellSize();
 
-    const isGenerationTypeRandomly =
-        ui.getColonyGenerationType() === ColonyGenerationType.Randomly
-            ? true
-            : false;
+    universe = createUniverseFactory(width, height, cellSize);
 
-    if (isGenerationTypeRandomly) {
+    if (ui.getColonyGenerationType() === ColonyGenerationType.Randomly) {
         universe.generateRandomColony();
     } else {
         universe.generatePatternColony();
@@ -58,11 +57,7 @@ function createUniverse() {
     }, 0);
 }
 
-function createUniverseFactory() {
-    const width = ui.getWidth();
-    const height = ui.getHeight();
-    const cellSize = ui.getCellSize();
-
+function createUniverseFactory(width, height, cellSize) {
     if (ui.getEngineGenerationType() === EngineGenerationType.Wasm) {
         return UniverseWasm().create(width, height, cellSize);
     } else {
@@ -151,4 +146,8 @@ function reset() {
 
 function setCell(row, column) {
     universe.setCell(row, column);
+}
+
+function libraryItemSelected(item) {
+    console.log(item);
 }
