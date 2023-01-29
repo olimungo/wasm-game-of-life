@@ -10,6 +10,7 @@ export function UniverseWasm() {
         generateRandomColony,
         tick,
         setCell,
+        drawCell,
         drawAllCells,
         drawUpdatedCells,
     };
@@ -26,7 +27,11 @@ export function UniverseWasm() {
         }
     }
 
-    function setCell(row, column) {
+    function setCell(row, column, state) {
+        // universe.set_cell(row, column, state);
+    }
+
+    function drawCell(row, column) {
         universe.set_cell(row, column);
     }
 

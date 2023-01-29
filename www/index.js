@@ -1,5 +1,6 @@
 import { Ui } from './src/ui';
-import { ColonyGenerationType, EngineGenerationType } from './src/inputs';
+import { EngineGenerationType } from './src/inputs';
+import { ColonySamples } from './src/colony-samples';
 import { UniverseJs } from './src/game-of-life-javascript';
 import { UniverseWasm } from './src/game-of-life-wasm';
 
@@ -14,13 +15,17 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(play, pause, reset, setCell, libraryItemSelected);
+const ui = Ui(play, pause, reset, drawCell, libraryItemSelected);
+
+const colonySample = ui.getColonySample();
+
+ui.setCanvasDimensions(
+    colonySample.width,
+    colonySample.height,
+    colonySample.cellSize
+);
 
 createUniverse();
-
-//
-// Functions
-//
 
 function createUniverse() {
     clearTimeout(animationTimeOutId);
@@ -38,14 +43,25 @@ function createUniverse() {
         universe.dispose();
     }
 
-    const { width, height, cellSize } = ui.setCanvas();
+    const colonySample = ui.getColonySample();
 
-    universe = createUniverseFactory(width, height, cellSize);
+    universe = createUniverseFactory(
+        colonySample.width,
+        colonySample.height,
+        colonySample.cellSize
+    );
 
-    if (ui.getColonyGenerationType() === ColonyGenerationType.Randomly) {
-        universe.generateRandomColony();
-    } else {
-        universe.generatePatternColony();
+    switch (colonySample.id) {
+        case ColonySamples.Pattern:
+            universe.generatePatternColony();
+            break;
+        case ColonySamples.Randomly:
+            universe.generateRandomColony();
+            break;
+        default:
+            for (let cells of colonySample.cells) {
+                universe.setCell(cells[0], cells[1]);
+            }
     }
 
     setTimeout(() => {
@@ -136,12 +152,14 @@ function pause() {
 
 function reset() {
     createUniverse();
+    ui.setPlayButton();
 }
 
-function setCell(row, column) {
-    universe.setCell(row, column);
+function drawCell(row, column) {
+    universe.drawCell(row, column);
 }
 
 function libraryItemSelected(item) {
-    console.log(item);
+    ui.setCanvasDimensions(item.width, item.height, item.cellSize);
+    reset();
 }

@@ -19,8 +19,7 @@ export function Ui(
     const benchmarks = Benchmarks();
     const canvas = Canvas(cellClickedCallback);
     const fps = Fps();
-
-    Library(libraryItemSelectedCallback);
+    const library = Library(libraryItemSelected);
 
     // Buttons
     const uiSet = document.getElementById('ui-set');
@@ -28,11 +27,10 @@ export function Ui(
     const uiReset = document.getElementById('ui-reset');
     const uiSourceCode = document.getElementById('ui-source-code');
 
-    // Canvas
-    const uiCanvas = document.getElementById('ui-canvas');
-
     // Counter
     const uiCounter = document.getElementById('ui-counter');
+
+    let colonySample = library.getDefaultSample();
 
     addEventListeners();
     updateUi(0);
@@ -40,10 +38,10 @@ export function Ui(
     return {
         getGenerationsAtOnce,
         getThrottle,
-        getColonyGenerationType,
+        getColonySample,
         getEngineGenerationType,
         getNumberOfGenerations,
-        setCanvas,
+        setCanvasDimensions,
         updateUi,
         setPlayButton,
         setResults,
@@ -55,8 +53,8 @@ export function Ui(
         return inputs.getGenerationsAtOnce();
     }
 
-    function getColonyGenerationType() {
-        return inputs.getColonyGenerationType();
+    function getColonySample() {
+        return colonySample;
     }
 
     function getEngineGenerationType() {
@@ -87,7 +85,19 @@ export function Ui(
     }
 
     function addEventListeners() {
-        uiSet.addEventListener('click', reset);
+        uiSet.addEventListener('click', () => {
+            const width = inputs.getWidth();
+            const height = inputs.getHeight();
+            const cellSize = inputs.getCellSize();
+
+            colonySample.width = width;
+            colonySample.height = height;
+            colonySample.cellSize = cellSize;
+
+            canvas.setCanvas(width, height, cellSize);
+            reset();
+        });
+
         uiReset.addEventListener('click', reset);
 
         uiPlayPause.addEventListener('click', (e) => {
@@ -105,14 +115,12 @@ export function Ui(
         );
     }
 
-    function setCanvas() {
-        const width = inputs.getWidth();
-        const height = inputs.getHeight();
-        const cellSize = inputs.getCellSize();
+    function setCanvasDimensions(width, height, cellSize) {
+        inputs.setWidth(width);
+        inputs.setHeight(height);
+        inputs.setCellSize(cellSize);
 
         canvas.setCanvas(width, height, cellSize);
-
-        return { width, height, cellSize };
     }
 
     function openResults() {
@@ -125,5 +133,10 @@ export function Ui(
 
     function resetResults() {
         benchmarks.resetResults();
+    }
+
+    function libraryItemSelected(item) {
+        colonySample = item;
+        libraryItemSelectedCallback(item);
     }
 }

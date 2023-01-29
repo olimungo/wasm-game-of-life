@@ -301,7 +301,6 @@ footer {
 }
 
 .library {
-    display: none !important;
     left: 7.6rem;
     top: 8.2rem;
     transition: 0.3s ease-in-out;

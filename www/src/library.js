@@ -1,10 +1,4 @@
-export const ColonySample = Object.freeze({
-    Clear: Symbol('clear'),
-    Pattern: Symbol('pattern'),
-    Randomly: Symbol('randomly'),
-    Blinker: Symbol('Blinker'),
-    Glider: Symbol('Glider'),
-});
+import { colonySamples, DEFAULT_SAMPLE } from './colony-samples';
 
 export function Library(itemSelectedCallback) {
     const uiLibraryPanel = document.getElementById('ui-library-panel');
@@ -18,16 +12,25 @@ export function Library(itemSelectedCallback) {
         }
     });
 
-    for (let value of Object.keys(ColonySample)) {
+    for (let [index, item] of colonySamples.entries()) {
         const li = document.createElement('li');
+        li.id = index;
 
         li.setAttribute('class', 'library-item');
-        li.textContent = value;
+        li.textContent = item.label;
 
         li.addEventListener('click', (event) => {
-            itemSelectedCallback(event.target.textContent);
+            itemSelectedCallback(colonySamples[index]);
         });
 
         uiLibraryList.appendChild(li);
+    }
+
+    return {
+        getDefaultSample,
+    };
+
+    function getDefaultSample() {
+        return colonySamples[DEFAULT_SAMPLE];
     }
 }

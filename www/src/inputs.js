@@ -19,9 +19,6 @@ export function Inputs(resetCallback) {
         'ui-generations-at-once'
     );
 
-    const uiColonyGenerationTypes = document.querySelectorAll(
-        'input[name="ui-colony-generation-type"]'
-    );
     const uiEngineGenerationTypes = document.querySelectorAll(
         'input[name="ui-engine-generation-type"]'
     );
@@ -39,8 +36,11 @@ export function Inputs(resetCallback) {
 
     return {
         getWidth,
+        setWidth,
         getHeight,
+        setHeight,
         getCellSize,
+        setCellSize,
         getGenerationsAtOnce,
         getColonyGenerationType,
         getEngineGenerationType,
@@ -53,10 +53,31 @@ export function Inputs(resetCallback) {
         return width;
     }
 
+    function setWidth(value) {
+        width = value;
+        uiWidth.value = width;
+    }
+
     function getHeight() {
         height = unwrapDefault(uiHeight.value, height);
 
         return height;
+    }
+
+    function setHeight(value) {
+        height = value;
+        uiHeight.value = height;
+    }
+
+    function getCellSize() {
+        cellSize = unwrapDefault(uiCellSize.value, cellSize);
+
+        return cellSize;
+    }
+
+    function setCellSize(value) {
+        cellSize = value;
+        uiCellSize.value = cellSize;
     }
 
     function getGenerationsAtOnce() {
@@ -66,12 +87,6 @@ export function Inputs(resetCallback) {
         );
 
         return generationsAtOnce;
-    }
-
-    function getCellSize() {
-        cellSize = unwrapDefault(uiCellSize.value, cellSize);
-
-        return cellSize;
     }
 
     function getNumberOfGenerations() {
@@ -101,15 +116,6 @@ export function Inputs(resetCallback) {
             }
         }
 
-        for (let radioButton of uiColonyGenerationTypes) {
-            if (radioButton.checked) {
-                colonyGenerationType =
-                    radioButton.value === 'pattern'
-                        ? ColonyGenerationType.Pattern
-                        : ColonyGenerationType.Randomly;
-            }
-        }
-
         width = parseInt(uiWidth.value);
         height = parseInt(uiHeight.value);
         cellSize = parseInt(uiCellSize.value);
@@ -134,17 +140,6 @@ export function Inputs(resetCallback) {
                     e.target.value === 'wasm'
                         ? EngineGenerationType.Wasm
                         : EngineGenerationType.Javascript;
-
-                resetCallback();
-            });
-        }
-
-        for (const radioButton of uiColonyGenerationTypes) {
-            radioButton.addEventListener('change', (e) => {
-                colonyGenerationType =
-                    e.target.value === 'pattern'
-                        ? ColonyGenerationType.Pattern
-                        : ColonyGenerationType.Randomly;
 
                 resetCallback();
             });

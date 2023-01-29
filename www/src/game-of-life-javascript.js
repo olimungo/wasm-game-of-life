@@ -14,6 +14,7 @@ export function UniverseJs() {
         generateRandomColony,
         tick,
         setCell,
+        drawCell,
         drawAllCells,
         drawUpdatedCells,
     };
@@ -34,7 +35,12 @@ export function UniverseJs() {
         updatedCells = [];
     }
 
-    function setCell(row, column) {
+    function setCell(row, column, state) {
+        const index = getIndex(row, column);
+        colony[index] = state;
+    }
+
+    function drawCell(row, column) {
         const index = getIndex(row, column);
         const state = colony[index];
 
@@ -100,7 +106,7 @@ export function UniverseJs() {
     }
 
     function drawAllCells() {
-        console.log;
+        console.log(colony);
         context.beginPath();
 
         drawAllCellsByState(colony, true);
