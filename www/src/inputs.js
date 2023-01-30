@@ -1,126 +1,90 @@
-export const ColonyGenerationType = Object.freeze({
-    Pattern: Symbol('pattern'),
-    Randomly: Symbol('randomly'),
-});
+import { Throttle } from './throttle';
 
-export const EngineGenerationType = Object.freeze({
+export const Engine = Object.freeze({
     Wasm: Symbol('wasm'),
     Javascript: Symbol('javascript'),
 });
 
-export function Inputs(resetCallback) {
-    const uiWidth = document.getElementById('ui-width');
-    const uiHeight = document.getElementById('ui-height');
+const DEFAULT_COLUMN_COUNT = 50;
+const DEFAULT_ROW_COUNT = 50;
+const DEFAULT_CELL_SIZE = 5;
+const DEFAULT_GENERATIONS_COUNT = 500;
+const DEFAULT_GENERATIONS_AT_ONCE = 1;
+const GITHUB_REPO_URL = 'https://github.com/olimungo/wasm-game-of-life';
+
+export function Inputs(
+    engineChangedCallback,
+    setClickedCallback,
+    resetClickedCalback,
+    playClickedCallback,
+    pauseClickedCallback
+) {
+    const uiRow = document.getElementById('ui-row');
+    const uiColumn = document.getElementById('ui-column');
     const uiCellSize = document.getElementById('ui-cell-size');
-    const uiNumberOfGenerations = document.getElementById(
-        'ui-number-of-generations'
-    );
+    const uiGenerationsCount = document.getElementById('ui-generations-count');
     const uiGenerationsAtOnce = document.getElementById(
         'ui-generations-at-once'
     );
+    const uiEngine = document.querySelectorAll('input[name="ui-engine"]');
 
-    const uiEngineGenerationTypes = document.querySelectorAll(
-        'input[name="ui-engine-generation-type"]'
-    );
+    // Buttons
+    const uiSet = document.getElementById('ui-set');
+    const uiPlayPause = document.getElementById('ui-play-pause');
+    const uiReset = document.getElementById('ui-reset');
+    const uiSourceCode = document.getElementById('ui-source-code');
 
-    let width; // px
-    let height; // px
-    let cellSize; // px
-    let numberOfGenerations;
-    let generationsAtOnce;
-    let colonyGenerationType;
-    let engineGenerationType;
+    let engine;
 
-    initProperties();
-    addEventListeners();
+    const throttle = Throttle();
+
+    init();
 
     return {
-        getWidth,
-        setWidth,
-        getHeight,
-        setHeight,
-        getCellSize,
-        setCellSize,
-        getGenerationsAtOnce,
-        getColonyGenerationType,
-        getEngineGenerationType,
-        getNumberOfGenerations,
+        getProperties,
+        setProperties,
+        setPlay,
     };
 
-    function getWidth() {
-        width = unwrapDefault(uiWidth.value, width);
-
-        return width;
+    function getProperties() {
+        return {
+            row: unwrapDefault(uiRow.value, DEFAULT_ROW_COUNT),
+            column: unwrapDefault(uiColumn.value, DEFAULT_COLUMN_COUNT),
+            cellSize: unwrapDefault(uiCellSize.value, DEFAULT_CELL_SIZE),
+            generationsCount: unwrapDefault(
+                uiGenerationsCount.value,
+                DEFAULT_GENERATIONS_COUNT
+            ),
+            generationsAtOnce: unwrapDefault(
+                uiGenerationsAtOnce.value,
+                DEFAULT_GENERATIONS_AT_ONCE
+            ),
+            throttleValue: throttle.getThrottle(),
+            engine,
+        };
     }
 
-    function setWidth(value) {
-        width = value;
-        uiWidth.value = width;
-    }
+    function setProperties(properties) {
+        const {
+            row,
+            column,
+            cellSize,
+            generationsCount,
+            generationsAtOnce,
+            throttleValue,
+        } = properties;
 
-    function getHeight() {
-        height = unwrapDefault(uiHeight.value, height);
-
-        return height;
-    }
-
-    function setHeight(value) {
-        height = value;
-        uiHeight.value = height;
-    }
-
-    function getCellSize() {
-        cellSize = unwrapDefault(uiCellSize.value, cellSize);
-
-        return cellSize;
-    }
-
-    function setCellSize(value) {
-        cellSize = value;
+        uiRow.value = row;
+        uiColumn.value = column;
         uiCellSize.value = cellSize;
+        uiGenerationsCount.value = generationsCount;
+        uiGenerationsAtOnce.value = generationsAtOnce;
+
+        throttle.setThrottle(throttleValue);
     }
 
-    function getGenerationsAtOnce() {
-        generationsAtOnce = unwrapDefault(
-            uiGenerationsAtOnce.value,
-            generationsAtOnce
-        );
-
-        return generationsAtOnce;
-    }
-
-    function getNumberOfGenerations() {
-        numberOfGenerations = unwrapDefault(
-            uiNumberOfGenerations.value,
-            numberOfGenerations
-        );
-
-        return numberOfGenerations;
-    }
-
-    function getColonyGenerationType() {
-        return colonyGenerationType;
-    }
-
-    function getEngineGenerationType() {
-        return engineGenerationType;
-    }
-
-    function initProperties() {
-        for (let radioButton of uiEngineGenerationTypes) {
-            if (radioButton.checked) {
-                engineGenerationType =
-                    radioButton.value === 'wasm'
-                        ? EngineGenerationType.Wasm
-                        : EngineGenerationType.Javascript;
-            }
-        }
-
-        width = parseInt(uiWidth.value);
-        height = parseInt(uiHeight.value);
-        cellSize = parseInt(uiCellSize.value);
-        numberOfGenerations = parseInt(uiNumberOfGenerations.value);
-        generationsAtOnce = parseInt(uiGenerationsAtOnce.value);
+    function setPlay() {
+        uiPlayPause.textContent = 'PLAY';
     }
 
     function unwrapDefault(value, defaultValue) {
@@ -133,16 +97,42 @@ export function Inputs(resetCallback) {
         return defaultValue;
     }
 
-    function addEventListeners() {
-        for (const radioButton of uiEngineGenerationTypes) {
-            radioButton.addEventListener('change', (e) => {
-                engineGenerationType =
-                    e.target.value === 'wasm'
-                        ? EngineGenerationType.Wasm
-                        : EngineGenerationType.Javascript;
+    function init() {
+        for (let radioButton of uiEngine) {
+            if (radioButton.checked) {
+                engine =
+                    radioButton.value === 'wasm'
+                        ? Engine.Wasm
+                        : Engine.Javascript;
+            }
+        }
 
-                resetCallback();
+        for (const radioButton of uiEngine) {
+            radioButton.addEventListener('change', (event) => {
+                engine =
+                    event.target.value === 'wasm'
+                        ? Engine.Wasm
+                        : Engine.Javascript;
+
+                engineChangedCallback();
             });
         }
+
+        uiSet.addEventListener('click', setClickedCallback);
+        uiReset.addEventListener('click', resetClickedCalback);
+
+        uiPlayPause.addEventListener('click', (e) => {
+            if (uiPlayPause.textContent === 'PAUSE') {
+                uiPlayPause.textContent = 'PLAY';
+                pauseClickedCallback();
+            } else {
+                uiPlayPause.textContent = 'PAUSE';
+                playClickedCallback();
+            }
+        });
+
+        uiSourceCode.addEventListener('click', () =>
+            window.open(GITHUB_REPO_URL, '_blank')
+        );
     }
 }

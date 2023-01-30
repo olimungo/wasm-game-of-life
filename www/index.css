@@ -219,15 +219,10 @@ input[type='number'] {
     margin: 0.5rem 0rem 0.5rem 1.3rem;
 }
 
-.colony-generation,
-.engine-generation {
+.engine {
     display: flex;
     margin: 0 0.5rem;
     justify-content: end;
-}
-
-.colony-generation {
-    margin: 0 0.5rem 0.8rem 0;
 }
 
 .throttle {

@@ -1,3 +1,5 @@
+export const DEFAULT_COLONY_SAMPLE = 5;
+
 export const ColonySamples = Object.freeze({
     Clear: Symbol('Clear'),
     Pattern: Symbol('Pattern'),
@@ -11,33 +13,45 @@ export const colonySamples = [
     {
         id: ColonySamples.Clear,
         label: ColonySamples.Clear.description,
-        width: 50,
-        height: 50,
-        cellSize: 10,
+        row: 15,
+        column: 15,
+        cellSize: 40,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
         cells: [],
     },
     {
         id: ColonySamples.Pattern,
         label: ColonySamples.Pattern.description,
-        width: 100,
-        height: 100,
-        cellSize: 5,
+        row: 150,
+        column: 150,
+        cellSize: 4,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
         cells: [],
     },
     {
         id: ColonySamples.Randomly,
         label: ColonySamples.Randomly.description,
-        width: 100,
-        height: 100,
+        row: 100,
+        column: 100,
         cellSize: 5,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
         cells: [],
     },
     {
         id: ColonySamples.Blinker,
         label: ColonySamples.Blinker.description,
-        width: 9,
-        height: 9,
+        row: 9,
+        column: 9,
         cellSize: 50,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 250,
         cells: [
             [4, 3],
             [4, 4],
@@ -47,9 +61,12 @@ export const colonySamples = [
     {
         id: ColonySamples.Glider,
         label: ColonySamples.Glider.description,
-        width: 50,
-        height: 50,
+        row: 50,
+        column: 50,
         cellSize: 8,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
         cells: [
             [1, 3],
             [2, 1],
@@ -61,9 +78,12 @@ export const colonySamples = [
     {
         id: ColonySamples.Gliders,
         label: ColonySamples.Gliders.description,
-        width: 300,
-        height: 300,
+        row: 300,
+        column: 300,
         cellSize: 2,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
         cells: [
             [25, 13],
             [25, 14],
@@ -104,5 +124,3 @@ export const colonySamples = [
         ],
     },
 ];
-
-export const DEFAULT_SAMPLE = 5;

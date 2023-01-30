@@ -1,6 +1,6 @@
-import { colonySamples, DEFAULT_SAMPLE } from './colony-samples';
+import { colonySamples, DEFAULT_COLONY_SAMPLE } from './colony-samples';
 
-export function Library(itemSelectedCallback) {
+export function Library(colonySampleSelectedCallback) {
     const uiLibraryPanel = document.getElementById('ui-library-panel');
     const uiLibraryList = document.getElementById('ui-library-list');
 
@@ -19,18 +19,18 @@ export function Library(itemSelectedCallback) {
         li.setAttribute('class', 'library-item');
         li.textContent = item.label;
 
-        li.addEventListener('click', (event) => {
-            itemSelectedCallback(colonySamples[index]);
+        li.addEventListener('click', () => {
+            colonySampleSelectedCallback(colonySamples[index]);
         });
 
         uiLibraryList.appendChild(li);
     }
 
     return {
-        getDefaultSample,
+        getDefaultColonySample,
     };
 
-    function getDefaultSample() {
-        return colonySamples[DEFAULT_SAMPLE];
+    function getDefaultColonySample() {
+        return colonySamples[DEFAULT_COLONY_SAMPLE];
     }
 }

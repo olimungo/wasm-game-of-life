@@ -22,14 +22,13 @@
                 <h1>GAME OF LIFE</h1>
                 <h2>Comparing WebAssembly to JavaScript</h2>
 
-                <div class="engine-generation">
+                <div class="engine">
                     <div class="radio-button">
                         <input
                             type="radio"
                             id="wasm"
-                            name="ui-engine-generation-type"
+                            name="ui-engine"
                             value="wasm"
-                            checked
                         />
                         <label for="wasm">WASM</label>
                     </div>
@@ -38,8 +37,9 @@
                         <input
                             type="radio"
                             id="javascript"
-                            name="ui-engine-generation-type"
+                            name="ui-engine"
                             value="javascript"
+                            checked
                         />
                         <label for="javascript">JAVASCRIPT</label>
                     </div>
@@ -48,15 +48,13 @@
                 <hr />
 
                 <div class="input">
-                    <label for="ui-width" class="label">WIDTH</label>
-                    <input id="ui-width" type="number" value="100" />
-                    <label for="ui-width" class="unit">px</label>
+                    <label for="ui-row" class="label">ROW</label>
+                    <input id="ui-row" type="number" value="100" />
                 </div>
 
                 <div class="input">
-                    <label for="ui-height" class="label">HEIGHT</label>
-                    <input id="ui-height" type="number" value="100" />
-                    <label for="ui-height" class="unit">px</label>
+                    <label for="ui-column" class="label">COLUMN</label>
+                    <input id="ui-column" type="number" value="100" />
                 </div>
 
                 <div class="input">
@@ -72,11 +70,11 @@
                 <hr />
 
                 <div class="input">
-                    <label for="ui-number-of-generations" class="label"
+                    <label for="ui-generations-count" class="label"
                         >GENERATIONS</label
                     >
                     <input
-                        id="ui-number-of-generations"
+                        id="ui-generations-count"
                         type="number"
                         value="500"
                         min="0"

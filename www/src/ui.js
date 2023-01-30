@@ -1,4 +1,3 @@
-import { Throttle } from './throttle';
 import { Benchmarks } from './benchmarks';
 import { Inputs } from './inputs';
 import { Library } from './library';
@@ -6,137 +5,106 @@ import { Canvas } from './canvas';
 import { Fps } from './fps';
 
 export function Ui(
+    engineChangedCallback,
+    resetCalback,
     playClickedCallback,
     pauseClickedCallback,
-    resetClickedCalback,
     cellClickedCallback,
-    libraryItemSelectedCallback
+    colonySampleSelectedCallback
 ) {
-    const githubSourcesUrl = 'https://github.com/olimungo/wasm-game-of-life';
-
-    const inputs = Inputs(reset);
-    const throttle = Throttle();
-    const benchmarks = Benchmarks();
+    const inputs = Inputs(
+        engineChangedCallback,
+        setClicked,
+        resetClicked,
+        playClickedCallback,
+        pauseClickedCallback
+    );
     const canvas = Canvas(cellClickedCallback);
+    const benchmarks = Benchmarks();
+    const library = Library(colonySampleSelected);
     const fps = Fps();
-    const library = Library(libraryItemSelected);
 
-    // Buttons
-    const uiSet = document.getElementById('ui-set');
-    const uiPlayPause = document.getElementById('ui-play-pause');
-    const uiReset = document.getElementById('ui-reset');
-    const uiSourceCode = document.getElementById('ui-source-code');
-
-    // Counter
     const uiCounter = document.getElementById('ui-counter');
 
-    let colonySample = library.getDefaultSample();
+    let colonySampleId, colony;
 
-    addEventListeners();
-    updateUi(0);
+    setColonySample(library.getDefaultColonySample());
 
     return {
-        getGenerationsAtOnce,
-        getThrottle,
-        getColonySample,
-        getEngineGenerationType,
-        getNumberOfGenerations,
-        setCanvasDimensions,
+        resetGame,
+        getProperties,
         updateUi,
-        setPlayButton,
+        getColonySample,
         setResults,
-        resetResults,
         openResults,
     };
-
-    function getGenerationsAtOnce() {
-        return inputs.getGenerationsAtOnce();
-    }
 
     function getColonySample() {
         return colonySample;
     }
 
-    function getEngineGenerationType() {
-        return inputs.getEngineGenerationType();
-    }
-
-    function getThrottle() {
-        return throttle.getThrottle();
-    }
-
-    function getNumberOfGenerations() {
-        return inputs.getNumberOfGenerations();
-    }
-
     function updateUi(count) {
         uiCounter.textContent = count;
-
         fps.render();
-    }
-
-    function setPlayButton() {
-        uiPlayPause.textContent = 'PLAY';
-    }
-
-    function reset() {
-        uiPlayPause.textContent = 'PLAY';
-        resetClickedCalback();
-    }
-
-    function addEventListeners() {
-        uiSet.addEventListener('click', () => {
-            const width = inputs.getWidth();
-            const height = inputs.getHeight();
-            const cellSize = inputs.getCellSize();
-
-            colonySample.width = width;
-            colonySample.height = height;
-            colonySample.cellSize = cellSize;
-
-            canvas.setCanvas(width, height, cellSize);
-            reset();
-        });
-
-        uiReset.addEventListener('click', reset);
-
-        uiPlayPause.addEventListener('click', (e) => {
-            if (uiPlayPause.textContent === 'PAUSE') {
-                uiPlayPause.textContent = 'PLAY';
-                pauseClickedCallback();
-            } else {
-                uiPlayPause.textContent = 'PAUSE';
-                playClickedCallback();
-            }
-        });
-
-        uiSourceCode.addEventListener('click', () =>
-            window.open(githubSourcesUrl, '_blank')
-        );
-    }
-
-    function setCanvasDimensions(width, height, cellSize) {
-        inputs.setWidth(width);
-        inputs.setHeight(height);
-        inputs.setCellSize(cellSize);
-
-        canvas.setCanvas(width, height, cellSize);
     }
 
     function openResults() {
         benchmarks.openResults();
+        inputs.setPlay();
     }
 
     function setResults(results) {
         benchmarks.setResults(results);
     }
 
-    function resetResults() {
-        benchmarks.resetResults();
+    function setColonySample(colonySample) {
+        colonySampleId = colonySample.id;
+        colony = colonySample.cells;
+
+        inputs.setProperties(colonySample);
+
+        canvas.setCanvas(
+            colonySample.row,
+            colonySample.column,
+            colonySample.cellSize
+        );
     }
 
-    function libraryItemSelected(item) {
-        colonySample = item;
-        libraryItemSelectedCallback(item);
+    function colonySampleSelected(colonySample) {
+        setColonySample(colonySample);
+        colonySampleSelectedCallback();
+    }
+
+    function getProperties() {
+        const properties = inputs.getProperties();
+
+        return {
+            ...properties,
+            colonySampleId,
+            colony,
+        };
+    }
+
+    function setClicked() {
+        const properties = inputs.getProperties();
+
+        canvas.setCanvas(
+            properties.row,
+            properties.column,
+            properties.cellSize
+        );
+
+        resetClicked();
+    }
+
+    function resetClicked() {
+        resetGame();
+        resetCalback();
+    }
+
+    function resetGame() {
+        benchmarks.resetResults();
+        uiCounter.textContent = 0;
+        inputs.setPlay();
     }
 }

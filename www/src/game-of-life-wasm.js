@@ -15,8 +15,8 @@ export function UniverseWasm() {
         drawUpdatedCells,
     };
 
-    function create(width, height, cellSize) {
-        universe = Universe.new(width, height, cellSize);
+    function create(rowCount, columnCount, cellSize) {
+        universe = Universe.new(rowCount, columnCount, cellSize);
         return this;
     }
 
@@ -27,12 +27,12 @@ export function UniverseWasm() {
         }
     }
 
-    function setCell(row, column, state) {
-        // universe.set_cell(row, column, state);
+    function setCell(row, column) {
+        universe.set_cell(row, column);
     }
 
     function drawCell(row, column) {
-        universe.set_cell(row, column);
+        universe.draw_cell(row, column);
     }
 
     function drawAllCells() {

@@ -49,8 +49,8 @@ struct UpdatedCell((u32, u32), bool);
 
 #[wasm_bindgen]
 pub struct Universe {
-    width: u32,
-    height: u32,
+    row_count: u32,
+    column_count: u32,
     cell_size: u32,
     colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
@@ -60,7 +60,7 @@ pub struct Universe {
 /// Public methods, exported to JavaScript
 #[wasm_bindgen]
 impl Universe {
-    pub fn new(width: u32, height: u32, cell_size: u32) -> Universe {
+    pub fn new(row_count: u32, column_count: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
         
         let mut canvas: Option<CanvasRenderingContext2d> = None;
@@ -74,13 +74,13 @@ impl Universe {
             canvas = Some(context_object.dyn_into().unwrap());
         }
 
-        let size = (width * height) as usize;
+        let size = (row_count * column_count) as usize;
         let colony = FixedBitSet::with_capacity(size);
         let updated_cells : Vec<UpdatedCell> = Vec::new();
 
         Universe {
-            width,
-            height,
+            row_count,
+            column_count,
             cell_size,
             colony,
             updated_cells,
@@ -101,8 +101,8 @@ impl Universe {
             let mut colony = self.colony.clone();
             let mut updated_cells : Vec<UpdatedCell>= Vec::new();
 
-            for row in 0..self.height {
-                for column in 0..self.width {
+            for row in 0..self.row_count {
+                for column in 0..self.column_count {
                     let index = self.get_index(row, column);
                     let previous_state = self.colony[index];
                     let count = self.live_neighbour_count(row, column);
@@ -126,17 +126,17 @@ impl Universe {
         }
     }
 
-    pub fn set_cell(&mut self, row: u32, column: u32) {
+    pub fn draw_cell(&mut self, row: u32, column: u32) {
         let index = self.get_index(row, column);
-        let new_state = !self.colony[index];
+        let state = !self.colony[index];
 
-        self.colony.set(index, new_state);
+        self.colony.set(index, state);
 
         if let Some(canvas) = &self.canvas {
             let color: &str;
             let cell_size = self.cell_size as f64;
 
-            if new_state {
+            if state {
                 color = &COLOR_CELL_ALIVE;
             } else {
                 color = &COLOR_CELL_DEAD;
@@ -155,6 +155,11 @@ impl Universe {
             
             canvas.close_path();        
         }
+    }
+
+    pub fn set_cell(&mut self, row: u32, column: u32) {
+        let index = self.get_index(row, column);
+        self.colony.set(index, true);
     }
 
     pub fn draw_all_cells(&self) {
@@ -197,12 +202,13 @@ impl Universe {
     }
 
     pub fn generate_colony(&mut self, randomly: bool) {
-        let size = (self.width * self.height) as usize;
+        let size = (self.row_count * self.column_count) as usize;
         let mut colony = FixedBitSet::with_capacity(size);
 
+        
         for i in 0..size {
             if randomly {
-                    colony.set(i, if js_sys::Math::random() < 0.5 { true } else { false });
+                    colony.set(i, js_sys::Math::random() < 0.5);
             } else {
                     colony.set(i, i % 2 == 0 || i % 7 == 0);
             }
@@ -211,32 +217,28 @@ impl Universe {
         self.colony = colony;
     }
 
-    fn get_index(&self, row: u32, column: u32) -> usize {
-        (row * self.width + column) as usize
-    }
-
     fn live_neighbour_count(&self, row: u32, column: u32) -> u8 {
         let mut count = 0;
 
         let north = if row == 0 {
-            self.height - 1
+            self.row_count - 1
         } else {
             row - 1
         };
 
-        let south = if row == self.height - 1 {
+        let south = if row == self.row_count - 1 {
             0
         } else {
             row + 1
         };
 
         let west = if column == 0 {
-            self.width - 1
+            self.column_count - 1
         } else {
             column - 1
         };
 
-        let east = if column == self.width - 1 {
+        let east = if column == self.column_count - 1 {
             0
         } else {
             column + 1
@@ -269,6 +271,10 @@ impl Universe {
         count
     }
 
+    fn get_index(&self, row: u32, column: u32) -> usize {
+        (row * self.column_count + column) as usize
+    }
+
     fn draw_all_cells_by_state(&self, state: bool) {
         if let Some(canvas) = &self.canvas {
             let color: &str;
@@ -282,8 +288,8 @@ impl Universe {
 
             canvas.set_fill_style(&color.into());
             
-            for row in 0..self.height {
-                for column in 0..self.width {
+            for row in 0..self.row_count {
+                for column in 0..self.column_count {
                     let index = self.get_index(row, column);
 
                     if self.colony[index] != state {
