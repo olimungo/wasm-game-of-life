@@ -121,6 +121,25 @@ button:active {
     background-color: var(--secondary-action-color);
 }
 
+/*
+** Remove Arrows/Spinners from input[type="number"]
+*/
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+/*
+**
+*/
+
 [type='radio']:checked,
 [type='radio']:not(:checked) {
     display: none;
@@ -249,13 +268,14 @@ input[type='number'] {
 
 .counter {
     font-family: monospace;
+    font-size: 1rem;
     text-align: right;
     color: var(--primary-action-color);
     background-color: var(--primary-dark-color);
     width: 4rem;
     border-radius: 10rem;
     padding: 0.3rem 1rem;
-    margin-top: 1rem;
+    margin-top: 1.1rem;
 }
 
 footer {
@@ -345,7 +365,7 @@ footer {
 .benchmark {
     display: flex;
     justify-content: space-between;
-    margin: 1.1rem 0;
+    margin: 1rem 0;
 }
 
 .benchmark-value {
@@ -363,21 +383,22 @@ footer {
     margin-left: 0.5rem;
 }
 
-.frame-per-seconds {
+.fps-container {
     position: fixed;
     top: 0.8rem;
     left: 19.8rem;
-    font-family: system-ui;
     color: var(--primary-action-color);
     background-color: rgb(85 91 105 / 51%);
     padding: 0.4rem 0.7rem;
     border-radius: 1.5rem;
     display: flex;
+    align-items: center;
 }
 
-#ui-fps {
-    width: 1.2rem;
+.fps {
+    width: 1.9rem;
     font-family: monospace;
+    font-size: 1rem;
 }
 
 /*
@@ -412,7 +433,7 @@ footer {
 .toggle-container {
     display: flex;
     align-items: center;
-    margin: 2.7rem 0 1rem 0;
+    margin: 2rem 0 1rem 0;
 }
 
 .toggle {
