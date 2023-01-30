@@ -35,6 +35,24 @@ export function UniverseJs() {
         updatedCells = [];
     }
 
+    function generatePatternColony() {
+        generateColony(false);
+    }
+
+    function generateRandomColony() {
+        generateColony(true);
+    }
+
+    function generateColony(randomly) {
+        for (let index = 0; index < columnCount * rowCount; index++) {
+            if (randomly) {
+                colony[index] = Math.random() < 0.5 ? true : false;
+            } else {
+                colony[index] = index % 2 == 0 || index % 7 == 0;
+            }
+        }
+    }
+
     function setCell(row, column) {
         const index = getIndex(row, column);
         colony[index] = true;
@@ -59,19 +77,6 @@ export function UniverseJs() {
         context.closePath();
 
         logCells();
-    }
-
-    function logCells() {
-        console.log('--------');
-
-        for (let index = 0; index < columnCount * rowCount; index++) {
-            if (colony[index]) {
-                let { row, column } = getRowColumn(index);
-                console.log(`[${row}, ${column}],`);
-            }
-        }
-
-        console.log('--------');
     }
 
     function tick(generations) {
@@ -99,24 +104,6 @@ export function UniverseJs() {
             }
 
             colony = newColony;
-        }
-    }
-
-    function generatePatternColony() {
-        generateColony(false);
-    }
-
-    function generateRandomColony() {
-        generateColony(true);
-    }
-
-    function generateColony(randomly) {
-        for (let index = 0; index < columnCount * rowCount; index++) {
-            if (randomly) {
-                colony[index] = Math.random() < 0.5 ? true : false;
-            } else {
-                colony[index] = index % 2 == 0 || index % 7 == 0;
-            }
         }
     }
 

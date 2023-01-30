@@ -50,10 +50,6 @@ export function Benchmarks() {
         resetResults,
     };
 
-    //
-    // Functions
-    //
-
     function openResults() {
         if (uiAutomaticOpenSwitch.checked) {
             if (!uiBenchmarksPanel.classList.contains('open')) {
