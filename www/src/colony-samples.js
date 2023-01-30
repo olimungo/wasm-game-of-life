@@ -1,4 +1,4 @@
-export const DEFAULT_COLONY_SAMPLE = 5;
+export const DEFAULT_COLONY_SAMPLE = 1;
 
 export const ColonySamples = Object.freeze({
     Clear: Symbol('Clear'),

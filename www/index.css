@@ -296,7 +296,7 @@ footer {
 }
 
 .library {
-    left: 7.6rem;
+    left: 6.6rem;
     top: 8.2rem;
     transition: 0.3s ease-in-out;
 }
@@ -306,21 +306,21 @@ footer {
 }
 
 .library-panel {
-    margin: 1rem 0;
+    margin: 1.3rem 0;
 }
 
 .library-list {
-    height: 9rem;
+    height: 8.5rem;
     overflow: auto;
     border: solid 1px var(--primary-dark-color);
     border-radius: 0.5rem;
 }
 
 .library-item {
-    color: var(--primary-action-color);
+    color: var(--primary-color);
     list-style: none;
     padding: 0.3rem 0.5rem 0.6rem 0.5rem;
-    width: 7rem;
+    width: 8rem;
     border-bottom: solid 1px var(--primary-dark-color);
 }
 
@@ -491,7 +491,7 @@ footer {
 
 .sliding-panel-label {
     font-size: 0.8rem;
-    padding: 0 0.6rem 0 2rem;
+    margin: 0 0.6rem 0 2rem;
     writing-mode: tb-rl;
     letter-spacing: 0.3rem;
 }
