@@ -1,5 +1,5 @@
 export function Canvas(cellClickedCallback) {
-    let width, height, cellSize;
+    let rowCount, columnCount, cellSize;
 
     const uiCanvas = document.getElementById('ui-canvas');
 
@@ -10,20 +10,20 @@ export function Canvas(cellClickedCallback) {
 
     return { setCanvas };
 
-    function setCanvas(newWidth, newHeight, newCellSize) {
-        width = newWidth;
-        height = newHeight;
+    function setCanvas(newRowCount, newColumnCount, newCellSize) {
+        rowCount = newRowCount;
+        columnCount = newColumnCount;
         cellSize = newCellSize;
 
-        uiCanvas.width = cellSize * width;
-        uiCanvas.height = cellSize * height;
+        uiCanvas.width = cellSize * columnCount;
+        uiCanvas.height = cellSize * rowCount;
     }
 
     function getCanvasClickCoordinates(event) {
         const boundingRect = uiCanvas.getBoundingClientRect();
 
-        const scaleX = width / boundingRect.width;
-        const scaleY = height / boundingRect.height;
+        const scaleX = columnCount / boundingRect.width;
+        const scaleY = rowCount / boundingRect.height;
 
         const canvasLeft = (event.clientX - boundingRect.left) * scaleX;
         const canvasTop = (event.clientY - boundingRect.top) * scaleY;

@@ -2,7 +2,7 @@ export function UniverseJs() {
     const DEAD_COLOR = '#FFFFFF';
     const ALIVE_COLOR = '#000000';
 
-    let width, height, cellSize, colony, updatedCells;
+    let rowCount, columnCount, cellSize, colony, updatedCells;
 
     const uiCanvas = document.getElementById('ui-canvas');
     const context = uiCanvas.getContext('2d');
@@ -14,16 +14,17 @@ export function UniverseJs() {
         generateRandomColony,
         tick,
         setCell,
+        drawCell,
         drawAllCells,
         drawUpdatedCells,
     };
 
-    function create(newWidth, newHeight, newCellSize) {
-        width = newWidth;
-        height = newHeight;
+    function create(newRowCount, newColumnCount, newCellSize) {
+        rowCount = newRowCount;
+        columnCount = newColumnCount;
         cellSize = newCellSize;
 
-        colony = [];
+        colony = Array(rowCount * columnCount).fill(false);
         updatedCells = [];
 
         return this;
@@ -34,23 +35,50 @@ export function UniverseJs() {
         updatedCells = [];
     }
 
+    function generatePatternColony() {
+        generateColony(false);
+    }
+
+    function generateRandomColony() {
+        generateColony(true);
+    }
+
+    function generateColony(randomly) {
+        for (let index = 0; index < columnCount * rowCount; index++) {
+            if (randomly) {
+                colony[index] = Math.random() < 0.5 ? true : false;
+            } else {
+                colony[index] = index % 2 == 0 || index % 7 == 0;
+            }
+        }
+    }
+
     function setCell(row, column) {
         const index = getIndex(row, column);
-        const state = colony[index];
+        const state = !colony[index];
+
+        colony[index] = state;
+    }
+
+    function drawCell(row, column) {
+        const index = getIndex(row, column);
+        const state = !colony[index];
+
+        colony[index] = state;
 
         if (state) {
-            context.fillStyle = DEAD_COLOR;
-        } else {
             context.fillStyle = ALIVE_COLOR;
+        } else {
+            context.fillStyle = DEAD_COLOR;
         }
-
-        colony[index] = !state;
 
         context.beginPath();
 
         context.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
 
         context.closePath();
+
+        logCells();
     }
 
     function tick(generations) {
@@ -59,7 +87,7 @@ export function UniverseJs() {
         for (let generation = 0; generation < generations; generation++) {
             const newColony = [];
 
-            for (let index = 0; index < width * height; index++) {
+            for (let index = 0; index < columnCount * rowCount; index++) {
                 const previousState = colony[index];
                 const { row, column } = getRowColumn(index);
                 const count = liveNeighbourCount(row, column);
@@ -81,26 +109,7 @@ export function UniverseJs() {
         }
     }
 
-    function generatePatternColony() {
-        generateColony(false);
-    }
-
-    function generateRandomColony() {
-        generateColony(true);
-    }
-
-    function generateColony(randomly) {
-        for (let index = 0; index < width * height; index++) {
-            if (randomly) {
-                colony.push(Math.random() < 0.5 ? true : false);
-            } else {
-                colony.push(index % 2 == 0 || index % 7 == 0);
-            }
-        }
-    }
-
     function drawAllCells() {
-        console.log;
         context.beginPath();
 
         drawAllCellsByState(colony, true);
@@ -124,9 +133,8 @@ export function UniverseJs() {
         } else {
             context.fillStyle = DEAD_COLOR;
         }
-
-        for (let row = 0; row < height; row++) {
-            for (let column = 0; column < width; column++) {
+        for (let row = 0; row < rowCount; row++) {
+            for (let column = 0; column < columnCount; column++) {
                 const index = getIndex(row, column);
 
                 if (colony[index] !== state) {
@@ -167,10 +175,10 @@ export function UniverseJs() {
     function liveNeighbourCount(row, column) {
         let count = 0;
 
-        let north = row == 0 ? height - 1 : row - 1;
-        let south = row == height - 1 ? 0 : row + 1;
-        let west = column == 0 ? width - 1 : column - 1;
-        let east = column == width - 1 ? 0 : column + 1;
+        let north = row == 0 ? rowCount - 1 : row - 1;
+        let south = row == rowCount - 1 ? 0 : row + 1;
+        let west = column == 0 ? columnCount - 1 : column - 1;
+        let east = column == columnCount - 1 ? 0 : column + 1;
 
         let nw = getIndex(north, west);
         count += colony[nw];
@@ -200,12 +208,12 @@ export function UniverseJs() {
     }
 
     function getIndex(row, column) {
-        return row * width + column;
+        return row * columnCount + column;
     }
 
     function getRowColumn(index) {
-        const row = Math.floor(index / width);
-        const column = index % width;
+        const row = Math.floor(index / columnCount);
+        const column = index % columnCount;
 
         return { row, column };
     }
