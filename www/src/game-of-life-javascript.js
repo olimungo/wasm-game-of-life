@@ -55,7 +55,9 @@ export function UniverseJs() {
 
     function setCell(row, column) {
         const index = getIndex(row, column);
-        colony[index] = true;
+        const state = !colony[index];
+
+        colony[index] = state;
     }
 
     function drawCell(row, column) {

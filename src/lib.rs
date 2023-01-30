@@ -159,7 +159,9 @@ impl Universe {
 
     pub fn set_cell(&mut self, row: u32, column: u32) {
         let index = self.get_index(row, column);
-        self.colony.set(index, true);
+        let state = !self.colony[index];
+
+        self.colony.set(index, state);
     }
 
     pub fn draw_all_cells(&self) {
