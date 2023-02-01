@@ -43,7 +43,7 @@ export function Inputs(
     return {
         getProperties,
         setProperties,
-        setPlay,
+        setPlayPause,
     };
 
     function getProperties() {
@@ -83,8 +83,8 @@ export function Inputs(
         throttle.setThrottle(throttleValue);
     }
 
-    function setPlay() {
-        uiPlayPause.textContent = 'PLAY';
+    function setPlayPause(text) {
+        uiPlayPause.textContent = text;
     }
 
     function unwrapDefault(value, defaultValue) {
@@ -123,10 +123,8 @@ export function Inputs(
 
         uiPlayPause.addEventListener('click', (e) => {
             if (uiPlayPause.textContent === 'PAUSE') {
-                uiPlayPause.textContent = 'PLAY';
                 pauseClickedCallback();
             } else {
-                uiPlayPause.textContent = 'PAUSE';
                 playClickedCallback();
             }
         });

@@ -112,12 +112,13 @@ function play() {
         startedGenerationTime += new Date().getTime() - generationPaused;
     } else {
         if (generationsOver) {
-            generationsOver = false;
             createUniverse();
         }
 
         startedGenerationTime = new Date().getTime();
     }
+
+    ui.setPlayPause('PAUSE');
 
     generationPaused = 0;
 
@@ -129,10 +130,13 @@ function pause() {
     clearTimeout(animationTimeOutId);
 
     generationPaused = new Date().getTime();
+
+    ui.setPlayPause('PLAY');
 }
 
 function reset() {
     createUniverse();
+    ui.setPlayPause('PLAY');
 }
 
 function drawCell(row, column) {

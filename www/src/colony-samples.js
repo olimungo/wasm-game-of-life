@@ -1,4 +1,4 @@
-export const DEFAULT_COLONY_SAMPLE = 1;
+export const DEFAULT_COLONY_SAMPLE = 6;
 
 export const ColonySamples = Object.freeze({
     Clear: Symbol('Clear'),
@@ -6,7 +6,8 @@ export const ColonySamples = Object.freeze({
     Randomly: Symbol('Randomly'),
     Blinker: Symbol('Blinker'),
     Glider: Symbol('Glider'),
-    Gliders: Symbol('Gliders'),
+    GlidersFactory: Symbol('Gliders factory'),
+    CoolPattern: Symbol('Cool pattern'),
 });
 
 export const colonySamples = [
@@ -66,7 +67,7 @@ export const colonySamples = [
         cellSize: 8,
         generationsCount: 5000,
         generationsAtOnce: 1,
-        throttleValue: 0,
+        throttleValue: 100,
         cells: [
             [1, 3],
             [2, 1],
@@ -76,8 +77,8 @@ export const colonySamples = [
         ],
     },
     {
-        id: ColonySamples.Gliders,
-        label: ColonySamples.Gliders.description,
+        id: ColonySamples.GlidersFactory,
+        label: ColonySamples.GlidersFactory.description,
         row: 300,
         column: 300,
         cellSize: 2,
@@ -121,6 +122,28 @@ export const colonySamples = [
             [23, 47],
             [23, 48],
             [24, 48],
+        ],
+    },
+    {
+        id: ColonySamples.Clear,
+        label: ColonySamples.CoolPattern.description,
+        row: 150,
+        column: 180,
+        cellSize: 4,
+        generationsCount: 1148,
+        generationsAtOnce: 1,
+        throttleValue: 0,
+        cells: [
+            [120, 82],
+            [120, 83],
+            [120, 84],
+            [120, 85],
+            [120, 86],
+            [120, 87],
+            [119, 84],
+            [119, 85],
+            [118, 83],
+            [118, 86],
         ],
     },
 ];
