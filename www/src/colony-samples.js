@@ -120,7 +120,7 @@ export const colonySamples = [
         row: 150,
         column: 180,
         cellSize: 4,
-        generationsCount: 1148,
+        generationsCount: 1200,
         generationsAtOnce: 1,
         throttleValue: 0,
         cells: [
