@@ -37,6 +37,7 @@ export function Ui(
         getColonySample,
         setResults,
         openResults,
+        setPlayPause,
     };
 
     function getColonySample() {
@@ -50,7 +51,7 @@ export function Ui(
 
     function openResults() {
         benchmarks.openResults();
-        inputs.setPlay();
+        inputs.setPlayPause('PLAY');
     }
 
     function setResults(results) {
@@ -105,6 +106,9 @@ export function Ui(
     function resetGame() {
         benchmarks.resetResults();
         uiCounter.textContent = 0;
-        inputs.setPlay();
+    }
+
+    function setPlayPause(text) {
+        inputs.setPlayPause(text);
     }
 }
