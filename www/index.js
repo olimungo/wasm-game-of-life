@@ -1,6 +1,7 @@
 import { Ui } from './src/ui';
 import { ColonySamples } from './src/colony-samples';
 import { UniverseFactory } from './src/universe-factory';
+import { Rle } from './src/rle';
 
 let universe;
 
