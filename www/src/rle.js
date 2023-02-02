@@ -111,7 +111,7 @@ export function Rle() {
 
             // If the whole line is made of only o's or only b's
             if (rows.length === 1) {
-                if (rows[0][0] === LIVE_CELL_LETTER) {
+                if (rows[0][0] === '1') {
                     output += `${input.column}${LIVE_CELL_LETTER}`;
                 } else {
                     output += DEAD_CELL_LETTER;
