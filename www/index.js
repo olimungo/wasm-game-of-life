@@ -14,7 +14,7 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(reset, reset, play, pause, drawCell, reset);
+const ui = Ui(reset, play, pause, drawCell, reset);
 
 const rle = Rle();
 

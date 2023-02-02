@@ -77,8 +77,6 @@ export function UniverseJs() {
         context.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
 
         context.closePath();
-
-        logCells();
     }
 
     function tick(generations) {

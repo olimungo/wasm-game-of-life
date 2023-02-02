@@ -13,7 +13,6 @@ const DEFAULT_GENERATIONS_AT_ONCE = 1;
 const GITHUB_REPO_URL = 'https://github.com/olimungo/wasm-game-of-life';
 
 export function Inputs(
-    engineChangedCallback,
     setClickedCallback,
     resetClickedCalback,
     playClickedCallback,
@@ -113,8 +112,6 @@ export function Inputs(
                     event.target.value === 'wasm'
                         ? Engine.Wasm
                         : Engine.Javascript;
-
-                engineChangedCallback();
             });
         }
 

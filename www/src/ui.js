@@ -2,10 +2,10 @@ import { Benchmarks } from './benchmarks';
 import { Inputs } from './inputs';
 import { Library } from './library';
 import { Canvas } from './canvas';
+import { Info } from './info';
 import { Fps } from './fps';
 
 export function Ui(
-    engineChangedCallback,
     resetCalback,
     playClickedCallback,
     pauseClickedCallback,
@@ -13,7 +13,6 @@ export function Ui(
     colonySampleSelectedCallback
 ) {
     const inputs = Inputs(
-        engineChangedCallback,
         setClicked,
         resetClicked,
         playClickedCallback,
@@ -22,6 +21,7 @@ export function Ui(
     const canvas = Canvas(cellClickedCallback);
     const benchmarks = Benchmarks();
     const library = Library(colonySampleSelected);
+    const info = Info();
     const fps = Fps();
 
     const uiCounter = document.getElementById('ui-counter');
@@ -58,6 +58,7 @@ export function Ui(
         colony = colonySample.colony;
 
         inputs.setProperties(colonySample);
+        info.setColonySample(colonySample.label);
 
         canvas.setCanvas(
             colonySample.row,
@@ -67,6 +68,7 @@ export function Ui(
     }
 
     function colonySampleSelected(colonySample) {
+        info.setColonySample(colonySample.label);
         setColonySample(colonySample);
         colonySampleSelectedCallback();
     }
@@ -89,6 +91,8 @@ export function Ui(
             properties.column,
             properties.cellSize
         );
+
+        info.setEngine(properties.engine.description);
 
         resetClicked();
     }
