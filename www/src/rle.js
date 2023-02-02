@@ -1,3 +1,5 @@
+const DEAD_CELL_LETTER = 'b';
+
 export function Rle() {
     return {
         transformToArrayOfLiveCells,
@@ -6,14 +8,29 @@ export function Rle() {
     };
 
     function decode(input) {
+        let rowCount, columnCount, rule;
+
         let lines = input
             .split('\n')
             .filter((line) => !line.match(/#/g) && line !== '');
 
-        const definition = lines.shift();
-        const coords = definition.match(/[x|y] = [0-9]*/g);
-        const columnCount = parseInt(coords[0].split(' = ')[1]);
-        const rowCount = parseInt(coords[1].split(' = ')[1]);
+        // If there's a first line starting with an 'x', it is the
+        // array definition
+        if (lines.length > 0 && lines[0].match(/^x/g)) {
+            const definition = lines.shift();
+            const coords = definition.match(/[x|y]\s*=\s*[0-9]*/g);
+            rule = definition.match(/rule.*/g);
+
+            if (rule) {
+                [rule] = rule;
+                rule = rule.split('=')[1].trim();
+            }
+
+            if (coords) {
+                columnCount = parseInt(coords[0].split('=')[1]);
+                rowCount = parseInt(coords[1].split('=')[1]);
+            }
+        }
 
         let compressedCells = lines.join('');
 
@@ -36,39 +53,42 @@ export function Rle() {
                 let state = '0';
 
                 const count = parseInt(instruction) || 1;
-                const [letter] = instruction.match(/[a-z]|[A-Z]/g);
+                const matchedLetter = instruction.match(/[a-z]|[A-Z]/g);
 
-                if (letter === 'o') {
-                    state = '1';
+                // If there's no letter in the instruction, we are in a
+                // 'Houston, I believe we've had a problem here' situation.
+                // If that happens, just scrub the current instruction
+                if (matchedLetter) {
+                    const [letter] = matchedLetter;
+
+                    if (letter !== DEAD_CELL_LETTER) {
+                        state = '1';
+                    }
+
+                    newLine += state.repeat(count);
                 }
-
-                newLine += state.repeat(count);
             });
 
             return newLine;
         });
 
-        return { rowCount, columnCount, inputDecoded };
+        return { rowCount, columnCount, rule, inputDecoded };
     }
 
     function transformToArrayOfLiveCells(input) {
         const cells = [];
 
-        const { rowCount, columnCount, inputDecoded } = decode(input);
+        const { rowCount, columnCount, rule, inputDecoded } = decode(input);
 
         inputDecoded.forEach((line, row) => {
-            let column = 0;
-
-            for (const state of line) {
+            for (let [column, state] of Object(line.split('')).entries()) {
                 if (parseInt(state)) {
                     cells.push([row, column]);
                 }
-
-                column++;
             }
         });
 
-        return { rowCount, columnCount, cells };
+        return { rowCount, columnCount, rule, cells };
     }
 
     function addRow(input, count) {

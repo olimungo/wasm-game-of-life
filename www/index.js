@@ -16,6 +16,22 @@ let animationTimeOutId = null;
 
 const ui = Ui(reset, reset, play, pause, drawCell, reset);
 
+// const rle = Rle();
+// const input = `
+// #N R-pentomino
+// #C A methuselah with lifespan 1103.
+// #C www.conwaylife.com/wiki/index.php?title=R-pentomino
+// x=3, y = 3, rule = B3/S23
+// b2o$2ob$bo!
+// `;
+
+// let decoded = rle.transformToArrayOfLiveCells(input);
+// let output = decoded.cells;
+// output = rle.addRow(output, 70);
+// output = rle.addColumn(output, 70);
+// console.log(decoded);
+// console.log(JSON.stringify(output));
+
 createUniverse();
 
 function createUniverse() {
