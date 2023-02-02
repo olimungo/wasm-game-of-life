@@ -1,5 +1,5 @@
 export function Fps() {
-    const uiFps = document.getElementById('ui-fps');
+    const uiFpsCounter = document.getElementById('ui-fps-counter');
     const frames = [];
     let lastFrameTimeStamp = performance.now();
 
@@ -20,6 +20,6 @@ export function Fps() {
         }
 
         // Render the statistics.
-        uiFps.textContent = `${Math.round(fps)}`.trim();
+        uiFpsCounter.textContent = `${Math.round(fps)}`.trim();
     }
 }

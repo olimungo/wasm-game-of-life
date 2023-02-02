@@ -38,7 +38,7 @@ h1 {
 }
 
 h2 {
-    margin: 0 0 1.3rem 0;
+    margin: 0 0 1.8rem 0;
     font-size: 0.9rem;
     font-weight: 300;
 }
@@ -317,7 +317,7 @@ footer {
 
 .library {
     left: 6.6rem;
-    top: 8.2rem;
+    top: 7.5rem;
     transition: 0.3s ease-in-out;
 }
 
@@ -350,7 +350,7 @@ footer {
 
 .benchmarks {
     left: 0.7rem;
-    top: 19.8rem;
+    top: 20.2rem;
     transition: 0.35s ease-in-out;
 }
 
@@ -365,7 +365,7 @@ footer {
 .benchmark {
     display: flex;
     justify-content: space-between;
-    margin: 1rem 0;
+    margin: 0.8rem 0;
 }
 
 .benchmark-value {
@@ -383,22 +383,35 @@ footer {
     margin-left: 0.5rem;
 }
 
-.fps-container {
+.info-container {
     position: fixed;
     top: 0.8rem;
     left: 19.8rem;
     color: var(--primary-action-color);
-    background-color: rgb(85 91 105 / 51%);
-    padding: 0.4rem 0.7rem;
+    background-color: rgb(85 91 105 / 70%);
+    padding: 0.5rem 1rem;
     border-radius: 1.5rem;
     display: flex;
-    align-items: center;
+    font-size: 1rem;
 }
 
-.fps {
-    width: 1.9rem;
+.border-right {
+    padding-right: 0.5rem;
+    border-right: solid 1px var(--primary-action-dark-color);
+}
+
+.colony-sample {
+    margin-left: 0.5rem;
+    text-transform: lowercase;
+}
+
+.fps-counter {
     font-family: monospace;
-    font-size: 1rem;
+    padding-left: 0.5rem;
+    width: 1.5rem;
+}
+
+.fps-label {
 }
 
 /*
