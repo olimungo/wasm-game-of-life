@@ -34,15 +34,10 @@ export function Ui(
         resetGame,
         getProperties,
         updateUi,
-        getColonySample,
         setResults,
         openResults,
         setPlayPause,
     };
-
-    function getColonySample() {
-        return colonySample;
-    }
 
     function updateUi(count) {
         uiCounter.textContent = count;
@@ -60,7 +55,7 @@ export function Ui(
 
     function setColonySample(colonySample) {
         colonySampleId = colonySample.id;
-        colony = colonySample.cells;
+        colony = colonySample.colony;
 
         inputs.setProperties(colonySample);
 

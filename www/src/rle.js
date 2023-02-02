@@ -1,7 +1,9 @@
+const LIVE_CELL_LETTER = 'o';
 const DEAD_CELL_LETTER = 'b';
 
 export function Rle() {
     return {
+        transformFromArrayOfLiveCells,
         transformToArrayOfLiveCells,
         addRow,
         addColumn,
@@ -76,26 +78,73 @@ export function Rle() {
     }
 
     function transformToArrayOfLiveCells(input) {
-        const cells = [];
+        const colony = [];
 
         const { rowCount, columnCount, rule, inputDecoded } = decode(input);
 
         inputDecoded.forEach((line, row) => {
             for (let [column, state] of Object(line.split('')).entries()) {
                 if (parseInt(state)) {
-                    cells.push([row, column]);
+                    colony.push([row, column]);
                 }
             }
         });
 
-        return { rowCount, columnCount, rule, cells };
+        return { rowCount, columnCount, rule, colony };
     }
 
-    function addRow(input, count) {
-        return input.map((cell) => [cell[0] + count, cell[1]]);
+    function transformFromArrayOfLiveCells(input) {
+        const colony = [];
+
+        for (let row = 0; row < input.row; row++) {
+            colony.push(Array(input.column).fill('0'));
+        }
+
+        for (let cell of input.colony) {
+            colony[cell[0]][cell[1]] = '1';
+        }
+
+        let output = '';
+
+        for (let row of colony) {
+            const rows = row.join('').match(/1+|0+/g);
+
+            // If the whole line is made of only o's or only b's
+            if (rows.length === 1) {
+                if (rows[0][0] === LIVE_CELL_LETTER) {
+                    output += `${input.column}${LIVE_CELL_LETTER}`;
+                } else {
+                    output += DEAD_CELL_LETTER;
+                }
+            } else {
+                for (let [row, group] of Object(rows).entries()) {
+                    const letter =
+                        group[0] === '1' ? LIVE_CELL_LETTER : DEAD_CELL_LETTER;
+
+                    // Do not add instructions at then end of a line for dead cells
+                    if (row < rows.length - 1 || letter !== DEAD_CELL_LETTER) {
+                        output += `${group.length}${letter}`;
+                    }
+                }
+            }
+
+            output += '$';
+        }
+
+        // Remove lines with only empty cells at the end of the output
+        output = output.replace(/(b\$)*$/, '');
+
+        // Replace the last '$' with a '!'
+        output = output.replace(/\$$/, '!');
+
+        return output;
     }
 
-    function addColumn(input, count) {
-        return input.map((cell) => [cell[0], cell[1] + count]);
+    function addRow(colony, count) {
+        return colony.map((cell) => [cell[0] + count, cell[1]]);
+    }
+
+    function addColumn(colony, count) {
+        return colony.map((cell) => [cell[0], cell[1] + count]);
     }
 }
