@@ -28,6 +28,9 @@ export function Ui(
 
     let colonySampleId, colony;
 
+    const properties = inputs.getProperties();
+    info.setEngine(properties.engine.description);
+
     setColonySample(library.getDefaultColonySample());
 
     return {
