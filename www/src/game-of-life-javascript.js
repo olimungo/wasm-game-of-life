@@ -113,8 +113,7 @@ export function UniverseJs() {
     }
 
     function drawAllCells() {
-        let radius = cellSize / 2;
-        radius = radius > 2 ? radius - 1 : 1;
+        let radius = cellSize / 2 - 1;
 
         context.beginPath();
 
@@ -143,15 +142,13 @@ export function UniverseJs() {
                     );
                 } else {
                     context.beginPath();
-
                     context.arc(
-                        column * cellSize,
-                        row * cellSize,
+                        column * cellSize + cellSize / 2,
+                        row * cellSize + cellSize / 2,
                         radius,
                         0,
                         2 * Math.PI
                     );
-
                     context.fill();
                 }
             }
@@ -188,8 +185,8 @@ export function UniverseJs() {
                 context.beginPath();
 
                 context.arc(
-                    element.column * cellSize,
-                    element.row * cellSize,
+                    element.column * cellSize + cellSize / 2,
+                    element.row * cellSize + cellSize / 2,
                     radius,
                     0,
                     2 * Math.PI
