@@ -192,7 +192,7 @@ impl Universe {
                         continue;
                     }
                     
-                    if cell_size < 3f64 {
+                    if cell_size < 4f64 {
                         canvas.fill_rect(
                             column as f64 * cell_size,
                             row as f64 * cell_size,
@@ -203,8 +203,8 @@ impl Universe {
                         canvas.begin_path();
 
                         let _result = canvas.arc(
-                            column as f64 * cell_size,
-                            row as f64 * cell_size,
+                            column as f64 * cell_size + cell_size / 2f64,
+                            row as f64 * cell_size + cell_size / 2f64,
                             radius,
                             0f64,
                             2f64 * PI
@@ -341,7 +341,7 @@ impl Universe {
                     continue;
                 }
 
-                if cell_size < 3f64 {
+                if cell_size < 4f64 {
                     canvas.fill_rect(
                         column as f64 * cell_size,
                         row as f64 * cell_size,
@@ -352,8 +352,8 @@ impl Universe {
                     canvas.begin_path();
 
                     let _result = canvas.arc(
-                        column as f64 * cell_size,
-                        row as f64 * cell_size,
+                        column as f64 * cell_size + cell_size / 2f64,
+                        row as f64 * cell_size + cell_size / 2f64,
                         radius,
                         0f64,
                         2f64 * PI
