@@ -334,6 +334,8 @@ footer {
     overflow: auto;
     border: solid 1px var(--primary-dark-color);
     border-radius: 0.5rem;
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 4px 3px inset,
+        rgb(0 0 0 / 15%) 0px 0px 1px 2px inset;
 }
 
 .library-item {
