@@ -76,7 +76,7 @@ main {
 }
 
 canvas {
-    border: solid 0.2rem var(--primary-dark-color);
+    border: solid 0.1rem var(--primary-dark-color);
     border-radius: 0.5rem;
     margin-top: 0.5rem;
 }

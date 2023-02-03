@@ -1,5 +1,7 @@
 mod utils;
 
+use core::f64::consts::PI;
+
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
@@ -19,8 +21,8 @@ use web_sys::HtmlCanvasElement;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-static COLOR_CELL_ALIVE: &str = "#000000";
-static COLOR_CELL_DEAD: &str = "#ffffff";
+static DEAD_COLOR: &str = "#242c37";
+static ALIVE_COLOR: &str = "#4fe4c1";
 
 // macro_rules! log {
 //     ( $( $t:tt )* ) => {
@@ -137,9 +139,9 @@ impl Universe {
             let cell_size = self.cell_size as f64;
 
             if state {
-                color = &COLOR_CELL_ALIVE;
+                color = &ALIVE_COLOR;
             } else {
-                color = &COLOR_CELL_DEAD;
+                color = &DEAD_COLOR;
             }
 
             canvas.begin_path();
@@ -166,24 +168,60 @@ impl Universe {
 
     pub fn draw_all_cells(&self) {
         if let Some(canvas) = &self.canvas {
+            let cell_size = self.cell_size as f64;
+            let mut radius = cell_size / 2f64;
+
+            radius = match radius > 2f64 {
+                true => radius - 1f64,
+                _ => 1f64
+            };
+
             canvas.begin_path();
-    
-            self.draw_all_cells_by_state(true);
-            self.draw_all_cells_by_state(false);  
+
+            canvas.set_fill_style(&DEAD_COLOR.into());
             
+            canvas.fill_rect(0f64, 0f64, self.column_count as f64 * cell_size, self.row_count as f64 * cell_size);
+            
+            canvas.set_fill_style(&ALIVE_COLOR.into());
+
+            for row in 0..self.row_count {
+                for column in 0..self.column_count {
+                    let index = self.get_index(row, column);
+
+                    if !self.colony[index] {
+                        continue;
+                    }
+                    
+                    if cell_size < 3f64 {
+                        canvas.fill_rect(
+                            column as f64 * cell_size,
+                            row as f64 * cell_size,
+                            cell_size,
+                            cell_size
+                        );
+                    } else {
+                        canvas.begin_path();
+
+                        let _result = canvas.arc(
+                            column as f64 * cell_size,
+                            row as f64 * cell_size,
+                            radius,
+                            0f64,
+                            2f64 * PI
+                        );
+    
+                        canvas.fill();
+                    }
+                }
+            }
+
             canvas.close_path();
         }
     }
 
     pub fn draw_updated_cells(&self) {
-        if let Some(canvas) = &self.canvas {
-            canvas.begin_path();
-
-            self.draw_updated_cells_by_state(true);
-            self.draw_updated_cells_by_state(false);
-        
-            canvas.close_path();
-        }
+        self.draw_updated_cells_by_state(true);
+        self.draw_updated_cells_by_state(false);
     }
 }
 
@@ -277,50 +315,23 @@ impl Universe {
         (row * self.column_count + column) as usize
     }
 
-    fn draw_all_cells_by_state(&self, state: bool) {
-        if let Some(canvas) = &self.canvas {
-            let color: &str;
-            let cell_size = self.cell_size as f64;
-
-            if state {
-                color = &COLOR_CELL_ALIVE;
-            } else {
-                color = &COLOR_CELL_DEAD;
-            }
-
-            canvas.set_fill_style(&color.into());
-            
-            for row in 0..self.row_count {
-                for column in 0..self.column_count {
-                    let index = self.get_index(row, column);
-
-                    if self.colony[index] != state {
-                        continue;
-                    }
-                    
-                    canvas.fill_rect(
-                        column as f64 * cell_size,
-                        row as f64 * cell_size,
-                        cell_size,
-                        cell_size
-                    );
-                }
-            }
-        }
-    }
-
     fn draw_updated_cells_by_state(&self, state: bool) {
         if let Some(canvas) = &self.canvas {
-            let color: &str;
             let cell_size = self.cell_size as f64;
+            let mut radius = cell_size / 2f64;
+
+            canvas.begin_path();
             
             if state {
-                color = &COLOR_CELL_ALIVE;
+                canvas.set_fill_style(&ALIVE_COLOR.into());
+
+                radius = match radius > 2f64 {
+                    true => radius - 1f64,
+                    _ => 1f64
+                };
             } else {
-                color = &COLOR_CELL_DEAD;
+                canvas.set_fill_style(&DEAD_COLOR.into());
             }
-            
-            canvas.set_fill_style(&color.into());
             
             for index in 0..self.updated_cells.len() {
                 let (row, column) = self.updated_cells[index].0;
@@ -330,13 +341,29 @@ impl Universe {
                     continue;
                 }
 
-                canvas.fill_rect(
-                    column as f64 * cell_size,
-                    row as f64 * cell_size,
-                    cell_size,
-                    cell_size
-                );
+                if cell_size < 3f64 {
+                    canvas.fill_rect(
+                        column as f64 * cell_size,
+                        row as f64 * cell_size,
+                        cell_size,
+                        cell_size
+                    );
+                } else {
+                    canvas.begin_path();
+
+                    let _result = canvas.arc(
+                        column as f64 * cell_size,
+                        row as f64 * cell_size,
+                        radius,
+                        0f64,
+                        2f64 * PI
+                    );
+
+                    canvas.fill();
+                }
             }
+
+            canvas.close_path();
         }
     }
 }

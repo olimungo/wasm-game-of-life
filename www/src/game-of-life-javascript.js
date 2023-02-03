@@ -1,6 +1,6 @@
 export function UniverseJs() {
-    const DEAD_COLOR = '#FFFFFF';
-    const ALIVE_COLOR = '#000000';
+    const DEAD_COLOR = '#242c37';
+    const ALIVE_COLOR = '#4fe4c1';
 
     let rowCount, columnCount, cellSize, colony, updatedCells;
 
@@ -107,51 +107,67 @@ export function UniverseJs() {
         }
     }
 
-    function drawAllCells() {
-        context.beginPath();
-
-        drawAllCellsByState(colony, true);
-        drawAllCellsByState(colony, false);
-
-        context.closePath();
-    }
-
     function drawUpdatedCells() {
-        context.beginPath();
-
         drawUpdatedCellsByState(updatedCells, true);
         drawUpdatedCellsByState(updatedCells, false);
-
-        context.closePath();
     }
 
-    function drawAllCellsByState(colony, state) {
-        if (state) {
-            context.fillStyle = ALIVE_COLOR;
-        } else {
-            context.fillStyle = DEAD_COLOR;
-        }
+    function drawAllCells() {
+        let radius = cellSize / 2;
+        radius = radius > 2 ? radius - 1 : 1;
+
+        context.beginPath();
+
+        // Erase canvas
+        context.fillStyle = DEAD_COLOR;
+
+        context.fillRect(0, 0, columnCount * cellSize, rowCount * cellSize);
+
+        // Fill canvas with live cells
+        context.fillStyle = ALIVE_COLOR;
+
         for (let row = 0; row < rowCount; row++) {
             for (let column = 0; column < columnCount; column++) {
                 const index = getIndex(row, column);
 
-                if (colony[index] !== state) {
+                if (!colony[index]) {
                     continue;
                 }
 
-                context.fillRect(
-                    column * cellSize,
-                    row * cellSize,
-                    cellSize,
-                    cellSize
-                );
+                if (cellSize < 3) {
+                    context.fillRect(
+                        column * cellSize,
+                        row * cellSize,
+                        cellSize,
+                        cellSize
+                    );
+                } else {
+                    context.beginPath();
+
+                    context.arc(
+                        column * cellSize,
+                        row * cellSize,
+                        radius,
+                        0,
+                        2 * Math.PI
+                    );
+
+                    context.fill();
+                }
             }
         }
+
+        context.closePath();
     }
 
     function drawUpdatedCellsByState(updatedCells, state) {
+        let radius = cellSize / 2;
+
+        context.beginPath();
+
         if (state) {
             context.fillStyle = ALIVE_COLOR;
+            radius = radius > 2 ? radius - 1 : 1;
         } else {
             context.fillStyle = DEAD_COLOR;
         }
@@ -161,13 +177,29 @@ export function UniverseJs() {
                 continue;
             }
 
-            context.fillRect(
-                element.column * cellSize,
-                element.row * cellSize,
-                cellSize,
-                cellSize
-            );
+            if (cellSize < 3) {
+                context.fillRect(
+                    element.column * cellSize,
+                    element.row * cellSize,
+                    cellSize,
+                    cellSize
+                );
+            } else {
+                context.beginPath();
+
+                context.arc(
+                    element.column * cellSize,
+                    element.row * cellSize,
+                    radius,
+                    0,
+                    2 * Math.PI
+                );
+
+                context.fill();
+            }
         }
+
+        context.closePath();
     }
 
     function liveNeighbourCount(row, column) {
