@@ -192,7 +192,7 @@ impl Universe {
                         continue;
                     }
                     
-                    if cell_size < 3f64 {
+                    if cell_size < 4f64 {
                         canvas.fill_rect(
                             column as f64 * cell_size,
                             row as f64 * cell_size,
@@ -341,7 +341,7 @@ impl Universe {
                     continue;
                 }
 
-                if cell_size < 3f64 {
+                if cell_size < 4f64 {
                     canvas.fill_rect(
                         column as f64 * cell_size,
                         row as f64 * cell_size,
