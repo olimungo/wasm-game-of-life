@@ -133,7 +133,7 @@ export function UniverseJs() {
                     continue;
                 }
 
-                if (cellSize < 3) {
+                if (cellSize < 4) {
                     context.fillRect(
                         column * cellSize,
                         row * cellSize,
@@ -174,7 +174,7 @@ export function UniverseJs() {
                 continue;
             }
 
-            if (cellSize < 3) {
+            if (cellSize < 4) {
                 context.fillRect(
                     element.column * cellSize,
                     element.row * cellSize,
