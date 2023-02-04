@@ -63,18 +63,18 @@ export function UniverseJs() {
     function drawCell(row, column) {
         const index = getIndex(row, column);
         const state = !colony[index];
+        let radius = cellSize / 2;
 
         colony[index] = state;
 
         if (state) {
             context.fillStyle = ALIVE_COLOR;
+            radius = radius > 2 ? radius - 1 : 1;
         } else {
             context.fillStyle = DEAD_COLOR;
         }
 
-        context.beginPath();
-
-        context.fillRect(column * cellSize, row * cellSize, cellSize, cellSize);
+        drawShape(row, column, cellSize, radius);
 
         context.closePath();
     }
@@ -133,24 +133,7 @@ export function UniverseJs() {
                     continue;
                 }
 
-                if (cellSize < 4) {
-                    context.fillRect(
-                        column * cellSize,
-                        row * cellSize,
-                        cellSize,
-                        cellSize
-                    );
-                } else {
-                    context.beginPath();
-                    context.arc(
-                        column * cellSize + cellSize / 2,
-                        row * cellSize + cellSize / 2,
-                        radius,
-                        0,
-                        2 * Math.PI
-                    );
-                    context.fill();
-                }
+                drawShape(row, column, cellSize, radius);
             }
         }
 
@@ -174,26 +157,7 @@ export function UniverseJs() {
                 continue;
             }
 
-            if (cellSize < 4) {
-                context.fillRect(
-                    element.column * cellSize,
-                    element.row * cellSize,
-                    cellSize,
-                    cellSize
-                );
-            } else {
-                context.beginPath();
-
-                context.arc(
-                    element.column * cellSize + cellSize / 2,
-                    element.row * cellSize + cellSize / 2,
-                    radius,
-                    0,
-                    2 * Math.PI
-                );
-
-                context.fill();
-            }
+            drawShape(element.row, element.column, cellSize, radius);
         }
 
         context.closePath();
@@ -243,5 +207,28 @@ export function UniverseJs() {
         const column = index % columnCount;
 
         return { row, column };
+    }
+
+    function drawShape(row, column, cellSize, radius) {
+        if (cellSize < 4) {
+            context.fillRect(
+                column * cellSize,
+                row * cellSize,
+                cellSize,
+                cellSize
+            );
+        } else {
+            context.beginPath();
+
+            context.arc(
+                column * cellSize + cellSize / 2,
+                row * cellSize + cellSize / 2,
+                radius,
+                0,
+                2 * Math.PI
+            );
+
+            context.fill();
+        }
     }
 }
