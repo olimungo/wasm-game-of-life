@@ -129,13 +129,14 @@ impl Universe {
     }
 
     pub fn draw_cell(&mut self, row: u32, column: u32) {        
+        let index = self.get_index(row, column);
+        let state = !self.colony[index];
+        
+        self.colony.set(index, state);
+
         if let Some(canvas) = &self.canvas {
-            let index = self.get_index(row, column);
-            let state = !self.colony[index];
             let cell_size = self.cell_size as f64;
             let mut radius = cell_size / 2f64;
-    
-            self.colony.set(index, state);
 
             if state {
                 canvas.set_fill_style(&ALIVE_COLOR.into());
