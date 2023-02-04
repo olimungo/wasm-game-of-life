@@ -61,9 +61,9 @@ export const colonySamples = [
     {
         id: ColonySamples.GlidersFactory,
         label: ColonySamples.GlidersFactory.description,
-        row: 250,
-        column: 250,
-        cellSize: 3,
+        row: 200,
+        column: 200,
+        cellSize: 4,
         generationsCount: 15000,
         generationsAtOnce: 1,
         throttleValue: 0,
