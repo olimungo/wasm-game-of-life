@@ -12,6 +12,7 @@ use fixedbitset::FixedBitSet;
 
 extern crate web_sys;
 use web_sys::window;
+// use web_sys::console;
 use web_sys::CanvasRenderingContext2d;
 use web_sys::HtmlCanvasElement;
 
@@ -55,6 +56,7 @@ pub struct Universe {
     column_count: u32,
     cell_size: u32,
     colony: FixedBitSet,
+    tick_colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
     canvas: Option<CanvasRenderingContext2d>
 }
@@ -78,6 +80,7 @@ impl Universe {
 
         let size = (row_count * column_count) as usize;
         let colony = FixedBitSet::with_capacity(size);
+        let tick_colony = FixedBitSet::with_capacity(size);
         let updated_cells : Vec<UpdatedCell> = Vec::new();
 
         Universe {
@@ -85,6 +88,7 @@ impl Universe {
             column_count,
             cell_size,
             colony,
+            tick_colony,
             updated_cells,
             canvas
         }
@@ -100,8 +104,8 @@ impl Universe {
 
     pub fn tick(&mut self, generations: u32) {
         for _ in 0..generations {
-            let mut colony = self.colony.clone();
-            let mut updated_cells : Vec<UpdatedCell>= Vec::new();
+            self.tick_colony.clone_from(&self.colony);
+            self.updated_cells.clear();
 
             for row in 0..self.row_count {
                 for column in 0..self.column_count {
@@ -114,17 +118,16 @@ impl Universe {
                         _ => false
                     };
 
-                    colony.set(index, new_state);
+                    self.tick_colony.set(index, new_state);
 
                     // If we process more than 1 generation, we can't rely on the updated cells
                     if generations == 1 && previous_state != new_state {                        
-                        updated_cells.push(UpdatedCell((row, column), new_state));
+                        self.updated_cells.push(UpdatedCell((row, column), new_state));
                     }
                 }
             }
 
-            self.colony = colony;
-            self.updated_cells = updated_cells;
+            self.colony.clone_from(&self.tick_colony);
         }
     }
 
@@ -176,7 +179,6 @@ impl Universe {
 
             // Erase canvas
             canvas.set_fill_style(&DEAD_COLOR.into());
-
             canvas.fill_rect(0f64, 0f64, self.column_count as f64 * cell_size, self.row_count as f64 * cell_size);
             
             // Fill canvas with live cells
@@ -222,18 +224,15 @@ impl Universe {
 
     pub fn generate_colony(&mut self, randomly: bool) {
         let size = (self.row_count * self.column_count) as usize;
-        let mut colony = FixedBitSet::with_capacity(size);
+        self.colony.clear();
 
-        
         for i in 0..size {
             if randomly {
-                    colony.set(i, js_sys::Math::random() < 0.5);
+                    self.colony.set(i, js_sys::Math::random() < 0.5);
             } else {
-                    colony.set(i, i % 2 == 0 || i % 7 == 0);
+                    self.colony.set(i, i % 2 == 0 || i % 7 == 0);
             }
         }
-
-        self.colony = colony;
     }
 
     fn draw_updated_cells_by_state(&self, state: bool) {
