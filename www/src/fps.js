@@ -20,6 +20,8 @@ export function Fps() {
         }
 
         // Render the statistics.
-        uiFpsCounter.textContent = `${Math.round(fps)}`.trim();
+        uiFpsCounter.textContent = (
+            '0'.repeat(2) + `${Math.round(fps)}`.trim()
+        ).slice(-2);
     }
 }
