@@ -76,9 +76,10 @@ main {
 }
 
 canvas {
-    border: solid 0.1rem var(--primary-dark-color);
-    border-radius: 0.5rem;
+    border: solid 0.1rem var(--primary-action-color);
+    border-radius: 1rem;
     margin-top: 0.5rem;
+    box-shadow: 1px 1px 5px black;
 }
 
 .canvas {
@@ -266,18 +267,6 @@ input[type='number'] {
     margin-left: 0.2rem;
 }
 
-.counter {
-    font-family: monospace;
-    font-size: 1rem;
-    text-align: right;
-    color: var(--primary-action-color);
-    background-color: var(--primary-dark-color);
-    width: 4rem;
-    border-radius: 10rem;
-    padding: 0.3rem 1rem;
-    margin-top: 1.1rem;
-}
-
 footer {
     grid-column: 1 / 4;
     border-top: solid 1px var(--primary-dark-color);
@@ -375,7 +364,7 @@ footer {
 }
 
 .benchmark-duration {
-    font-family: monospace;
+    font-family: 'Roboto Mono', monospace;
 }
 
 .benchmark-automatic-open-label {
@@ -387,33 +376,34 @@ footer {
 
 .info-container {
     position: fixed;
-    top: 0.8rem;
-    left: 19.8rem;
+    bottom: 5.5rem;
+    right: 1rem;
     color: var(--primary-action-color);
-    background-color: rgb(85 91 105 / 70%);
-    padding: 0.5rem 1rem;
-    border-radius: 1.5rem;
     display: flex;
     font-size: 1rem;
 }
 
 .border-right {
-    padding-right: 0.5rem;
-    border-right: solid 1px var(--primary-action-dark-color);
+    margin: 0 0.5rem;
+    border-right: solid 1px var(--primary-color);
 }
 
 .colony-sample {
-    margin-left: 0.5rem;
     text-transform: lowercase;
 }
 
-.fps-counter {
-    font-family: monospace;
-    padding-left: 0.5rem;
-    width: 1.5rem;
+.font-monospace {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 300;
+    font-size: 0.9rem;
 }
 
-.fps-label {
+.generations-label {
+    margin-left: 0.3rem;
+}
+
+.fps-counter {
+    margin-right: 0.3rem;
 }
 
 /*

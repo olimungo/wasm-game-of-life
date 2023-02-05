@@ -24,8 +24,6 @@ export function Ui(
     const info = Info();
     const fps = Fps();
 
-    const uiCounter = document.getElementById('ui-counter');
-
     let colonySampleId, colony;
 
     const properties = inputs.getProperties();
@@ -43,7 +41,7 @@ export function Ui(
     };
 
     function updateUi(count) {
-        uiCounter.textContent = count;
+        info.setGenerationsCounter(count);
         fps.render();
     }
 
@@ -107,7 +105,7 @@ export function Ui(
 
     function resetGame() {
         benchmarks.resetResults();
-        uiCounter.textContent = 0;
+        info.setGenerationsCounter(0);
     }
 
     function setPlayPause(text) {

@@ -21,10 +21,9 @@ jobs:
               uses: actions/cache@v3
               with:
                   path: |
-                      target
+                      ./target
                       ~/.cargo
-                  key: cache-${{ runner.os }}-crates-pull-${{ hashFiles('Cargo.lock') }}
-                  restore-keys: cache-${{ runner.os }}-crates-pull-
+                  key: cache-${{ runner.os }}-crates
             - name: Test Rust code
               run: wasm-pack test --chrome --headless
             - name: Compile Rust code to WebAssembly
