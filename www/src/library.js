@@ -12,6 +12,17 @@ export function Library(colonySampleSelectedCallback) {
         }
     });
 
+    // If the library is open and a the user clicks outside
+    // of the library panel, then close the panel
+    document.addEventListener('click', (event) => {
+        if (
+            !uiLibraryPanel.contains(event.target) &&
+            uiLibraryPanel.classList.contains('open')
+        ) {
+            uiLibraryPanel.classList.remove('open');
+        }
+    });
+
     for (let [index, item] of colonySamples.entries()) {
         const li = document.createElement('li');
         li.id = index;
