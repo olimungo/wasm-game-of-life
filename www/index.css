@@ -76,9 +76,10 @@ main {
 }
 
 canvas {
-    border: solid 0.1rem var(--primary-dark-color);
-    border-radius: 0.5rem;
+    border: solid 0.1rem var(--primary-action-color);
+    border-radius: 1rem;
     margin-top: 0.5rem;
+    box-shadow: 1px 1px 5px black;
 }
 
 .canvas {
