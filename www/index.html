@@ -129,15 +129,21 @@
                 </div>
             </div>
 
-            <!--
-                LIBRARY PANEL
-            -->
-
             <main class="section">
+                <!--
+                    LIBRARY PANEL
+                -->
                 <div id="ui-library-panel" class="sliding-panel library">
-                    <div class="library-panel">
-                        <ul id="ui-library-list" class="library-list"></ul>
+                    <div>
+                        <div class="library-panel">
+                            <ul id="ui-library-list" class="library-list"></ul>
+                        </div>
+
+                        <button id="ui-library-rle" class="library-rle">
+                            RLE
+                        </button>
                     </div>
+
                     <div class="sliding-panel-label">LIBRARY</div>
                 </div>
 
@@ -248,6 +254,10 @@
                     <div class="sliding-panel-label">BENCHMARKS</div>
                 </div>
 
+                <!--
+                    INFO CONTAINER
+                -->
+
                 <div class="info-container">
                     <div id="ui-engine"></div>
 
@@ -270,14 +280,55 @@
                     <div>fps</div>
                 </div>
 
+                <!--
+                    CANVAS
+                -->
+
                 <div class="canvas">
                     <canvas id="ui-canvas"></canvas>
                 </div>
+
+                <!--
+                    RLE PANEL
+                -->
+
+                <div class="rle-panel">
+                    <textarea
+                        id="ui-rle-text"
+                        class="rle-text"
+                        rows="5"
+                        cols="80"
+                    >
+19b2o$19b4o$19bob2o2$20bo$19b2o$19b3o$21bo$33b2o$33b2o7$36bo$35b2o$34bo3bo$35b2o2bo$40bo$37bobo$38bo$38bo$38b2o$38b2o3$13bo10bo$12b5o5bob2o11bo$11bo10bo3bo9bo$12b2o8b3obo9b2o$13b2o9b2o12bo$2o13bo21b3o$2o35b3o7$8b2o$8b2o11b2o$19b2o2bo$24bo3bo$18bo5bo3bo$19bo2b2o3bobo$20b3o5bo$28bo!</textarea
+                    >
+
+                    <div id="ui-rle-error" class="rle-error"></div>
+
+                    <div class="rle-actions">
+                        <div>
+                            <button id="ui-rle-decode" class="rle-button">
+                                DECODE
+                            </button>
+
+                            <button id="ui-rle-encode" class="rle-button">
+                                ENCODE
+                            </button>
+                        </div>
+
+                        <button id="ui-rle-close" class="rle-button-outline">
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
             </main>
+
+            <!--
+                FOOTER
+            -->
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.26.0</div>
+                    <div class="version">v1.27.0</div>
 
                     <svg
                         id="ui-source-code"

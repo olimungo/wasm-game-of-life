@@ -18,7 +18,7 @@ export function Rle() {
             // If the whole line is made of only o's or only b's
             if (rows.length === 1) {
                 if (rows[0][0] === '1') {
-                    output += `${input.column}${LIVE_CELL_LETTER}`;
+                    output += `${rows[0].length}${LIVE_CELL_LETTER}`;
                 } else {
                     output += DEAD_CELL_LETTER;
                 }
@@ -29,7 +29,9 @@ export function Rle() {
 
                     // Do not add instructions at then end of a line for dead cells
                     if (row < rows.length - 1 || letter !== DEAD_CELL_LETTER) {
-                        output += `${group.length}${letter}`;
+                        output += `${
+                            group.length > 1 ? group.length : ''
+                        }${letter}`;
                     }
                 }
             }
@@ -39,6 +41,15 @@ export function Rle() {
 
         // Remove lines with only empty cells at the end of the output
         output = output.replace(/(b\$)*$/, '');
+
+        // Compact multiple blank lines (like $b$b$b$ becomes 3$)
+        let emptyLines = output.match(/\$b(\$b)+\$/g);
+
+        emptyLines = emptyLines.sort((a, b) => (a > b ? -1 : 1));
+
+        emptyLines.forEach((item) => {
+            output = output.replace(item, (item.length - 1) / 2 + '$');
+        });
 
         // Replace the last '$' with a '!'
         output = output.replace(/\$$/, '!');
@@ -123,6 +134,8 @@ export function Rle() {
             if (split.length === 1) {
                 inputDecoded.push(line);
             } else {
+                inputDecoded.push(split[0]);
+
                 const count = parseInt(split[1]);
 
                 for (let row = 0; row < count; ++row) {
@@ -137,7 +150,7 @@ export function Rle() {
     function transformToArrayOfLiveCells(input) {
         const colony = [];
 
-        const { rowCount, columnCount, rule, inputDecoded } = decode(input);
+        let { rowCount, columnCount, rule, inputDecoded } = decode(input);
 
         inputDecoded.forEach((line, row) => {
             for (let [column, state] of Object(line.split('')).entries()) {
@@ -147,21 +160,43 @@ export function Rle() {
             }
         });
 
+        if (!rowCount) {
+            const { maxRow, maxColumn } = getMaxRowColumn(colony);
+            rowCount = maxRow + 1;
+            columnCount = maxColumn + 1;
+        }
+
         return { rowCount, columnCount, rule, colony };
     }
 
-    function transformFromArrayOfLiveCells(input) {
-        const colony = [];
+    function transformFromArrayOfLiveCells(textColony) {
+        const bitColony = [];
 
-        for (let row = 0; row < input.row; row++) {
-            colony.push(Array(input.column).fill('0'));
+        const colony = JSON.parse(textColony);
+
+        const { maxRow, maxColumn } = getMaxRowColumn(colony);
+
+        for (let row = 0; row < maxRow + 1; row++) {
+            bitColony.push(Array(maxColumn + 1).fill('0'));
         }
 
-        for (let cell of input.colony) {
-            colony[cell[0]][cell[1]] = '1';
+        for (let cell of colony) {
+            bitColony[cell[0]][cell[1]] = '1';
         }
 
-        return encode(colony);
+        return encode(bitColony);
+    }
+
+    function getMaxRowColumn(colony) {
+        let maxRow = 0;
+        let maxColumn = 0;
+
+        for (let cell of colony) {
+            maxRow = cell[0] > maxRow ? cell[0] : maxRow;
+            maxColumn = cell[1] > maxColumn ? cell[1] : maxColumn;
+        }
+
+        return { maxRow, maxColumn };
     }
 
     function addRow(colony, count) {

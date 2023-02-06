@@ -47,8 +47,8 @@ export function Inputs(
 
     function getProperties() {
         return {
-            row: unwrapDefault(uiRow.value, DEFAULT_ROW_COUNT),
-            column: unwrapDefault(uiColumn.value, DEFAULT_COLUMN_COUNT),
+            rowCount: unwrapDefault(uiRow.value, DEFAULT_ROW_COUNT),
+            columnCount: unwrapDefault(uiColumn.value, DEFAULT_COLUMN_COUNT),
             cellSize: unwrapDefault(uiCellSize.value, DEFAULT_CELL_SIZE),
             generationsCount: unwrapDefault(
                 uiGenerationsCount.value,
@@ -65,16 +65,16 @@ export function Inputs(
 
     function setProperties(properties) {
         const {
-            row,
-            column,
+            rowCount,
+            columnCount,
             cellSize,
             generationsCount,
             generationsAtOnce,
             throttleValue,
         } = properties;
 
-        uiRow.value = row;
-        uiColumn.value = column;
+        uiRow.value = rowCount;
+        uiColumn.value = columnCount;
         uiCellSize.value = cellSize;
         uiGenerationsCount.value = generationsCount;
         uiGenerationsAtOnce.value = generationsAtOnce;

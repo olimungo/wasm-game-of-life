@@ -1,4 +1,4 @@
-export const DEFAULT_COLONY_SAMPLE = 0;
+export const DEFAULT_COLONY_SAMPLE = 3;
 
 export const ColonySamples = Object.freeze({
     Pattern: Symbol('Pattern'),
@@ -11,14 +11,15 @@ export const ColonySamples = Object.freeze({
     Gabriel: Symbol("Gabriel's p138"),
     RPentomino: Symbol('R-pentomino'),
     RPentominos: Symbol('R-pentominos'),
+    TwoEngineCordership: Symbol('2-engine Cordership'),
 });
 
 export const colonySamples = [
     {
         id: ColonySamples.Pattern,
         label: ColonySamples.Pattern.description,
-        row: 150,
-        column: 150,
+        rowCount: 150,
+        columnCount: 150,
         cellSize: 4,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -28,8 +29,8 @@ export const colonySamples = [
     {
         id: ColonySamples.Randomly,
         label: ColonySamples.Randomly.description,
-        row: 100,
-        column: 100,
+        rowCount: 100,
+        columnCount: 100,
         cellSize: 5,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -39,8 +40,8 @@ export const colonySamples = [
     {
         id: ColonySamples.Blinker,
         label: ColonySamples.Blinker.description,
-        row: 9,
-        column: 9,
+        rowCount: 9,
+        columnCount: 9,
         cellSize: 50,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -50,9 +51,9 @@ export const colonySamples = [
     {
         id: ColonySamples.Glider,
         label: ColonySamples.Glider.description,
-        row: 50,
-        column: 50,
-        cellSize: 8,
+        rowCount: 100,
+        columnCount: 100,
+        cellSize: 6,
         generationsCount: 5000,
         generationsAtOnce: 1,
         throttleValue: 100,
@@ -61,8 +62,8 @@ export const colonySamples = [
     {
         id: ColonySamples.GlidersFactory,
         label: ColonySamples.GlidersFactory.description,
-        row: 200,
-        column: 200,
+        rowCount: 200,
+        columnCount: 200,
         cellSize: 4,
         generationsCount: 15000,
         generationsAtOnce: 1,
@@ -72,8 +73,8 @@ export const colonySamples = [
     {
         id: ColonySamples.CoolPattern,
         label: ColonySamples.CoolPattern.description,
-        row: 150,
-        column: 180,
+        rowCount: 150,
+        columnCount: 180,
         cellSize: 4,
         generationsCount: 1200,
         generationsAtOnce: 1,
@@ -83,8 +84,8 @@ export const colonySamples = [
     {
         id: ColonySamples.GosperGliderGun,
         label: ColonySamples.GosperGliderGun.description,
-        row: 45,
-        column: 150,
+        rowCount: 45,
+        columnCount: 150,
         cellSize: 5,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -94,8 +95,8 @@ export const colonySamples = [
     {
         id: ColonySamples.Gabriel,
         label: ColonySamples.Gabriel.description,
-        row: 50,
-        column: 50,
+        rowCount: 50,
+        columnCount: 50,
         cellSize: 8,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -105,8 +106,8 @@ export const colonySamples = [
     {
         id: ColonySamples.RPentomino,
         label: ColonySamples.RPentomino.description,
-        row: 150,
-        column: 150,
+        rowCount: 150,
+        columnCount: 150,
         cellSize: 4,
         generationsCount: 5000,
         generationsAtOnce: 1,
@@ -116,12 +117,24 @@ export const colonySamples = [
     {
         id: ColonySamples.RPentominos,
         label: ColonySamples.RPentominos.description,
-        row: 250,
-        column: 300,
-        cellSize: 2,
+        rowCount: 200,
+        columnCount: 300,
+        cellSize: 4,
         generationsCount: 5000,
         generationsAtOnce: 1,
         throttleValue: 0,
         colony: '100$163b2o$162b1o1b1o$162b1o2b1o$163b2o$164b1o$163b2o58b1o$162b1o2b1o56b1o1b2o$162b1o59b1o$163b3o57b1o1b1o$224b1o$163b1o50b1o$162b1o1b2o36b4o6b2o1b1o6b3o$162b1o1b2o37b3o7b2o7b1o1b2o$163b2o39b1o9b1o1b1o6b3o$163b1o37b1o11b1o1b1o$162b1o1b1o37b1o3b1o6b1o8b2o9b1o8b2o$162b1o1b2o37b3o7b3o7b2o1b1o4b2o1b2o6b1o1b2o$163b1o53b1o6b1o9b1o9b1o$217b1o$193b1o$192b1o$183b1o8b1o$162b3o17b1o1b1o7b1o$162b1o1b1o17b1o1b1o$164b1o18b1o2b1o6b3o$62b2o99b1o9b1o$63b2o97b3o7b3o$64b1o99b1o8b1o$63b1o108b1o$62b2o9b1o$61b1o1b1o9b3o26b3o57b3o$64b1o6b1o29b1o2b1o58b1o$62b2o39b1o58b1o$60b1o1b1o$60b1o1b1o51b1o18b1o29b1o$63b1o16b2o1b2o17b2o9b1o9b2o8b1o29b1o$62b2o19b2o18b2o6b1o1b1o7b1o1b1o9b1o28b1o1b1o$62b2o18b1o17b1o1b1o9b1o10b1o7b2o$162b2o$60b2o$60b3o17b2o$63b1o19b2o7b2o8b2o48b3o7b3o$62b2o17b1o1b1o5b1o3b1o7b1o1b1o$62b1o19b1o10b1o5b1o3b1o49b1o7b1o2b1o$89b1o1b1o7b1o52b1o$152b1o9b2o$80b2o1b1o69b1o$81b1o1b1o8b1o60b1o$81b3o6b4o59b1o$89b3o1b1o$89b2o60b3o$79b1o$81b1o1b1o60b1o7b1o$81b3o58b1o1b1o8b2o$82b1o8b3o$89b2o2b1o48b1o9b1o$89b1o52b1o9b1o$142b1o9b1o!',
+    },
+    {
+        id: ColonySamples.TwoEngineCordership,
+        label: ColonySamples.TwoEngineCordership.description,
+        rowCount: 150,
+        columnCount: 150,
+        cellSize: 8,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
+        colony: '24b2o$24b4o$b$b$25b1o$24b2o$24b3o$26b1o$38b2o$b$b$b$b$b$b$b$41b1o$40b2o$39b1o1b1o$40b3o$41b1o$41b2o$41b1o$41b1o$41b2o$b$b$b$18b1o10b1o$17b5o5b1o1b2o10b1o$16b1o10b1o3b1o9b1o$17b2o8b3o1b1o9b2o$18b2o9b2o10b1o$5b2o13b1o20b3o$b$b$b$b$b$b$b$13b2o$13b2o11b2o$24b2o2b1o$29b1o3b1o$23b1o5b1o3b1o$24b1o2b2o3b1o1b1o$25b3o5b1o$33b1o!',
+        // colony: '19b2o$19b4o$19bob2o2$20bo$19b2o$19b3o$21bo$33b2o$33b2o7$36bo$35b2o$34bo3bo$35b2o2bo$40bo$37bobo$38bo$38bo$38b2o$38b2o3$13bo10bo$12b5o5bob2o11bo$11bo10bo3bo9bo$12b2o8b3obo9b2o$13b2o9b2o12bo$2o13bo21b3o$2o35b3o7$8b2o$8b2o11b2o$19b2o2bo$24bo3bo$18bo5bo3bo$19bo2b2o3bobo$20b3o5bo$28bo!',
     },
 ];

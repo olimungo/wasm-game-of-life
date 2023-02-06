@@ -4,13 +4,15 @@ import { Library } from './library';
 import { Canvas } from './canvas';
 import { Info } from './info';
 import { Fps } from './fps';
+import { RlePanel } from './rle-panel';
 
 export function Ui(
     resetCalback,
     playClickedCallback,
     pauseClickedCallback,
     cellClickedCallback,
-    colonySampleSelectedCallback
+    colonySampleSelectedCallback,
+    displayColonyCallback
 ) {
     const inputs = Inputs(
         setClicked,
@@ -23,6 +25,11 @@ export function Ui(
     const library = Library(colonySampleSelected);
     const info = Info();
     const fps = Fps();
+
+    // No need to reference the RLE panel, it handles himself.
+    // Just need to instantiate it and be aware when to draw something
+    // on the canvas.
+    RlePanel(displayColonyCallback);
 
     let colonySampleId, colony;
 
@@ -62,8 +69,8 @@ export function Ui(
         info.setColonySample(colonySample.label);
 
         canvas.setCanvas(
-            colonySample.row,
-            colonySample.column,
+            colonySample.rowCount,
+            colonySample.columnCount,
             colonySample.cellSize
         );
     }
@@ -88,8 +95,8 @@ export function Ui(
         const properties = inputs.getProperties();
 
         canvas.setCanvas(
-            properties.row,
-            properties.column,
+            properties.rowCount,
+            properties.columnCount,
             properties.cellSize
         );
 

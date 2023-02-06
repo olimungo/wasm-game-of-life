@@ -14,7 +14,7 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(reset, play, pause, drawCell, reset);
+const ui = Ui(reset, play, pause, drawCell, reset, displayColony);
 const rle = Rle();
 
 createUniverse();
@@ -38,8 +38,8 @@ function createUniverse() {
 
     universe = UniverseFactory(
         properties.engine,
-        properties.row,
-        properties.column,
+        properties.rowCount,
+        properties.columnCount,
         properties.cellSize
     );
 
@@ -147,4 +147,8 @@ function reset() {
 
 function drawCell(row, column) {
     universe.drawCell(row, column);
+}
+
+function displayColony(colony) {
+    console.log(colony);
 }
