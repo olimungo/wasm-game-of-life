@@ -14,7 +14,7 @@ let generationPaused;
 let animationId = null;
 let animationTimeOutId = null;
 
-const ui = Ui(reset, play, pause, drawCell, reset);
+const ui = Ui(reset, play, pause, drawCell, reset, displayColony, grabColony);
 const rle = Rle();
 
 createUniverse();
@@ -38,8 +38,8 @@ function createUniverse() {
 
     universe = UniverseFactory(
         properties.engine,
-        properties.row,
-        properties.column,
+        properties.rowCount,
+        properties.columnCount,
         properties.cellSize
     );
 
@@ -51,7 +51,7 @@ function createUniverse() {
             universe.generateRandomColony();
             break;
         default:
-            const colonySample = rle.transformToArrayOfLiveCells(
+            const { error, ...colonySample } = rle.transformToArrayOfLiveCells(
                 properties.colony
             );
 
@@ -147,4 +147,16 @@ function reset() {
 
 function drawCell(row, column) {
     universe.drawCell(row, column);
+}
+
+function displayColony(colony) {
+    universe.clear();
+
+    for (let cell of colony) {
+        universe.drawCell(cell[0], cell[1]);
+    }
+}
+
+function grabColony() {
+    return universe.getColony();
 }

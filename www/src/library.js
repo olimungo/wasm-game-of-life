@@ -3,6 +3,8 @@ import { colonySamples, DEFAULT_COLONY_SAMPLE } from './colony-samples';
 export function Library(colonySampleSelectedCallback) {
     const uiLibraryPanel = document.getElementById('ui-library-panel');
     const uiLibraryList = document.getElementById('ui-library-list');
+    const uiLibraryRle = document.getElementById('ui-library-rle');
+    const uiRlePanel = document.getElementById('ui-rle-panel');
 
     uiLibraryPanel.addEventListener('click', () => {
         if (uiLibraryPanel.classList.contains('open')) {
@@ -36,6 +38,14 @@ export function Library(colonySampleSelectedCallback) {
 
         uiLibraryList.appendChild(li);
     }
+
+    uiLibraryRle.addEventListener('click', () => {
+        if (!uiRlePanel.classList.contains('open')) {
+            uiRlePanel.classList.add('open');
+        } else {
+            uiRlePanel.classList.remove('open');
+        }
+    });
 
     return {
         getDefaultColonySample,

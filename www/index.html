@@ -129,15 +129,21 @@
                 </div>
             </div>
 
-            <!--
-                LIBRARY PANEL
-            -->
-
             <main class="section">
+                <!--
+                    LIBRARY PANEL
+                -->
                 <div id="ui-library-panel" class="sliding-panel library">
-                    <div class="library-panel">
-                        <ul id="ui-library-list" class="library-list"></ul>
+                    <div>
+                        <div class="library-panel">
+                            <ul id="ui-library-list" class="library-list"></ul>
+                        </div>
+
+                        <button id="ui-library-rle" class="library-rle">
+                            RLE
+                        </button>
                     </div>
+
                     <div class="sliding-panel-label">LIBRARY</div>
                 </div>
 
@@ -248,6 +254,10 @@
                     <div class="sliding-panel-label">BENCHMARKS</div>
                 </div>
 
+                <!--
+                    INFO CONTAINER
+                -->
+
                 <div class="info-container">
                     <div id="ui-engine"></div>
 
@@ -270,14 +280,154 @@
                     <div>fps</div>
                 </div>
 
+                <!--
+                    CANVAS
+                -->
+
                 <div class="canvas">
                     <canvas id="ui-canvas"></canvas>
                 </div>
+
+                <!--
+                    RLE PANEL
+                -->
+
+                <div id="ui-rle-panel" class="rle-panel">
+                    <textarea
+                        id="ui-rle-text"
+                        class="rle-text"
+                        rows="5"
+                        cols="85"
+                    ></textarea>
+
+                    <div id="ui-rle-error" class="rle-error"></div>
+
+                    <div class="rle-actions">
+                        <div>
+                            <button id="ui-rle-decode" class="rle-button">
+                                DECODE
+                            </button>
+
+                            <button id="ui-rle-encode" class="rle-button">
+                                ENCODE
+                            </button>
+
+                            <button id="ui-rle-grab" class="rle-button">
+                                GRAB
+                            </button>
+                        </div>
+
+                        <div class="rle-arrows">
+                            <svg
+                                id="ui-rle-arrow-up"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                version="1.1"
+                                id="Capa_1"
+                                x="0px"
+                                y="0px"
+                                width="20px"
+                                viewBox="0 0 960 560"
+                                enable-background="new 0 0 960 560"
+                                xml:space="preserve"
+                                class="rle-arrow up"
+                            >
+                                <g>
+                                    <path
+                                        fill="#4fe4c1"
+                                        d="M480,344.181L268.869,131.889c-15.756-15.859-41.3-15.859-57.054,0c-15.754,15.857-15.754,41.57,0,57.431l237.632,238.937   c8.395,8.451,19.562,12.254,30.553,11.698c10.993,0.556,22.159-3.247,30.555-11.698l237.631-238.937   c15.756-15.86,15.756-41.571,0-57.431s-41.299-15.859-57.051,0L480,344.181z"
+                                    />
+                                </g>
+                            </svg>
+
+                            <div class="rle-arrows-middle">
+                                <svg
+                                    id="ui-rle-arrow-left"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1"
+                                    id="Capa_1"
+                                    x="0px"
+                                    y="0px"
+                                    width="20px"
+                                    viewBox="0 0 960 560"
+                                    enable-background="new 0 0 960 560"
+                                    xml:space="preserve"
+                                    class="rle-arrow left"
+                                >
+                                    <g>
+                                        <path
+                                            fill="#4fe4c1"
+                                            d="M480,344.181L268.869,131.889c-15.756-15.859-41.3-15.859-57.054,0c-15.754,15.857-15.754,41.57,0,57.431l237.632,238.937   c8.395,8.451,19.562,12.254,30.553,11.698c10.993,0.556,22.159-3.247,30.555-11.698l237.631-238.937   c15.756-15.86,15.756-41.571,0-57.431s-41.299-15.859-57.051,0L480,344.181z"
+                                        />
+                                    </g>
+                                </svg>
+
+                                <svg
+                                    id="ui-rle-arrow-right"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1"
+                                    id="Capa_1"
+                                    x="0px"
+                                    y="0px"
+                                    width="20px"
+                                    viewBox="0 0 960 560"
+                                    enable-background="new 0 0 960 560"
+                                    xml:space="preserve"
+                                    class="rle-arrow right"
+                                >
+                                    <g>
+                                        <path
+                                            fill="#4fe4c1"
+                                            d="M480,344.181L268.869,131.889c-15.756-15.859-41.3-15.859-57.054,0c-15.754,15.857-15.754,41.57,0,57.431l237.632,238.937   c8.395,8.451,19.562,12.254,30.553,11.698c10.993,0.556,22.159-3.247,30.555-11.698l237.631-238.937   c15.756-15.86,15.756-41.571,0-57.431s-41.299-15.859-57.051,0L480,344.181z"
+                                        />
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <svg
+                                id="ui-rle-arrow-down"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                version="1.1"
+                                id="Capa_1"
+                                x="0px"
+                                y="0px"
+                                width="20px"
+                                viewBox="0 0 960 560"
+                                enable-background="new 0 0 960 560"
+                                xml:space="preserve"
+                                class="rle-arrow down"
+                            >
+                                <g>
+                                    <path
+                                        fill="#4fe4c1"
+                                        d="M480,344.181L268.869,131.889c-15.756-15.859-41.3-15.859-57.054,0c-15.754,15.857-15.754,41.57,0,57.431l237.632,238.937   c8.395,8.451,19.562,12.254,30.553,11.698c10.993,0.556,22.159-3.247,30.555-11.698l237.631-238.937   c15.756-15.86,15.756-41.571,0-57.431s-41.299-15.859-57.051,0L480,344.181z"
+                                    />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div>
+                            <button
+                                id="ui-rle-close"
+                                class="rle-button-outline"
+                            >
+                                CLOSE
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </main>
+
+            <!--
+                FOOTER
+            -->
 
             <footer class="section">
                 <div class="footer">
-                    <div class="version">v1.26.0</div>
+                    <div class="version">v1.27.0</div>
 
                     <svg
                         id="ui-source-code"
