@@ -122,7 +122,7 @@ export function Rle() {
     function decode(rleInput) {
         let rleLines = rleInput
             .split('\n')
-            // Remove lines starting with a '#'
+            // Remove lines starting with a '#' and empty lines
             .filter((line) => !line.match(/#/g) && line !== '');
 
         // Extract information about the number of rows, columns and the rule
@@ -287,14 +287,6 @@ export function Rle() {
     }
 
     function translateLiveCells(colony, x, y) {
-        return addColumn(addRow(colony, y), x);
-    }
-
-    function addRow(colony, count) {
-        return colony.map((cell) => [cell[0] + count, cell[1]]);
-    }
-
-    function addColumn(colony, count) {
-        return colony.map((cell) => [cell[0], cell[1] + count]);
+        return colony.map((cell) => [cell[0] + y, cell[1] + x]);
     }
 }
