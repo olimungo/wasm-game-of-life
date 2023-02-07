@@ -1,4 +1,4 @@
-export const DEFAULT_COLONY_SAMPLE = 0;
+export const DEFAULT_COLONY_SAMPLE = 2;
 
 export const ColonySamples = Object.freeze({
     Pattern: Symbol('Pattern'),

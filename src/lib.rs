@@ -218,6 +218,10 @@ impl Universe {
         self.draw_updated_cells_by_state(true);
         self.draw_updated_cells_by_state(false);
     }
+
+    pub fn get_colony(&self) -> *const u32 {
+        self.colony.as_slice().as_ptr()
+    }
 }
 
 // Private methods called from Rust only
