@@ -11,6 +11,8 @@
 * {
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -320,7 +322,7 @@ footer {
 
 .library-list {
     height: 14.5rem;
-    overflow: auto;
+    overflow: overlay;
     border: solid 1px var(--primary-dark-color);
     border-radius: 0.5rem;
     box-shadow: rgb(0 0 0 / 15%) 0px 0px 4px 3px inset,
