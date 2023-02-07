@@ -57,18 +57,18 @@ pub fn test_get_colony() {
     let mut input_universe = Universe::new(3, 3, 1);
     input_universe.generate_random_colony();
 
-    assert_eq!(&input_universe.get_colony().len(), &9usize);
+    assert_eq!(&input_universe.get_colony_for_test().len(), &9usize);
 }
 
 #[wasm_bindgen_test]
 pub fn test_set_cells() {
     let mut input_universe = Universe::new(3, 3, 1);
 
-    assert_eq!(&input_universe.get_colony().count_ones(..), &0usize);
+    assert_eq!(&input_universe.get_colony_for_test().count_ones(..), &0usize);
 
     input_universe.set_cells(&[(0, 0)]);
 
-    let colony = input_universe.get_colony();
+    let colony = input_universe.get_colony_for_test();
 
     assert_eq!(&colony.count_ones(..), &1usize);
     assert_eq!(&colony[0], &true);
@@ -83,7 +83,7 @@ pub fn test_generate_pattern_colony() {
 
     input_universe.tick(1);
 
-    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
+    assert_eq!(&input_universe.get_colony_for_test(), &expected_universe.get_colony_for_test());
 }
 
 #[wasm_bindgen_test]
@@ -91,7 +91,7 @@ pub fn test_generate_random_colony() {
     let mut input_universe = Universe::new(3, 3, 1);
     input_universe.generate_random_colony();
 
-    assert_ne!(&input_universe.get_colony().count_ones(..), &0usize);
+    assert_ne!(&input_universe.get_colony_for_test().count_ones(..), &0usize);
 }
 
 #[wasm_bindgen_test]
@@ -101,7 +101,7 @@ pub fn test_tick_spaceship() {
 
     input_universe.tick(1);
     
-    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
+    assert_eq!(&input_universe.get_colony_for_test(), &expected_universe.get_colony_for_test());
 }
 
 #[wasm_bindgen_test]
@@ -112,7 +112,7 @@ pub fn test_tick_blinker() {
 
     input_universe.tick(1);
 
-    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
+    assert_eq!(&input_universe.get_colony_for_test(), &expected_universe.get_colony_for_test());
 }
 
 #[wasm_bindgen_test]
@@ -122,25 +122,25 @@ pub fn test_tick_border() {
 
     input_universe.tick(1);
 
-    assert_eq!(&input_universe.get_colony(), &expected_universe.get_colony());
+    assert_eq!(&input_universe.get_colony_for_test(), &expected_universe.get_colony_for_test());
 }
 
 #[wasm_bindgen_test]
 pub fn test_set_cell() {
     let mut input_universe = Universe::new(1, 1, 1);
-    let mut state = *(&input_universe.get_colony()[0]) as u8;
+    let mut state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 0);
     
     input_universe.set_cell(0, 0);
     
-    state = *(&input_universe.get_colony()[0]) as u8;
+    state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 1);
 
     input_universe.set_cell(0, 0);
     
-    state = *(&input_universe.get_colony()[0]) as u8;
+    state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 0);
 }
@@ -148,19 +148,31 @@ pub fn test_set_cell() {
 #[wasm_bindgen_test]
 pub fn test_draw_cell() {
     let mut input_universe = Universe::new(1, 1, 1);
-    let mut state = *(&input_universe.get_colony()[0]) as u8;
+    let mut state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 0);
     
     input_universe.draw_cell(0, 0);
     
-    state = *(&input_universe.get_colony()[0]) as u8;
+    state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 1);
     
     input_universe.draw_cell(0, 0);
     
-    state = *(&input_universe.get_colony()[0]) as u8;
+    state = *(&input_universe.get_colony_for_test()[0]) as u8;
+
+    assert_eq!(state, 0);
+}
+
+#[wasm_bindgen_test]
+pub fn test_clear() {
+    let mut input_universe = Universe::new(1, 1, 1);
+
+    input_universe.draw_cell(0, 0);
+    input_universe.clear();
+    
+    let state = *(&input_universe.get_colony_for_test()[0]) as u8;
 
     assert_eq!(state, 0);
 }

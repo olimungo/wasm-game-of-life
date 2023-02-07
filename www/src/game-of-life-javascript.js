@@ -10,9 +10,11 @@ export function UniverseJs() {
     return {
         create,
         dispose,
+        clear,
         generatePatternColony,
         generateRandomColony,
         tick,
+        getColony,
         setCell,
         drawCell,
         drawAllCells,
@@ -33,6 +35,16 @@ export function UniverseJs() {
     function dispose() {
         colony = [];
         updatedCells = [];
+    }
+
+    function clear() {
+        colony = Array(rowCount * columnCount).fill(false);
+        updatedCells = [];
+
+        context.beginPath();
+        context.fillStyle = DEAD_COLOR;
+        context.fillRect(0, 0, columnCount * cellSize, rowCount * cellSize);
+        context.closePath();
     }
 
     function generatePatternColony() {
@@ -82,6 +94,8 @@ export function UniverseJs() {
     function tick(generations) {
         updatedCells = [];
 
+        // console.log('tick', colony, rowCount, columnCount);
+
         for (let generation = 0; generation < generations; generation++) {
             const newColony = [];
 
@@ -105,6 +119,19 @@ export function UniverseJs() {
 
             colony = newColony;
         }
+    }
+
+    function getColony() {
+        const liveCells = [];
+
+        colony.forEach((state, index) => {
+            if (state) {
+                const { row, column } = getRowColumn(index);
+                liveCells.push([row, column]);
+            }
+        });
+
+        return liveCells;
     }
 
     function drawUpdatedCells() {

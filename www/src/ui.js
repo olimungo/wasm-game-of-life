@@ -12,7 +12,8 @@ export function Ui(
     pauseClickedCallback,
     cellClickedCallback,
     colonySampleSelectedCallback,
-    displayColonyCallback
+    displayColonyCallback,
+    grabColonyCallback
 ) {
     const inputs = Inputs(
         setClicked,
@@ -26,12 +27,12 @@ export function Ui(
     const info = Info();
     const fps = Fps();
 
+    let colonySampleId, colony;
+
     // No need to reference the RLE panel, it handles himself.
     // Just need to instantiate it and be aware when to draw something
     // on the canvas.
-    RlePanel(displayColonyCallback);
-
-    let colonySampleId, colony;
+    RlePanel(displayColonyCallback, grabColonyCallback);
 
     const properties = inputs.getProperties();
     info.setEngine(properties.engine.description);

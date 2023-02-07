@@ -6,6 +6,7 @@ export function UniverseWasm() {
     return {
         create,
         dispose,
+        clear,
         generatePatternColony,
         generateRandomColony,
         tick,
@@ -24,6 +25,12 @@ export function UniverseWasm() {
         if (universe) {
             universe.free();
             universe = null;
+        }
+    }
+
+    function clear() {
+        if (universe) {
+            universe.clear();
         }
     }
 

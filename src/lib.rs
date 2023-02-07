@@ -131,6 +131,20 @@ impl Universe {
         }
     }
 
+    pub fn clear(&mut self) {
+        let cell_size = self.cell_size as f64;
+
+        self.colony.clear();
+        self.updated_cells.clear();
+
+        if let Some(canvas) = &self.canvas {
+            canvas.begin_path();
+            canvas.set_fill_style(&DEAD_COLOR.into());
+            canvas.fill_rect(0f64, 0f64, self.column_count as f64 * cell_size, self.row_count as f64 * cell_size);
+            canvas.close_path();
+        }
+    }
+
     pub fn draw_cell(&mut self, row: u32, column: u32) {        
         let index = self.get_index(row, column);
         let state = !self.colony[index];
@@ -208,8 +222,8 @@ impl Universe {
 
 // Private methods called from Rust only
 impl Universe {
-    // Get the dead and alive values of the entire universe.
-    pub fn get_colony(&self) -> &FixedBitSet {
+    // Get all cells from the entire universe
+    pub fn get_colony_for_test(&self) -> &FixedBitSet {
         &self.colony
     }
 

@@ -1,4 +1,4 @@
-export const DEFAULT_COLONY_SAMPLE = 3;
+export const DEFAULT_COLONY_SAMPLE = 0;
 
 export const ColonySamples = Object.freeze({
     Pattern: Symbol('Pattern'),
@@ -6,12 +6,14 @@ export const ColonySamples = Object.freeze({
     Blinker: Symbol('Blinker'),
     Glider: Symbol('Glider'),
     GlidersFactory: Symbol('Gliders factory'),
+    GlidersFactory2: Symbol('Gliders factory 2'),
     CoolPattern: Symbol('Cool pattern'),
     GosperGliderGun: Symbol('Gosper glider gun'),
     Gabriel: Symbol("Gabriel's p138"),
     RPentomino: Symbol('R-pentomino'),
     RPentominos: Symbol('R-pentominos'),
     TwoEngineCordership: Symbol('2-engine Cordership'),
+    NoahsArk: Symbol("Noah's ark"),
 });
 
 export const colonySamples = [
@@ -46,7 +48,7 @@ export const colonySamples = [
         generationsCount: 5000,
         generationsAtOnce: 1,
         throttleValue: 250,
-        colony: '4$3b3o!',
+        colony: 'b3$3b3o!',
     },
     {
         id: ColonySamples.Glider,
@@ -63,12 +65,23 @@ export const colonySamples = [
         id: ColonySamples.GlidersFactory,
         label: ColonySamples.GlidersFactory.description,
         rowCount: 200,
-        columnCount: 200,
+        columnCount: 250,
         cellSize: 4,
         generationsCount: 15000,
         generationsAtOnce: 1,
         throttleValue: 0,
-        colony: '25$37b1o$35b1o1b1o$25b2o6b2o12b2o$24b1o3b1o4b2o12b2o$13b2o8b1o5b1o3b2o$13b2o8b1o3b1o1b2o4b1o1b1o$23b1o5b1o7b1o$24b1o3b1o$25b2o!',
+        colony: 'b34$80bo$78bobo$68b2o6b2o12b2o$67bo3bo4b2o12b2o$56b2o8bo5bo3b2o$56b2o8bo3bob2o4bobo$66bo5bo7bo$67bo3bo$68b2o!',
+    },
+    {
+        id: ColonySamples.GlidersFactory2,
+        label: ColonySamples.GlidersFactory2.description,
+        rowCount: 600,
+        columnCount: 600,
+        cellSize: 1,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
+        colony: 'b570$532bobo$531bo$532bo2bo$534b3o$557b2o$557b2o!',
     },
     {
         id: ColonySamples.CoolPattern,
@@ -128,13 +141,23 @@ export const colonySamples = [
     {
         id: ColonySamples.TwoEngineCordership,
         label: ColonySamples.TwoEngineCordership.description,
-        rowCount: 150,
-        columnCount: 150,
-        cellSize: 8,
+        rowCount: 180,
+        columnCount: 180,
+        cellSize: 4,
         generationsCount: 5000,
         generationsAtOnce: 1,
         throttleValue: 0,
-        colony: '24b2o$24b4o$b$b$25b1o$24b2o$24b3o$26b1o$38b2o$b$b$b$b$b$b$b$41b1o$40b2o$39b1o1b1o$40b3o$41b1o$41b2o$41b1o$41b1o$41b2o$b$b$b$18b1o10b1o$17b5o5b1o1b2o10b1o$16b1o10b1o3b1o9b1o$17b2o8b3o1b1o9b2o$18b2o9b2o10b1o$5b2o13b1o20b3o$b$b$b$b$b$b$b$13b2o$13b2o11b2o$24b2o2b1o$29b1o3b1o$23b1o5b1o3b1o$24b1o2b2o3b1o1b1o$25b3o5b1o$33b1o!',
-        // colony: '19b2o$19b4o$19bob2o2$20bo$19b2o$19b3o$21bo$33b2o$33b2o7$36bo$35b2o$34bo3bo$35b2o2bo$40bo$37bobo$38bo$38bo$38b2o$38b2o3$13bo10bo$12b5o5bob2o11bo$11bo10bo3bo9bo$12b2o8b3obo9b2o$13b2o9b2o12bo$2o13bo21b3o$2o35b3o7$8b2o$8b2o11b2o$19b2o2bo$24bo3bo$18bo5bo3bo$19bo2b2o3bobo$20b3o5bo$28bo!',
+        colony: 'b60$88b2o$88b4o$88bob2o2$89bo$88b2o$88b3o$90bo$102b2o$102b2o7$105bo$104b2o$103bo3bo$104b2o2bo$109bo$106bobo$107bo$107bo$107b2o$107b2o3$82bo10bo$81b5o5bob2o11bo$80bo10bo3bo9bo$81b2o8b3obo9b2o$82b2o9b2o12bo$69b2o13bo21b3o$69b2o35b3o7$77b2o$77b2o11b2o$88b2o2bo$93bo3bo$87bo5bo3bo$88bo2b2o3bobo$89b3o5bo$97bo!',
+    },
+    {
+        id: ColonySamples.NoahsArk,
+        label: ColonySamples.NoahsArk.description,
+        rowCount: 180,
+        columnCount: 180,
+        cellSize: 4,
+        generationsCount: 5000,
+        generationsAtOnce: 1,
+        throttleValue: 0,
+        colony: 'b76$87bobo$88b2o$88bo6bo$94bo$94b3o$98b2o$98bobo$98bo2$78bo$79b2o$78b2o5$81b2o$80bobo$82bo2$83b3o$83bo$84bo!',
     },
 ];
