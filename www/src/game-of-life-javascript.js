@@ -94,8 +94,6 @@ export function UniverseJs() {
     function tick(generations) {
         updatedCells = [];
 
-        // console.log('tick', colony, rowCount, columnCount);
-
         for (let generation = 0; generation < generations; generation++) {
             const newColony = [];
 
@@ -135,8 +133,8 @@ export function UniverseJs() {
     }
 
     function drawUpdatedCells() {
-        drawUpdatedCellsByState(updatedCells, true);
-        drawUpdatedCellsByState(updatedCells, false);
+        drawUpdatedCellsByState(true);
+        drawUpdatedCellsByState(false);
     }
 
     function drawAllCells() {
@@ -167,7 +165,7 @@ export function UniverseJs() {
         context.closePath();
     }
 
-    function drawUpdatedCellsByState(updatedCells, state) {
+    function drawUpdatedCellsByState(state) {
         let radius = cellSize / 2;
 
         context.beginPath();

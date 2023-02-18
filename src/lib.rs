@@ -58,7 +58,7 @@ pub struct Universe {
     colony: FixedBitSet,
     tick_colony: FixedBitSet,
     updated_cells: Vec<UpdatedCell>,
-    canvas: Option<CanvasRenderingContext2d>
+    canvas: Option<CanvasRenderingContext2d>,
 }
 
 /// Public methods, exported to JavaScript
@@ -66,7 +66,7 @@ pub struct Universe {
 impl Universe {
     pub fn new(row_count: u32, column_count: u32, cell_size: u32) -> Universe {
         utils::set_panic_hook();
-        
+
         let mut canvas: Option<CanvasRenderingContext2d> = None;
         let document = window().unwrap().document().unwrap();
         let option_element = document.get_element_by_id("ui-canvas");
@@ -81,7 +81,7 @@ impl Universe {
         let size = (row_count * column_count) as usize;
         let colony = FixedBitSet::with_capacity(size);
         let tick_colony = FixedBitSet::with_capacity(size);
-        let updated_cells : Vec<UpdatedCell> = Vec::new();
+        let updated_cells: Vec<UpdatedCell> = Vec::new();
 
         Universe {
             row_count,
@@ -90,14 +90,14 @@ impl Universe {
             colony,
             tick_colony,
             updated_cells,
-            canvas
+            canvas,
         }
     }
 
     pub fn generate_pattern_colony(&mut self) {
         self.generate_colony(false);
     }
-    
+
     pub fn generate_random_colony(&mut self) {
         self.generate_colony(true);
     }
@@ -113,16 +113,14 @@ impl Universe {
                     let previous_state = self.colony[index];
                     let count = self.live_neighbour_count(row, column);
 
-                    let new_state = match (count, previous_state) {
-                        (2, true) | (3, _) => true,
-                        _ => false
-                    };
+                    let new_state = matches!((count, previous_state), (2, true) | (3, _));
 
                     self.tick_colony.set(index, new_state);
 
                     // If we process more than 1 generation, we can't rely on the updated cells
-                    if generations == 1 && previous_state != new_state {                        
-                        self.updated_cells.push(UpdatedCell((row, column), new_state));
+                    if generations == 1 && previous_state != new_state {
+                        self.updated_cells
+                            .push(UpdatedCell((row, column), new_state));
                     }
                 }
             }
@@ -140,15 +138,20 @@ impl Universe {
         if let Some(canvas) = &self.canvas {
             canvas.begin_path();
             canvas.set_fill_style(&DEAD_COLOR.into());
-            canvas.fill_rect(0f64, 0f64, self.column_count as f64 * cell_size, self.row_count as f64 * cell_size);
+            canvas.fill_rect(
+                0f64,
+                0f64,
+                self.column_count as f64 * cell_size,
+                self.row_count as f64 * cell_size,
+            );
             canvas.close_path();
         }
     }
 
-    pub fn draw_cell(&mut self, row: u32, column: u32) {        
+    pub fn draw_cell(&mut self, row: u32, column: u32) {
         let index = self.get_index(row, column);
         let state = !self.colony[index];
-        
+
         self.colony.set(index, state);
 
         if let Some(canvas) = &self.canvas {
@@ -160,15 +163,15 @@ impl Universe {
 
                 radius = match radius > 2f64 {
                     true => radius - 1f64,
-                    _ => 1f64
+                    _ => 1f64,
                 };
             } else {
                 canvas.set_fill_style(&DEAD_COLOR.into());
             }
 
             self.draw_shape(canvas, row as f64, column as f64, cell_size, radius);
-            
-            canvas.close_path();        
+
+            canvas.close_path();
         }
     }
 
@@ -186,15 +189,20 @@ impl Universe {
 
             radius = match radius > 2f64 {
                 true => radius - 1f64,
-                _ => 1f64
+                _ => 1f64,
             };
 
             canvas.begin_path();
 
             // Erase canvas
             canvas.set_fill_style(&DEAD_COLOR.into());
-            canvas.fill_rect(0f64, 0f64, self.column_count as f64 * cell_size, self.row_count as f64 * cell_size);
-            
+            canvas.fill_rect(
+                0f64,
+                0f64,
+                self.column_count as f64 * cell_size,
+                self.row_count as f64 * cell_size,
+            );
+
             // Fill canvas with live cells
             canvas.set_fill_style(&ALIVE_COLOR.into());
 
@@ -246,9 +254,9 @@ impl Universe {
 
         for i in 0..size {
             if randomly {
-                    self.colony.set(i, js_sys::Math::random() < 0.5);
+                self.colony.set(i, js_sys::Math::random() < 0.5);
             } else {
-                    self.colony.set(i, i % 2 == 0 || i % 7 == 0);
+                self.colony.set(i, i % 2 == 0 || i % 7 == 0);
             }
         }
     }
@@ -259,18 +267,18 @@ impl Universe {
             let mut radius = cell_size / 2f64;
 
             canvas.begin_path();
-            
+
             if state {
                 canvas.set_fill_style(&ALIVE_COLOR.into());
 
                 radius = match radius > 2f64 {
                     true => radius - 1f64,
-                    _ => 1f64
+                    _ => 1f64,
                 };
             } else {
                 canvas.set_fill_style(&DEAD_COLOR.into());
             }
-            
+
             for index in 0..self.updated_cells.len() {
                 let (row, column) = self.updated_cells[index].0;
                 let updated_state = self.updated_cells[index].1;
@@ -344,23 +352,25 @@ impl Universe {
         (row * self.column_count + column) as usize
     }
 
-    fn draw_shape(&self, canvas: &CanvasRenderingContext2d, row:f64,column:f64, cell_size:f64, radius:f64 ){
+    fn draw_shape(
+        &self,
+        canvas: &CanvasRenderingContext2d,
+        row: f64,
+        column: f64,
+        cell_size: f64,
+        radius: f64,
+    ) {
         if cell_size < 4f64 {
-            canvas.fill_rect(
-                column as f64 * cell_size,
-                row as f64 * cell_size,
-                cell_size,
-                cell_size
-            );
+            canvas.fill_rect(column * cell_size, row * cell_size, cell_size, cell_size);
         } else {
             canvas.begin_path();
 
             let _result = canvas.arc(
-                column as f64 * cell_size + cell_size / 2f64,
-                row as f64 * cell_size + cell_size / 2f64,
+                column * cell_size + cell_size / 2f64,
+                row * cell_size + cell_size / 2f64,
                 radius,
                 0f64,
-                2f64 * PI
+                2f64 * PI,
             );
 
             canvas.fill();
