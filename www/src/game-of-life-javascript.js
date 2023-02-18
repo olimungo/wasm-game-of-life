@@ -133,6 +133,8 @@ export function UniverseJs() {
     }
 
     function drawUpdatedCells() {
+        // Because it costs more processing time, we're doing it in 2
+        // passes to avoid to change the fill color constantly...
         drawUpdatedCellsByState(true);
         drawUpdatedCellsByState(false);
     }
