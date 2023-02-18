@@ -3,7 +3,7 @@ name = "wasm-game-of-life"
 description= "A project for comparing WebAssembly (Rust) to JavaScript"
 repository = "https://github.com/olimungo/wasm-game-of-life"
 license = "Apache-2.0"
-version = "1.10.0"
+version = "1.29.0"
 authors = ["Olivier Mungo <olivier@mungo.eu>"]
 edition = "2018"
 
